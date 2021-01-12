@@ -579,6 +579,8 @@ Class MainWindow1
 
         InkCanvas1.Strokes.Add(last.StrokesRemoved)
         InkCanvas1.Strokes.Remove(last.StrokesAdded)
+        PreStrokes.Add(last.StrokesRemoved)
+        PreStrokes.Remove(last.StrokesAdded)
 
         _ignoreStrokesChange = False
         Push(_redoHistory, last)
@@ -591,6 +593,8 @@ Class MainWindow1
 
         InkCanvas1.Strokes.Remove(last.StrokesRemoved)
         InkCanvas1.Strokes.Add(last.StrokesAdded)
+        PreStrokes.Add(last.StrokesAdd)
+        PreStrokes.Remove(last.StrokesRemoved)
 
         _ignoreStrokesChange = False
         Push(_history, last)
