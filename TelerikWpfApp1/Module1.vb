@@ -1,5 +1,16 @@
 ﻿Imports System.Runtime.InteropServices
-
+Public Enum Edit_Mode_Enum As Integer
+    Cursor = 1
+    Pen = 2
+    Marker = 4
+    Eraser = 8
+    Selectt = 16
+End Enum
+Public Enum App_Mode_Enum As Integer
+    PPT = 1
+    Board = 2
+    Camera = 4
+End Enum
 Module Module1
     Public Structure RECT
         Dim Left As Integer
