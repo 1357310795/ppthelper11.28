@@ -59,10 +59,9 @@ Class MainWindow1
         AddHandler InkCanvas1.TouchMove, AddressOf OnTouchMove
         AddHandler InkCanvas1.PreviewMouseDown, AddressOf OnMouseDown
         AddHandler InkCanvas1.MouseUp, AddressOf OnMouseUp
-        AddHandler InkCanvas1.MouseLeave, AddressOf OnMouseUp
+        'AddHandler InkCanvas1.MouseLeave, AddressOf OnMouseUp
 
-        '_history = New Stack(Of StrokesHistoryNode)()
-        '_redoHistory = New Stack(Of StrokesHistoryNode)()
+
         ' 在 InitializeComponent() 调用之后添加任何初始化。
     End Sub
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -413,6 +412,8 @@ Class MainWindow1
 
     Private Sub OnMouseUp(ByVal sender As Object, ByVal e As MouseEventArgs)
         Console.WriteLine("OnMouseUp")
+        CreateHistory()
+        PushToHistory()
         If e.StylusDevice IsNot Nothing Then Return
         If Edit_Mode = Edit_Mode_Enum.Pen Then
             InkCanvas1.EditingMode = InkCanvasEditingMode.None
@@ -560,121 +561,136 @@ Class MainWindow1
     '    GC.Collect()
     'End Sub
 #End Region
-    '#Region "History"
-    '    Private ReadOnly _history As Stack(Of StrokesHistoryNode)
-    '    Private ReadOnly _redoHistory As Stack(Of StrokesHistoryNode)
-    '    Private _ignoreStrokesChange As Boolean
-    '    Private strokeadded, strokeremoved As New StrokeCollection
+#Region "History"
+    Private ReadOnly _history As New Stack(Of StrokesHistoryNode)
+    Private ReadOnly _redoHistory As New Stack(Of StrokesHistoryNode)
+    Private _ignoreStrokesChange As Boolean
+    Private strokeadded, strokeremoved As New StrokeCollection
+    Private PreStrokes As New StrokeCollection
 
-    '    Private Sub Undo()
-    '        If strokeadded.Count <> 0 Or strokeremoved.Count <> 0 Then PushToHistory()
-    '        If Not CanUndo() Then Return
+    Private Sub Undo()
+        If strokeadded.Count <> 0 Or strokeremoved.Count <> 0 Then
+            PushToHistory()
+        End If
+        If Not CanUndo() Then Return
 
-    '        Dim last = Pop(_history)
-    '        _ignoreStrokesChange = True
+        Dim last = Pop(_history)
+        _ignoreStrokesChange = True
 
-    '        If last.Type = StrokesHistoryNodeType.Added Then
-    '            InkCanvas1.Strokes.Remove(last.Strokes)
-    '        Else
-    '            InkCanvas1.Strokes.Add(last.Strokes)
-    '        End If
+        InkCanvas1.Strokes.Add(last.StrokesRemoved)
+        InkCanvas1.Strokes.Remove(last.StrokesAdded)
 
-    '        _ignoreStrokesChange = False
-    '        Push(_redoHistory, last)
-    '    End Sub
+        _ignoreStrokesChange = False
+        Push(_redoHistory, last)
+    End Sub
 
-    '    Private Sub Redo()
-    '        If Not CanRedo() Then Return
-    '        Dim last = Pop(_redoHistory)
-    '        _ignoreStrokesChange = True
+    Private Sub Redo()
+        If Not CanRedo() Then Return
+        Dim last = Pop(_redoHistory)
+        _ignoreStrokesChange = True
 
-    '        If last.Type = StrokesHistoryNodeType.Removed Then
-    '            InkCanvas1.Strokes.Remove(last.Strokes)
-    '        Else
-    '            InkCanvas1.Strokes.Add(last.Strokes)
-    '        End If
+        InkCanvas1.Strokes.Remove(last.StrokesRemoved)
+        InkCanvas1.Strokes.Add(last.StrokesAdded)
 
-    '        _ignoreStrokesChange = False
-    '        Push(_history, last)
-    '    End Sub
+        _ignoreStrokesChange = False
+        Push(_history, last)
+    End Sub
 
-    '    Private Shared Sub Push(ByVal collection As Stack(Of StrokesHistoryNode), ByVal node As StrokesHistoryNode)
-    '        collection.Push(node)
-    '    End Sub
+    Private Shared Sub Push(ByVal collection As Stack(Of StrokesHistoryNode), ByVal node As StrokesHistoryNode)
+        collection.Push(node)
+    End Sub
 
-    '    Private Shared Function Pop(ByVal collection As Stack(Of StrokesHistoryNode)) As StrokesHistoryNode
-    '        Return If(collection.Count = 0, Nothing, collection.Pop())
-    '    End Function
+    Private Shared Function Pop(ByVal collection As Stack(Of StrokesHistoryNode)) As StrokesHistoryNode
+        Return If(collection.Count = 0, Nothing, collection.Pop())
+    End Function
 
-    '    Private Function CanUndo() As Boolean
-    '        Return _history.Count <> 0
-    '    End Function
+    Private Function CanUndo() As Boolean
+        Return _history.Count <> 0
+    End Function
 
-    '    Private Function CanRedo() As Boolean
-    '        Return _redoHistory.Count <> 0
-    '    End Function
+    Private Function CanRedo() As Boolean
+        Return _redoHistory.Count <> 0
+    End Function
 
-    '    Private Sub StrokesChanged(ByVal sender As Object, ByVal e As StrokeCollectionChangedEventArgs)
-    '        If _ignoreStrokesChange Then Exit Sub
-    '        For Each i In e.Added
-    '            strokeadded.Add(i)
-    '        Next
-    '        For Each i In e.Removed
-    '            strokeremoved.Add(i)
-    '        Next
-    '        'strokeadded = TryCast(strokeadded.Concat(e.Added), StrokeCollection)
-    '        'strokeremoved = TryCast(strokeremoved.Concat(e.Removed), StrokeCollection)
-    '    End Sub
+    'Private Sub StrokesChanged(ByVal sender As Object, ByVal e As StrokeCollectionChangedEventArgs)
+    '    If _ignoreStrokesChange Then Exit Sub
+    '    For Each i In e.Added
+    '        strokeadded.Add(i)
+    '    Next
+    '    For Each i In e.Removed
+    '        strokeremoved.Add(i)
+    '    Next
+    '    'strokeadded = TryCast(strokeadded.Concat(e.Added), StrokeCollection)
+    '    'strokeremoved = TryCast(strokeremoved.Concat(e.Removed), StrokeCollection)
+    'End Sub
+    Public Sub CreateHistory()
+        Dim t As New StrokeCollection
+        For Each s In PreStrokes
+            If Not InkCanvas1.Strokes.Contains(s) Then
+                strokeremoved.Add(s)
+                t.Add(s)
+            End If
+        Next
+        For Each s In t
+            PreStrokes.Remove(s)
+        Next
+        For Each s In InkCanvas1.Strokes
+            If Not PreStrokes.Contains(s) Then
+                strokeadded.Add(s)
+                PreStrokes.Add(s)
+            End If
+        Next
+        'PreStrokes = InkCanvas1.Strokes
+    End Sub
 
-    '    Private Sub PushToHistory()
-    '        If strokeadded.Count <> 0 Then
-    '            Push(_history, New StrokesHistoryNode(strokeadded, StrokesHistoryNodeType.Added))
-    '        End If
-    '        If strokeremoved.Count <> 0 Then
-    '            Push(_history, New StrokesHistoryNode(strokeremoved, StrokesHistoryNodeType.Removed))
-    '        End If
+    Private Sub PushToHistory()
+        If strokeadded.Count = 0 And strokeremoved.Count = 0 Then Return
+        Dim t As New StrokesHistoryNode()
+        t.StrokesAdded = strokeadded
+        t.StrokesRemoved = strokeremoved
+        Push(_history, t)
 
-    '        strokeadded = New StrokeCollection
-    '        strokeremoved = New StrokeCollection
-    '        ClearHistory(_redoHistory)
-    '    End Sub
+        strokeadded = New StrokeCollection()
+        strokeremoved = New StrokeCollection()
+        ClearHistory(_redoHistory)
+    End Sub
 
-    '    Private Sub ClearHistory()
-    '        ClearHistory(_history)
-    '        ClearHistory(_redoHistory)
-    '    End Sub
+    Private Sub ClearHistory()
+        ClearHistory(_history)
+        ClearHistory(_redoHistory)
+    End Sub
 
-    '    Private Shared Sub ClearHistory(ByVal collection As Stack(Of StrokesHistoryNode))
-    '        collection?.Clear()
-    '    End Sub
+    Private Shared Sub ClearHistory(ByVal collection As Stack(Of StrokesHistoryNode))
+        collection?.Clear()
+    End Sub
 
-    '    Public Sub Clear()
-    '        InkCanvas1.Strokes.Clear()
-    '        ClearHistory()
-    '        FlushMemory.Flush()
-    '    End Sub
+    Public Sub Clear()
+        InkCanvas1.Strokes.Clear()
+        ClearHistory()
+        FlushMemory.Flush()
+    End Sub
 
-    '    Private Sub AnimatedClear()
-    '        Dim ani = New DoubleAnimation(0, New Duration(New TimeSpan(0, 0, 0, 0, 3)))
-    '        AddHandler ani.Completed, AddressOf ClearAniComplete
-    '        InkCanvas1.BeginAnimation(OpacityProperty, ani)
-    '    End Sub
+    Private Sub AnimatedClear()
+        Dim ani = New DoubleAnimation(0, New Duration(New TimeSpan(0, 0, 0, 0, 3)))
+        AddHandler ani.Completed, AddressOf ClearAniComplete
+        InkCanvas1.BeginAnimation(OpacityProperty, ani)
+    End Sub
 
-    '    Private Sub ClearAniComplete(ByVal sender As Object, ByVal e As EventArgs)
-    '        Clear()
-    '        InkCanvas1.BeginAnimation(OpacityProperty, New DoubleAnimation(1, New Duration(New TimeSpan(0, 0, 0, 0, 3))))
-    '    End Sub
+    Private Sub ClearAniComplete(ByVal sender As Object, ByVal e As EventArgs)
+        Clear()
+        InkCanvas1.BeginAnimation(OpacityProperty, New DoubleAnimation(1, New Duration(New TimeSpan(0, 0, 0, 0, 3))))
+    End Sub
 
-    '    Private Sub Redo_Selected(sender As Object, e As RoutedEventArgs)
-    '        TryCast(sender, RadioButton).IsChecked = False
-    '        Redo()
-    '    End Sub
+    Private Sub Redo_Selected(sender As Object, e As RoutedEventArgs)
+        TryCast(sender, RadioButton).IsChecked = False
+        Redo()
+    End Sub
 
-    '    Private Sub Undo_Selected(sender As Object, e As RoutedEventArgs)
-    '        TryCast(sender, RadioButton).IsChecked = False
-    '        Undo()
-    '    End Sub
-    '#End Region
+    Private Sub Undo_Selected(sender As Object, e As RoutedEventArgs)
+        TryCast(sender, RadioButton).IsChecked = False
+        Undo()
+    End Sub
+#End Region
 
     Private Class ColorValueConverter
         Implements IValueConverter
@@ -728,14 +744,6 @@ Class MainWindow1
     Private Sub Window_Closing(sender As Object, e As ComponentModel.CancelEventArgs)
         update_timer.Stop()
         update_timer = Nothing
-    End Sub
-
-    Private Sub Redo_Selected(sender As Object, e As RoutedEventArgs)
-
-    End Sub
-
-    Private Sub Undo_Selected(sender As Object, e As RoutedEventArgs)
-
     End Sub
 End Class
 

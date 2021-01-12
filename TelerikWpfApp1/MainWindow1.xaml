@@ -5,8 +5,14 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:TelerikWpfApp1"
         Title="HandyDraw BlackBoard Ver. by Hikari✨" 
-        Height="1080" Width="1920" Icon="项目2.ico" WindowStyle="None" Background="Transparent" 
-        AllowsTransparency="True" ShowInTaskbar="False" Topmost="False" PreviewMouseWheel="Window_PreviewMouseWheel" PreviewKeyDown="Window_PreviewKeyDown" Closing="Window_Closing">
+        Height="1080" Width="1920" 
+        Icon="项目2.ico" WindowStyle="None" 
+        Background="Transparent" 
+        AllowsTransparency="True" 
+        ShowInTaskbar="False" Topmost="False" 
+        PreviewMouseWheel="Window_PreviewMouseWheel" 
+        PreviewKeyDown="Window_PreviewKeyDown" 
+        Closing="Window_Closing">
     <Window.Resources>
         <Style x:Key="ListBoxItemStyle" TargetType="{x:Type RadioButton}" 
          BasedOn="{StaticResource MaterialDesignToolRadioButton}">
