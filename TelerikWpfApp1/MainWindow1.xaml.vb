@@ -71,7 +71,7 @@ Class MainWindow1
         'animation_timer.Interval = 100
         'AddHandler animation_timer.Elapsed, AddressOf animation_timer_tick
         'animation_timer.Start()
-
+        App_Mode = App_Mode_Enum.PPT
         MoveWindow(New WindowInteropHelper(Me).Handle,
                                    ppt_rect.Left,
                                     ppt_rect.Top,
@@ -105,6 +105,7 @@ Class MainWindow1
         AddHandler update_timer.Elapsed, AddressOf update_timer_Tick
         update_timer.Start()
     End Sub
+
 
 #Region "listboxTools"
     Public Sub Set_Edit_Mode(e As Edit_Mode_Enum)
@@ -763,10 +764,32 @@ Class MainWindow1
             ci = bv.InkCanvas1
             BoardGrid.Visibility = Visibility.Visible
             update_timer.Stop()
+            TextPage.Text = bv.getlabel
+            If bv.n = bv.inks.Count - 1 Then
+                PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Add
+                PageControlNextText.Text = "加页"
+            Else
+                PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.KeyboardArrowRight
+                PageControlNextText.Text = "下一页"
+            End If
+            Set_Edit_Mode(Edit_Mode_Enum.Pen)
         Else
-
+            ci = InkCanvas1
+            BoardGrid.Visibility = Visibility.Collapsed
+            update_timer.Start()
+            PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.KeyboardArrowRight
+            PageControlNextText.Text = "下一页"
+            Set_Edit_Mode(Edit_Mode_Enum.Pen)
         End If
         App_Mode = e
+    End Sub
+
+    Private Sub Button_Board_Click(sender As Object, e As RoutedEventArgs)
+        If App_Mode = App_Mode_Enum.PPT Then
+            Set_App_Mode(App_Mode_Enum.Board)
+        Else
+            Set_App_Mode(App_Mode_Enum.PPT)
+        End If
     End Sub
     Private Class ColorValueConverter
         Implements IValueConverter
@@ -785,6 +808,8 @@ Class MainWindow1
         Dim s As AboutDialog = New AboutDialog
         res = Await MaterialDesignThemes.Wpf.DialogHost.Show(s, "MainDialogHost1")
     End Sub
+
+
     'Private Sub startnotianimation(c As Canvas, n As UserControl1)
     '    Dim doubleKeyFrame1 As DoubleKeyFrame = New LinearDoubleKeyFrame()
     '    doubleKeyFrame1.KeyTime = TimeSpan.FromSeconds(0.0)

@@ -548,3 +548,4 @@ C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Tel
 C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\TelerikWpfApp1.xml
 C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\TelerikWpfApp1.pdb
 C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\View\BoardView.g.vb
+C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\View\BoardView.baml
