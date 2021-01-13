@@ -9,7 +9,7 @@
         Icon="项目2.ico" WindowStyle="None" 
         Background="Transparent" 
         AllowsTransparency="True" 
-        ShowInTaskbar="False" Topmost="False" 
+        ShowInTaskbar="False" Topmost="True" 
         PreviewMouseWheel="Window_PreviewMouseWheel" 
         PreviewKeyDown="Window_PreviewKeyDown" 
         Closing="Window_Closing">
@@ -38,6 +38,9 @@
                         </InkCanvas.ContextMenu>
                     </InkCanvas>
                 </ContentControl>
+                <Grid x:Name="BoardGrid" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <local:BoardView x:Name="bv" Visibility="Collapsed"/>
+                </Grid>
                 <Grid x:Name="GridTools"
                       HorizontalAlignment="Center" VerticalAlignment="Bottom"
                       Margin="172,0,173,15" RenderTransformOrigin="0.5,0.5" Height="60" Opacity="0.6">
@@ -254,7 +257,7 @@
                 </Grid>
                 <StackPanel x:Name="NotiStackPanel" Width="Auto" Height="Auto" 
                             VerticalAlignment="Top" HorizontalAlignment="Right"
-                            Margin="0,15,15,0">
+                            Margin="0,15,15,0" Visibility="Collapsed">
                     <!--<Canvas Width="174">
                         <local:UserControl1/>
                     </Canvas>-->
@@ -351,9 +354,11 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                             Kind="KeyboardArrowRight" Width="24" Height="24" Foreground="Black" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="下一页" Margin="0,5,0,0" Foreground="Black"/>
+                                    <materialDesign:PackIcon x:Name="PageControlNextIcon"
+                                        HorizontalAlignment="Center" Grid.Row="0" 
+                                        Kind="KeyboardArrowRight" Width="24" Height="24" Foreground="Black" />
+                                    <TextBlock  x:Name="PageControlNextText"
+                                        HorizontalAlignment="Center" Grid.Row="1" Text="下一页" Margin="0,5,0,0" Foreground="Black"/>
                                 </Grid>
                             </Button>
                         </StackPanel>

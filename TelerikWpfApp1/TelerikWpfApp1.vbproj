@@ -163,6 +163,9 @@
     <Compile Include="about.xaml.vb">
       <DependentUpon>about.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\BoardView.xaml.vb">
+      <DependentUpon>BoardView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="YesNoDialog.xaml.vb">
       <DependentUpon>YesNoDialog.xaml</DependentUpon>
     </Compile>
@@ -214,6 +217,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="about.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\BoardView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

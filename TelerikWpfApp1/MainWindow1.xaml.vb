@@ -19,7 +19,7 @@ Class MainWindow1
     Public Edit_Mode As Edit_Mode_Enum
     Public App_Mode As App_Mode_Enum
     Private Save_leftclicked As Boolean
-
+    Private ci As InkCanvas
     Private animation_timer As Timer
 
     Public Sub New()
@@ -50,6 +50,7 @@ Class MainWindow1
 
         InitializeComponent()
         InkCanvas1.EraserShape = New Ink.RectangleStylusShape(40, 60)
+        ci = InkCanvas1
 
         _currentCanvasStrokes = New Dictionary(Of Integer, Stroke)()
         _lasttimestamp = New Dictionary(Of Integer, Double)
@@ -107,34 +108,61 @@ Class MainWindow1
 
 #Region "listboxTools"
     Public Sub Set_Edit_Mode(e As Edit_Mode_Enum)
-        Select Case e
-            Case Edit_Mode_Enum.Cursor
-                InkCanvas1.EditingMode = InkCanvasEditingMode.None
-                CursorRadioButton.IsChecked = True
-                InkCanvas1.Background = TryCast(Application.Current.Resources("TrueTransparent"), Brush)
-            Case Edit_Mode_Enum.Pen
-                InkCanvas1.EditingMode = InkCanvasEditingMode.None
-                InkCanvas1.DefaultDrawingAttributes = pen
-                PenRadioButton.IsChecked = True
-                InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
-            Case Edit_Mode_Enum.Selectt
-                InkCanvas1.EditingMode = InkCanvasEditingMode.Select
-                InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
-                SelectRadioButton.IsChecked = True
-            Case Edit_Mode_Enum.Marker
-                InkCanvas1.EditingMode = InkCanvasEditingMode.Ink
-                InkCanvas1.DefaultDrawingAttributes = marker
-                MarkerRadioButton.IsChecked = True
-                InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
-            Case Edit_Mode_Enum.Eraser
-                If InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByStroke And
+        If App_Mode = App_Mode_Enum.PPT Then
+            Select Case e
+                Case Edit_Mode_Enum.Cursor
+                    InkCanvas1.EditingMode = InkCanvasEditingMode.None
+                    CursorRadioButton.IsChecked = True
+                    InkCanvas1.Background = TryCast(Application.Current.Resources("TrueTransparent"), Brush)
+                Case Edit_Mode_Enum.Pen
+                    InkCanvas1.EditingMode = InkCanvasEditingMode.None
+                    InkCanvas1.DefaultDrawingAttributes = pen
+                    PenRadioButton.IsChecked = True
+                    InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
+                Case Edit_Mode_Enum.Selectt
+                    InkCanvas1.EditingMode = InkCanvasEditingMode.Select
+                    InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
+                    SelectRadioButton.IsChecked = True
+                Case Edit_Mode_Enum.Marker
+                    InkCanvas1.EditingMode = InkCanvasEditingMode.Ink
+                    InkCanvas1.DefaultDrawingAttributes = marker
+                    MarkerRadioButton.IsChecked = True
+                    InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
+                Case Edit_Mode_Enum.Eraser
+                    If InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByStroke And
                     InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByPoint Then
-                    InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint
-                End If
-                EraserRadioButton.IsChecked = True
-                InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
-        End Select
-        Edit_Mode = e
+                        InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint
+                    End If
+                    EraserRadioButton.IsChecked = True
+                    InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
+            End Select
+            Edit_Mode = e
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            Select Case e
+                Case Edit_Mode_Enum.Cursor
+                    bv.InkCanvas1.EditingMode = InkCanvasEditingMode.None
+                    CursorRadioButton.IsChecked = True
+                Case Edit_Mode_Enum.Pen
+                    bv.InkCanvas1.EditingMode = InkCanvasEditingMode.None
+                    bv.InkCanvas1.DefaultDrawingAttributes = pen
+                    PenRadioButton.IsChecked = True
+                Case Edit_Mode_Enum.Selectt
+                    bv.InkCanvas1.EditingMode = InkCanvasEditingMode.Select
+                    SelectRadioButton.IsChecked = True
+                Case Edit_Mode_Enum.Marker
+                    bv.InkCanvas1.EditingMode = InkCanvasEditingMode.Ink
+                    bv.InkCanvas1.DefaultDrawingAttributes = marker
+                    MarkerRadioButton.IsChecked = True
+                Case Edit_Mode_Enum.Eraser
+                    If bv.InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByStroke And
+                        bv.InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByPoint Then
+                        bv.InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint
+                    End If
+                    EraserRadioButton.IsChecked = True
+            End Select
+            Edit_Mode = e
+            bv.Edit_Mode = e
+        End If
     End Sub
     Private Sub Cursor_Selected(sender As Object, e As RoutedEventArgs)
         Set_Edit_Mode(Edit_Mode_Enum.Cursor)
@@ -178,7 +206,7 @@ Class MainWindow1
                     MarkerSetting.popup = MarkerSettingPopup
                 Case "Eraser"
                     EraserSettingPopup.IsPopupOpen = True
-                    EraserSetting.initdrawerandcanvas(InkCanvas1, eraser, Me)
+                    EraserSetting.initdrawerandcanvas(ci, eraser, Me)
                 Case "Cursor"
                     Exit Sub
             End Select
@@ -206,10 +234,40 @@ Class MainWindow1
         SetForegroundWindow(ppt_hwnd)
     End Sub
     Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
-        ppt_prev()
+        If App_Mode = App_Mode_Enum.PPT Then
+            ppt_prev()
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            bv.PrevPage()
+            TextPage.Text = bv.getlabel
+            If bv.n = bv.inks.Count - 1 Then
+                PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Add
+                PageControlNextText.Text = "加页"
+            Else
+                PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.KeyboardArrowRight
+                PageControlNextText.Text = "下一页"
+            End If
+        End If
     End Sub
     Private Sub Button_Click_1(sender As Object, e As RoutedEventArgs)
-        ppt_next()
+        If App_Mode = App_Mode_Enum.PPT Then
+            ppt_next()
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            If bv.n = bv.inks.Count - 1 Then
+                bv.AddPage()
+                PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Add
+                PageControlNextText.Text = "加页"
+            Else
+                bv.NextPage()
+                If bv.n = bv.inks.Count - 1 Then
+                    PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Add
+                    PageControlNextText.Text = "加页"
+                Else
+                    PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.KeyboardArrowRight
+                    PageControlNextText.Text = "下一页"
+                End If
+            End If
+            TextPage.Text = bv.getlabel
+        End If
     End Sub
     Private Function GetTotalSlideCount() As Int32
         Return ppt_obj.ActivePresentation.Slides.Count
@@ -248,7 +306,7 @@ Class MainWindow1
                 Me.Dispatcher.Invoke(Sub()
                                          TextPage.Text = currentpage & "/" & GetTotalSlideCount()
                                          InkCanvas1.Strokes = inks(currentpage)
-                                         'ClearHistory()
+                                         ClearHistory()
                                      End Sub)
             End If
         Catch ex As Exception
@@ -412,7 +470,7 @@ Class MainWindow1
 
     Private Sub OnMouseUp(ByVal sender As Object, ByVal e As MouseEventArgs)
         Console.WriteLine("OnMouseUp")
-        CreateHistory()
+        CompareStrokes()
         PushToHistory()
         If e.StylusDevice IsNot Nothing Then Return
         If Edit_Mode = Edit_Mode_Enum.Pen Then
@@ -569,6 +627,7 @@ Class MainWindow1
     Private PreStrokes As New StrokeCollection
 
     Private Sub Undo()
+        CompareStrokes()
         If strokeadded.Count <> 0 Or strokeremoved.Count <> 0 Then
             PushToHistory()
         End If
@@ -587,13 +646,18 @@ Class MainWindow1
     End Sub
 
     Private Sub Redo()
+        CompareStrokes()
+        If strokeadded.Count <> 0 Or strokeremoved.Count <> 0 Then
+            PushToHistory()
+            Return
+        End If
         If Not CanRedo() Then Return
         Dim last = Pop(_redoHistory)
         _ignoreStrokesChange = True
 
         InkCanvas1.Strokes.Remove(last.StrokesRemoved)
         InkCanvas1.Strokes.Add(last.StrokesAdded)
-        PreStrokes.Add(last.StrokesAdd)
+        PreStrokes.Add(last.StrokesAdded)
         PreStrokes.Remove(last.StrokesRemoved)
 
         _ignoreStrokesChange = False
@@ -627,7 +691,7 @@ Class MainWindow1
     '    'strokeadded = TryCast(strokeadded.Concat(e.Added), StrokeCollection)
     '    'strokeremoved = TryCast(strokeremoved.Concat(e.Removed), StrokeCollection)
     'End Sub
-    Public Sub CreateHistory()
+    Public Sub CompareStrokes()
         Dim t As New StrokeCollection
         For Each s In PreStrokes
             If Not InkCanvas1.Strokes.Contains(s) Then
@@ -644,7 +708,6 @@ Class MainWindow1
                 PreStrokes.Add(s)
             End If
         Next
-        'PreStrokes = InkCanvas1.Strokes
     End Sub
 
     Private Sub PushToHistory()
@@ -695,7 +758,16 @@ Class MainWindow1
         Undo()
     End Sub
 #End Region
+    Private Sub Set_App_Mode(e As App_Mode_Enum)
+        If e = App_Mode_Enum.Board Then
+            ci = bv.InkCanvas1
+            BoardGrid.Visibility = Visibility.Visible
+            update_timer.Stop()
+        Else
 
+        End If
+        App_Mode = e
+    End Sub
     Private Class ColorValueConverter
         Implements IValueConverter
         Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As Globalization.CultureInfo) As Object Implements IValueConverter.Convert
