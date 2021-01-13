@@ -7,9 +7,9 @@ Public Enum Edit_Mode_Enum As Integer
     Selectt = 16
 End Enum
 Public Enum App_Mode_Enum As Integer
-    PPT = 1
-    Board = 2
-    Camera = 4
+    PPT = 0
+    Board = 1
+    Camera = 2
 End Enum
 Module Module1
     Public Structure RECT

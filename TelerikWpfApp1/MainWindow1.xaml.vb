@@ -11,9 +11,8 @@ Class MainWindow1
     Private Declare Function GetClientRect Lib "user32" Alias "GetClientRect" (ByVal hwnd As IntPtr, ByRef lpRect As RECT) As Integer
     Private Declare Function MoveWindow Lib "user32" Alias "MoveWindow" (ByVal hwnd As IntPtr, ByVal x As Integer, ByVal y As Integer, ByVal nWidth As Integer, ByVal nHeight As Integer, ByVal bRepaint As Boolean) As Integer
 
-    Public pen As DrawingAttributes
-    Public marker As DrawingAttributes
-    Public eraser As DrawingAttributes
+    Public pen, marker As DrawingAttributes
+    Public pen1, marker1 As DrawingAttributes
     Public settingwindow As UserControl
 
     Public Edit_Mode As Edit_Mode_Enum
@@ -39,19 +38,19 @@ Class MainWindow1
             .IsHighlighter = True,
             .StylusTip = StylusTip.Rectangle
         }
-        eraser = New DrawingAttributes With {
+        pen1 = New DrawingAttributes With {
             .Color = Colors.White,
-            .Height = 25,
-            .Width = 25,
-            .FitToCurve = False,
-            .IsHighlighter = True,
+            .Height = 4,
+            .Width = 4,
+            .FitToCurve = True,
+            .IsHighlighter = False,
             .StylusTip = StylusTip.Ellipse
         }
 
         InitializeComponent()
         InkCanvas1.EraserShape = New Ink.RectangleStylusShape(40, 60)
         ci = InkCanvas1
-
+        App_Mode = App_Mode_Enum.PPT
         _currentCanvasStrokes = New Dictionary(Of Integer, Stroke)()
         _lasttimestamp = New Dictionary(Of Integer, Double)
         _lastpoint = New Dictionary(Of Integer, StylusPoint)
@@ -71,7 +70,7 @@ Class MainWindow1
         'animation_timer.Interval = 100
         'AddHandler animation_timer.Elapsed, AddressOf animation_timer_tick
         'animation_timer.Start()
-        App_Mode = App_Mode_Enum.PPT
+
         MoveWindow(New WindowInteropHelper(Me).Handle,
                                    ppt_rect.Left,
                                     ppt_rect.Top,
@@ -145,7 +144,7 @@ Class MainWindow1
                     CursorRadioButton.IsChecked = True
                 Case Edit_Mode_Enum.Pen
                     bv.InkCanvas1.EditingMode = InkCanvasEditingMode.None
-                    bv.InkCanvas1.DefaultDrawingAttributes = pen
+                    bv.InkCanvas1.DefaultDrawingAttributes = pen1
                     PenRadioButton.IsChecked = True
                 Case Edit_Mode_Enum.Selectt
                     bv.InkCanvas1.EditingMode = InkCanvasEditingMode.Select
@@ -198,7 +197,11 @@ Class MainWindow1
                 Case "Pen"
                     'settingwindow = New PenSetting(pen)
                     PenSettingPopup.IsPopupOpen = True
-                    PenSetting.initdrawer(pen)
+                    If App_Mode = App_Mode_Enum.PPT Then
+                        PenSetting.initdrawer(pen)
+                    ElseIf App_Mode = App_Mode_Enum.Board Then
+                        PenSetting.initdrawer(pen1)
+                    End If
                     PenSetting.popup = PenSettingPopup
                     Exit Sub
                 Case "Marker"
@@ -207,7 +210,7 @@ Class MainWindow1
                     MarkerSetting.popup = MarkerSettingPopup
                 Case "Eraser"
                     EraserSettingPopup.IsPopupOpen = True
-                    EraserSetting.initdrawerandcanvas(ci, eraser, Me)
+                    EraserSetting.initdrawerandcanvas(ci, Me)
                 Case "Cursor"
                     Exit Sub
             End Select
@@ -751,12 +754,21 @@ Class MainWindow1
 
     Private Sub Redo_Selected(sender As Object, e As RoutedEventArgs)
         TryCast(sender, RadioButton).IsChecked = False
-        Redo()
+        If App_Mode = App_Mode_Enum.PPT Then
+            Redo()
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            bv.Redo()
+        End If
+
     End Sub
 
     Private Sub Undo_Selected(sender As Object, e As RoutedEventArgs)
         TryCast(sender, RadioButton).IsChecked = False
-        Undo()
+        If App_Mode = App_Mode_Enum.PPT Then
+            Undo()
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            bv.Undo()
+        End If
     End Sub
 #End Region
     Private Sub Set_App_Mode(e As App_Mode_Enum)

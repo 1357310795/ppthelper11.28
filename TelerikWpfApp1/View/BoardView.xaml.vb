@@ -210,7 +210,7 @@ Public Class BoardView
     Private strokeadded, strokeremoved As New StrokeCollection
     Private PreStrokes As New StrokeCollection
 
-    Private Sub Undo()
+    Public Sub Undo()
         CompareStrokes()
         If strokeadded.Count <> 0 Or strokeremoved.Count <> 0 Then
             PushToHistory()
@@ -229,7 +229,7 @@ Public Class BoardView
         Push(_redoHistory, last)
     End Sub
 
-    Private Sub Redo()
+    Public Sub Redo()
         CompareStrokes()
         If strokeadded.Count <> 0 Or strokeremoved.Count <> 0 Then
             PushToHistory()

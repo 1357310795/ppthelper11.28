@@ -9,12 +9,10 @@ Public Class EraserSettingMenu
         ' 在 InitializeComponent() 调用之后添加任何初始化。
     End Sub
     Public ic As InkCanvas
-    Public drawer As DrawingAttributes
     Public mw As MainWindow1
 
-    Public Sub initdrawerandcanvas(d As InkCanvas, e As DrawingAttributes, m As MainWindow1)
+    Public Sub initdrawerandcanvas(d As InkCanvas, m As MainWindow1)
         ic = d
-        drawer = e
         mw = m
     End Sub
 
@@ -24,7 +22,6 @@ Public Class EraserSettingMenu
 
     Private Sub Button_Click_1(sender As Object, e As RoutedEventArgs)
         ic.EditingMode = InkCanvasEditingMode.EraseByPoint
-        ic.DefaultDrawingAttributes = drawer
     End Sub
 
     Private Async Sub Button_Click_2(sender As Object, e As RoutedEventArgs)
