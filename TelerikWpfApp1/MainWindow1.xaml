@@ -48,12 +48,12 @@
                       Margin="172,0,173,15" RenderTransformOrigin="0.5,0.5" 
                       Height="60" Opacity="0.6">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <materialDesign:Card UniformCornerRadius="3" Padding="0" Grid.Column="1">
+                    <materialDesign:Card UniformCornerRadius="3" Padding="0" Grid.Column="1" >
                         <StackPanel x:Name="listboxTools"  
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Left"
                                     Orientation="Horizontal" Margin="0" RenderTransformOrigin="0.5,0.5">
                             <StackPanel.RenderTransform>
                                 <TransformGroup>
@@ -258,7 +258,7 @@
                             </Button>
                         </StackPanel>
                     </materialDesign:Card>
-                    <materialDesign:Card UniformCornerRadius="3" Padding="0" Margin="0,0,12,0" >
+                    <materialDesign:Card UniformCornerRadius="3" Padding="0" Margin="0,0,12,0">
                         <StackPanel HorizontalAlignment="Center"
                                     Orientation="Horizontal" Margin="0">
                             <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Button_Board_Click">

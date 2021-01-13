@@ -761,6 +761,7 @@ Class MainWindow1
 #End Region
     Private Sub Set_App_Mode(e As App_Mode_Enum)
         If e = App_Mode_Enum.Board Then
+            App_Mode = e
             ci = bv.InkCanvas1
             BoardGrid.Visibility = Visibility.Visible
             update_timer.Stop()
@@ -774,14 +775,16 @@ Class MainWindow1
             End If
             Set_Edit_Mode(Edit_Mode_Enum.Pen)
         Else
+            App_Mode = e
             ci = InkCanvas1
             BoardGrid.Visibility = Visibility.Collapsed
+            TextPage.Text = currentpage & "/" & GetTotalSlideCount()
             update_timer.Start()
             PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.KeyboardArrowRight
             PageControlNextText.Text = "下一页"
             Set_Edit_Mode(Edit_Mode_Enum.Pen)
         End If
-        App_Mode = e
+
     End Sub
 
     Private Sub Button_Board_Click(sender As Object, e As RoutedEventArgs)

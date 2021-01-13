@@ -189,6 +189,8 @@ Public Class BoardView
 
     Private Sub OnMouseUp(ByVal sender As Object, ByVal e As MouseEventArgs)
         Console.WriteLine("OnMouseUp")
+        CompareStrokes()
+        PushToHistory()
         If e.StylusDevice IsNot Nothing Then Return
         If Edit_Mode = Edit_Mode_Enum.Pen Then
             InkCanvas1.EditingMode = InkCanvasEditingMode.None
