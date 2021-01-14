@@ -38,7 +38,7 @@
                         </InkCanvas.ContextMenu>
                     </InkCanvas>
                 </ContentControl>
-                <Grid x:Name="BoardGrid" 
+                <Grid x:Name="BoardGrid" Width="{Binding ElementName=MainGrid,Path=ActualWidth}" Height="999"
                       HorizontalAlignment="Left" VerticalAlignment="Top"
                       Visibility="Collapsed">
                     <local:BoardView x:Name="bv" />
@@ -267,22 +267,23 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="WebAsset" Width="24" Height="24" Foreground="Black" >
+                                    <materialDesign:PackIcon x:Name="ButtonBoardIcon"
+                                        HorizontalAlignment="Center" Grid.Row="0" 
+                                        Kind="WebAsset" Width="24" Height="24" Foreground="Black" >
                                     </materialDesign:PackIcon>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="白板" Margin="0,5,0,0"  FontSize="14" Foreground="Black"/>
+                                    <TextBlock x:Name="ButtonBoardText" HorizontalAlignment="Center" Grid.Row="1" Text="白板" Margin="0,5,0,0"  FontSize="14" Foreground="Black"/>
                                 </Grid>
                             </Button>
-                            <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Button_Board_Click">
+                            <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Button_Camera_Click">
                                 <Grid Margin="-7,5,-7,4">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
+                                    <materialDesign:PackIcon x:Name="ButtonCameraIcon" HorizontalAlignment="Center" Grid.Row="0" 
                                                                  Kind="WebCamera" Width="24" Height="24" Foreground="Black" >
                                     </materialDesign:PackIcon>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="视频展台" Margin="0,5,0,0"  FontSize="14" Foreground="Black"/>
+                                    <TextBlock x:Name="ButtonCameraText" HorizontalAlignment="Center" Grid.Row="1" Text="视频展台" Margin="0,5,0,0"  FontSize="14" Foreground="Black"/>
                                 </Grid>
                             </Button>
                         </StackPanel>

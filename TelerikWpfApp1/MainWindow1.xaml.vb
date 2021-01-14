@@ -39,7 +39,7 @@ Class MainWindow1
             .StylusTip = StylusTip.Rectangle
         }
         pen1 = New DrawingAttributes With {
-            .Color = Colors.White,
+            .Color = Colors.Black,
             .Height = 4,
             .Width = 4,
             .FitToCurve = True,
@@ -774,9 +774,11 @@ Class MainWindow1
     Private Sub Set_App_Mode(e As App_Mode_Enum)
         If e = App_Mode_Enum.Board Then
             App_Mode = e
+            update_timer.Stop()
             ci = bv.InkCanvas1
             BoardGrid.Visibility = Visibility.Visible
-            update_timer.Stop()
+            Dim da = CubicBezierAnimation(TimeSpan.FromSeconds(0.3), 0, MainGrid.ActualHeight, "0,.96,.8,1")
+            BoardGrid.BeginAnimation(Grid.HeightProperty, da)
             TextPage.Text = bv.getlabel
             If bv.n = bv.inks.Count - 1 Then
                 PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Add
@@ -786,15 +788,27 @@ Class MainWindow1
                 PageControlNextText.Text = "下一页"
             End If
             Set_Edit_Mode(Edit_Mode_Enum.Pen)
-        Else
+            ButtonBoardIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.KeyboardBackspace
+            ButtonBoardText.Text = "返回"
+            ButtonCameraIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WebCamera
+            ButtonCameraText.Text = "视频展台"
+        ElseIf e = App_Mode_Enum.ppt Then
             App_Mode = e
             ci = InkCanvas1
-            BoardGrid.Visibility = Visibility.Collapsed
+            Dim da = CubicBezierAnimation(TimeSpan.FromSeconds(0.3), MainGrid.ActualHeight, 0, "0,.96,.8,1")
+            BoardGrid.BeginAnimation(Grid.HeightProperty, da)
+            'BoardGrid.Visibility = Visibility.Collapsed
             TextPage.Text = currentpage & "/" & GetTotalSlideCount()
             update_timer.Start()
             PageControlNextIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.KeyboardArrowRight
             PageControlNextText.Text = "下一页"
             Set_Edit_Mode(Edit_Mode_Enum.Pen)
+            ButtonBoardIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WebAsset
+            ButtonBoardText.Text = "白板"
+            ButtonCameraIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WebCamera
+            ButtonCameraText.Text = "视频展台"
+        ElseIf e = App_Mode_Enum.Camera Then
+
         End If
 
     End Sub
@@ -802,10 +816,23 @@ Class MainWindow1
     Private Sub Button_Board_Click(sender As Object, e As RoutedEventArgs)
         If App_Mode = App_Mode_Enum.PPT Then
             Set_App_Mode(App_Mode_Enum.Board)
-        Else
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            Set_App_Mode(App_Mode_Enum.PPT)
+        ElseIf App_Mode = App_Mode_Enum.Camera Then
+            Set_App_Mode(App_Mode_Enum.Camera)
+        End If
+    End Sub
+
+    Private Sub Button_Camera_Click(sender As Object, e As RoutedEventArgs)
+        If App_Mode = App_Mode_Enum.PPT Then
+            Set_App_Mode(App_Mode_Enum.Camera)
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            Set_App_Mode(App_Mode_Enum.Camera)
+        ElseIf App_Mode = App_Mode_Enum.Camera Then
             Set_App_Mode(App_Mode_Enum.PPT)
         End If
     End Sub
+
     Private Class ColorValueConverter
         Implements IValueConverter
         Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As Globalization.CultureInfo) As Object Implements IValueConverter.Convert

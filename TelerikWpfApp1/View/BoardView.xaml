@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TelerikWpfApp1" xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" Height="Auto" Width="Auto">
+             mc:Ignorable="d" Height="Auto" Width="Auto" d:DesignWidth="800" d:DesignHeight="800">
     <Canvas x:Name="Canvas1">
         <Grid x:Name="Grid1" Canvas.Left="0" Canvas.Top="0">
             <Grid.LayoutTransform>
@@ -15,7 +15,7 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Grid.LayoutTransform>
-            <Grid x:Name="MyBackControl" Height="1080" Width="1920" Background="#FF484848"/>
+            <Grid x:Name="MyBackControl" Height="{Binding ElementName=Canvas1,Path=ActualHeight}" Width="{Binding ElementName=Canvas1,Path=ActualWidth}" Background="White"/>
             <InkCanvas x:Name="InkCanvas1" 
                        Visibility="Visible" 
                        Background="#008B8B8B" 
