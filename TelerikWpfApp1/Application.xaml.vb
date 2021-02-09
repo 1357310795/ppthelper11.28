@@ -1,4 +1,5 @@
-﻿Imports System.Threading.Tasks
+﻿Imports System.IO
+Imports System.Threading.Tasks
 Imports System.Timers
 Imports System.Windows.Interop
 Imports Microsoft.Office.Interop
@@ -83,9 +84,17 @@ Class Application
                                          Me.MainWindow = Nothing
                                          'Application.Current.Shutdown()
                                      End Sub)
-                Console.WriteLine("WINDOW_CLOSE")
+                'Console.WriteLine("WINDOW_CLOSE")
             End If
             FlushMemory.Flush()
+            If updatehelper.updateok Then
+                Dim t1 = New DirectoryInfo(System.Environment.CurrentDirectory)
+                Dim downini = t1.Parent.FullName & "\tmp.ini"
+                Dim localini = t1.Parent.FullName & "\version.ini"
+                Dim rootpath = t1.Parent.FullName
+                Process.Start(rootpath & "\loader.exe")
+                End
+            End If
             prepare_timer.Start()
         End If
 

@@ -7,14 +7,14 @@
     <framework targetVersion="4.7.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="TelerikWpfApp1.exe.manifest" size="16490">
+    <dependentAssembly dependencyType="install" codebase="TelerikWpfApp1.exe.manifest" size="17162">
       <assemblyIdentity name="TelerikWpfApp1.exe" version="1.0.1.0" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="x86" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>3bG3HjI1Cxf+SSDd+RW5bSr4AlAInMv6tQwLwZv5z40=</dsig:DigestValue>
+        <dsig:DigestValue>SoT0yDdTbwTOPtplTL8kloi+umuUPS/azM9VRXgxTjo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

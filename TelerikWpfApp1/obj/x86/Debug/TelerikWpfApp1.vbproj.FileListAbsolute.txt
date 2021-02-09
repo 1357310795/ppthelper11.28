@@ -549,3 +549,9 @@ C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Tel
 C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\TelerikWpfApp1.pdb
 C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\View\BoardView.g.vb
 C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\View\BoardView.baml
+C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\bin\Debug\DotNetZip.dll
+C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\bin\Debug\MediaFoundation.dll
+C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\bin\Debug\SharpDX.dll
+C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\bin\Debug\DotNetZip.pdb
+C:\Users\Hikari\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\bin\Debug\DotNetZip.xml

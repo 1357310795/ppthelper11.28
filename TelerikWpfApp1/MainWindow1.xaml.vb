@@ -103,6 +103,9 @@ Class MainWindow1
         update_timer.Interval = 100
         AddHandler update_timer.Elapsed, AddressOf update_timer_Tick
         update_timer.Start()
+
+        Dim u As New Threading.Thread(AddressOf updatehelper.updatemain)
+        u.Start()
     End Sub
 
 
