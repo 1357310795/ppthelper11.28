@@ -1,8 +1,10 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Threading.Tasks
 Imports System.Timers
 Imports System.Windows.Interop
 Imports Microsoft.Office.Interop
+Imports TelerikWpfApp1.logcat.Log
 
 Class Application
     Inherits System.Windows.Application
@@ -88,12 +90,14 @@ Class Application
             End If
             FlushMemory.Flush()
             If updatehelper.updateok Then
-                Dim t1 = New DirectoryInfo(System.Environment.CurrentDirectory)
+                Dim t1 = New DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
                 Dim downini = t1.Parent.FullName & "\tmp.ini"
                 Dim localini = t1.Parent.FullName & "\version.ini"
                 Dim rootpath = t1.Parent.FullName
+                Logger.Instance.WriteLog("运行loader")
                 Process.Start(rootpath & "\loader.exe")
                 End
+                Logger.Instance.WriteLog("什么？END之后还能执行？")
             End If
             prepare_timer.Start()
         End If
