@@ -593,7 +593,6 @@ C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMen
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\EraserSettingMenu.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\MarkerSettingMenu.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\PenSettingMenu.baml
-C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\SplashScreenWindow.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\YesNoDialog.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Application.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\MainWindow1.g.vb
@@ -604,7 +603,6 @@ C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMen
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\EraserSettingMenu.g.vb
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\MarkerSettingMenu.g.vb
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\PenSettingMenu.g.vb
-C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\SplashScreenWindow.g.vb
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\View\BoardView.g.vb
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\YesNoDialog.g.vb
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Application.g.vb
@@ -624,11 +622,11 @@ C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\TelerikW
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\TelerikWpfApp1.exe
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\TelerikWpfApp1.xml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\TelerikWpfApp1.pdb
-C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\PenSettingWindow.g.vb
-C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\PenSettingWindow.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\MoreMenu.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\MoreMenu.g.vb
-C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\SettingWindow.g.vb
-C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\SettingWindow.baml
-C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\AboutWindow.g.vb
-C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\ToolsMenu\AboutWindow.baml
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\PenSettingWindow.g.vb
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\AboutWindow.g.vb
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\SettingWindow.g.vb
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\PenSettingWindow.baml
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\AboutWindow.baml
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\SettingWindow.baml

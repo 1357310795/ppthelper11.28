@@ -9,7 +9,7 @@
         Icon="Resources/项目2.ico" WindowStyle="None" 
         Background="Transparent" 
         AllowsTransparency="True" 
-        ShowInTaskbar="False" Topmost="False" 
+        ShowInTaskbar="False" Topmost="True" 
         PreviewMouseWheel="Window_PreviewMouseWheel" 
         PreviewKeyDown="Window_PreviewKeyDown" 
         Closing="Window_Closing">

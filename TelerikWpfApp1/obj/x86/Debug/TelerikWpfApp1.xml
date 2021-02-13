@@ -154,16 +154,6 @@ PenSettingMenu
 InitializeComponent
 </summary>
 </member>
-<member name="T:TelerikWpfApp1.SplashScreenWindow">
-<summary>
-SplashScreenWindow
-</summary>
-</member>
-<member name="M:TelerikWpfApp1.SplashScreenWindow.InitializeComponent">
-<summary>
-InitializeComponent
-</summary>
-</member>
 <member name="T:TelerikWpfApp1.AboutWindow">
 <summary>
 AboutWindow

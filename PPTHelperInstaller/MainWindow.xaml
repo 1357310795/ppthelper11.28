@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PPTHelperInstaller"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="394.34" Width="280.189">
+        mc:Ignorable="d" Icon="项目2.ico"
+        Title="PPT Helper 安装程序" Height="394.34" Width="280.189">
     <StackPanel>
-        <Button Content="Start" Height="43" Click="Button_Click" />
+        <Button Content="开始安装！" Height="43" Click="Button_Click" />
         <ListBox x:Name="ListBox1" Height="300">
             
         </ListBox>

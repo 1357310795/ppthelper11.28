@@ -7,7 +7,7 @@ Imports TelerikWpfApp1.logcat.Log
 Public Class updatehelper
     Public Shared f As FtpWeb
     Public Shared updateok As Boolean = False
-    Public Shared ftpaddress = "ftp://192.168.2.104"
+    Public Shared ftpaddress = "ftp://10.233.88.2"
     Public Shared Sub updatemain()
         Logger.Instance.WriteLog("Update Start")
         Dim t1 = New DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
