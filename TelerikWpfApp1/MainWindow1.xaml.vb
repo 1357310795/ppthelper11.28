@@ -189,6 +189,7 @@ Class MainWindow1
     End Sub
     Private Sub Setting_Selected(sender As Object, e As RoutedEventArgs)
         TryCast(sender, RadioButton).IsChecked = False
+        More.mypopup = MorePopup
         MorePopup.IsPopupOpen = True
     End Sub
     Private Sub ListBoxItem_MouseUp(sender As Object, e As MouseEventArgs)
@@ -384,6 +385,7 @@ Class MainWindow1
         InkCanvas1.Strokes.Add(eraseResults)
     End Sub
 
+#Disable Warning BC40005 ' 成员隐藏基类型中的可重写的方法
     Private Sub OnTouchDown(ByVal sender As Object, ByVal touchEventArgs As TouchEventArgs)
         Console.WriteLine("OnTouchDown")
         Dim touchPoint = touchEventArgs.GetTouchPoint(Me)

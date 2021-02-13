@@ -36,11 +36,11 @@ Public Class DpiDecorator
     Inherits Decorator
 
     Public Sub New()
-        AddHandler Me.Loaded, Function(s, e)
+        AddHandler Me.Loaded, Sub(s, e)
                                   Dim m As Matrix = PresentationSource.FromVisual(Me).CompositionTarget.TransformToDevice
                                   Dim dpiTransform As ScaleTransform = New ScaleTransform(1 / m.M11, 1 / m.M22)
                                   If dpiTransform.CanFreeze Then dpiTransform.Freeze()
                                   Me.LayoutTransform = dpiTransform
-                              End Function
+                              End Sub
     End Sub
 End Class

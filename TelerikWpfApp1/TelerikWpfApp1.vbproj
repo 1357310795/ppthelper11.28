@@ -148,7 +148,7 @@
     <Compile Include="ToolsMenu\CursorSettingMenu.xaml.vb">
       <DependentUpon>CursorSettingMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ToolsMenu\PenSettingWindow.xaml.vb">
+    <Compile Include="Window\PenSettingWindow.xaml.vb">
       <DependentUpon>PenSettingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ToolsMenu\MoreMenu.xaml.vb">
@@ -163,13 +163,10 @@
     <Compile Include="ToolsMenu\PenSettingMenu.xaml.vb">
       <DependentUpon>PenSettingMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SplashScreenWindow.xaml.vb">
-      <DependentUpon>SplashScreenWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ToolsMenu\AboutWindow.xaml.vb">
+    <Compile Include="Window\AboutWindow.xaml.vb">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ToolsMenu\SettingWindow.xaml.vb">
+    <Compile Include="Window\SettingWindow.xaml.vb">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\updatehelper.vb" />
@@ -202,7 +199,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ToolsMenu\PenSettingWindow.xaml">
+    <Page Include="Window\PenSettingWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -222,15 +219,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SplashScreenWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ToolsMenu\AboutWindow.xaml">
+    <Page Include="Window\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ToolsMenu\SettingWindow.xaml">
+    <Page Include="Window\SettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -365,6 +358,7 @@
   <ItemGroup>
     <Resource Include="Resources\HandyDrawPPTHelper1.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="..\packages\MaterialDesignThemes.3.1.3\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.1.3\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

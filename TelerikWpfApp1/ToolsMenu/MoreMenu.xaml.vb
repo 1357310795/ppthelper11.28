@@ -1,9 +1,11 @@
 ﻿Imports System.Globalization
 Imports System.Windows.Ink
+Imports MaterialDesignThemes.Wpf
 
 Public Class MoreMenu
     Inherits UserControl
     Public inkcanvas1 As InkCanvas
+    Public mypopup As PopupBox
     Public Sub New()
         ' 此调用是设计器所必需的。
         InitializeComponent()
@@ -19,14 +21,15 @@ Public Class MoreMenu
     End Sub
 
     Private Sub Button_Click_3(sender As Object, e As RoutedEventArgs)
+        mypopup.IsPopupOpen = False
         Dim t As New SettingWindow
         t.Show()
     End Sub
 
     Private Sub Button_Click_4(sender As Object, e As RoutedEventArgs)
+        mypopup.IsPopupOpen = False
         Dim t As New AboutWindow
         t.Show()
-        t.Focus()
         t.Activate()
     End Sub
 

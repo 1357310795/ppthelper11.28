@@ -70,6 +70,7 @@ Public Class BoardView
             InkCanvas1.Height = MyBackControl.ActualHeight
         End If
     End Sub
+
 #Region "MultiTouch"
     Private Const ThreasholdNearbyDistance As Double = 0.01
     Private ReadOnly _currentCanvasStrokes As Dictionary(Of Integer, Stroke)
@@ -83,7 +84,7 @@ Public Class BoardView
         InkCanvas1.Strokes.Remove(argsHitTester.HitStroke)
         InkCanvas1.Strokes.Add(eraseResults)
     End Sub
-
+#Disable Warning BC40005 ' 成员隐藏基类型中的可重写的方法
     Private Sub OnTouchDown(ByVal sender As Object, ByVal touchEventArgs As TouchEventArgs)
         Console.WriteLine("OnTouchDown")
         Dim touchPoint = touchEventArgs.GetTouchPoint(Me)
