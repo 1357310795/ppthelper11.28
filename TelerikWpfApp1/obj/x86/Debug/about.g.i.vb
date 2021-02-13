@@ -38,11 +38,11 @@ Imports System.Windows.Shell
 
 
 '''<summary>
-'''AboutDialog
+'''AboutWindow
 '''</summary>
 <Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>  _
-Partial Public Class AboutDialog
-    Inherits System.Windows.Controls.UserControl
+Partial Public Class AboutWindow
+    Inherits System.Windows.Window
     Implements System.Windows.Markup.IComponentConnector
     
     

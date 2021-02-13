@@ -104,12 +104,22 @@ CursorSettingMenu
 InitializeComponent
 </summary>
 </member>
-<member name="T:TelerikWpfApp1.SettingMenu">
+<member name="T:TelerikWpfApp1.PenSettingWindow">
 <summary>
-SettingMenu
+PenSettingWindow
 </summary>
 </member>
-<member name="M:TelerikWpfApp1.SettingMenu.InitializeComponent">
+<member name="M:TelerikWpfApp1.PenSettingWindow.InitializeComponent">
+<summary>
+InitializeComponent
+</summary>
+</member>
+<member name="T:TelerikWpfApp1.MoreMenu">
+<summary>
+MoreMenu
+</summary>
+</member>
+<member name="M:TelerikWpfApp1.MoreMenu.InitializeComponent">
 <summary>
 InitializeComponent
 </summary>
@@ -144,16 +154,6 @@ PenSettingMenu
 InitializeComponent
 </summary>
 </member>
-<member name="T:TelerikWpfApp1.SaveSettingMenu">
-<summary>
-SaveSettingMenu
-</summary>
-</member>
-<member name="M:TelerikWpfApp1.SaveSettingMenu.InitializeComponent">
-<summary>
-InitializeComponent
-</summary>
-</member>
 <member name="T:TelerikWpfApp1.SplashScreenWindow">
 <summary>
 SplashScreenWindow
@@ -164,12 +164,22 @@ SplashScreenWindow
 InitializeComponent
 </summary>
 </member>
-<member name="T:TelerikWpfApp1.AboutDialog">
+<member name="T:TelerikWpfApp1.AboutWindow">
 <summary>
-AboutDialog
+AboutWindow
 </summary>
 </member>
-<member name="M:TelerikWpfApp1.AboutDialog.InitializeComponent">
+<member name="M:TelerikWpfApp1.AboutWindow.InitializeComponent">
+<summary>
+InitializeComponent
+</summary>
+</member>
+<member name="T:TelerikWpfApp1.SettingWindow">
+<summary>
+SettingWindow
+</summary>
+</member>
+<member name="M:TelerikWpfApp1.SettingWindow.InitializeComponent">
 <summary>
 InitializeComponent
 </summary>

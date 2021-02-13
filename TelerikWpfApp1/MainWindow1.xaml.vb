@@ -17,7 +17,6 @@ Class MainWindow1
 
     Public Edit_Mode As Edit_Mode_Enum
     Public App_Mode As App_Mode_Enum
-    Private Save_leftclicked As Boolean
     Private ci As InkCanvas
     Private animation_timer As Timer
 
@@ -65,11 +64,13 @@ Class MainWindow1
         ' 在 InitializeComponent() 调用之后添加任何初始化。
     End Sub
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        'logogrid.Visibility = Visibility.Hidden
-        'animation_timer = New Timer
-        'animation_timer.Interval = 100
-        'AddHandler animation_timer.Elapsed, AddressOf animation_timer_tick
-        'animation_timer.Start()
+        '启动动画
+        If GetKeyValue("main", "StartAnimation", "true", inipath) = "true" Then
+            animation_timer = New Timer
+            animation_timer.Interval = 100
+            AddHandler animation_timer.Elapsed, AddressOf animation_timer_tick
+            animation_timer.Start()
+        End If
 
         MoveWindow(New WindowInteropHelper(Me).Handle,
                                    ppt_rect.Left,
@@ -100,7 +101,7 @@ Class MainWindow1
 
         SetForegroundWindow(New WindowInteropHelper(Me).Handle)
 
-        update_timer.Interval = 100
+        update_timer.Interval = 1000
         AddHandler update_timer.Elapsed, AddressOf update_timer_Tick
         update_timer.Start()
 
@@ -188,8 +189,7 @@ Class MainWindow1
     End Sub
     Private Sub Setting_Selected(sender As Object, e As RoutedEventArgs)
         TryCast(sender, RadioButton).IsChecked = False
-        SettingPopup.IsPopupOpen = True
-        GlobalSetting.inkcanvas1 = InkCanvas1
+        MorePopup.IsPopupOpen = True
     End Sub
     Private Sub ListBoxItem_MouseUp(sender As Object, e As MouseEventArgs)
         'ListboxClickItem.IsSelected = True
@@ -198,14 +198,26 @@ Class MainWindow1
         If TryCast(sender, RadioButton).IsChecked Then
             Select Case TryCast(sender, RadioButton).Tag
                 Case "Pen"
-                    'settingwindow = New PenSetting(pen)
-                    PenSettingPopup.IsPopupOpen = True
-                    If App_Mode = App_Mode_Enum.PPT Then
-                        PenSetting.initdrawer(pen)
+                    'PenSettingPopup.IsPopupOpen = True
+                    'If App_Mode = App_Mode_Enum.PPT Then
+                    '    PenSetting.initdrawer(pen)
+                    'ElseIf App_Mode = App_Mode_Enum.Board Then
+                    '    PenSetting.initdrawer(pen1)
+                    'End If
+                    'PenSetting.popup = PenSettingPopup
+
+                    Dim w As New PenSettingWindow
+                     If App_Mode = App_Mode_Enum.PPT Then
+                        w.initdrawer(pen)
                     ElseIf App_Mode = App_Mode_Enum.Board Then
-                        PenSetting.initdrawer(pen1)
+                        w.initdrawer(pen1)
                     End If
-                    PenSetting.popup = PenSettingPopup
+                    Dim rr = New RECT()
+                    Dim s = ScreenHelper.GetScalingRatio()
+                    w.Show()
+                    w.Top = TryCast(sender, RadioButton).PointToScreen(New Point(0, 0)).Y / s - w.ActualHeight
+                    w.Left = TryCast(sender, RadioButton).PointToScreen(New Point(0, 0)).X / s
+                    w.Focus()
                     Exit Sub
                 Case "Marker"
                     MarkerSettingPopup.IsPopupOpen = True
@@ -448,18 +460,20 @@ Class MainWindow1
                     Dim sp As StylusPoint = New StylusPoint(point.X, point.Y)
                     Dim nowtime As Double = DateTime.Now.Ticks / 1000000D
                     Dim v = (point - _lastpoint(touchPoint.TouchDevice.Id).ToPoint).Length / (nowtime - _lasttimestamp(touchPoint.TouchDevice.Id))
-                    If (Double.IsNaN(v) Or v > maxv) Then
-                        sp.PressureFactor = 0.2F
-                    Else
-                        sp.PressureFactor = CType((0.8F - (0.6F / maxv) * v), Single)
-                    End If
+                    'If (Double.IsNaN(v) Or v > maxv) Then
+                    '    sp.PressureFactor = 0.2F
+                    'Else
+                    '    sp.PressureFactor = CType((0.8F - (0.6F / maxv) * v), Single)
+                    'End If
+                    sp.PressureFactor = CType(calc_pressure(v), Single)
                     stroke.StylusPoints.Add(sp)
                     _lastpoint(touchPoint.TouchDevice.Id) = sp
                     _lasttimestamp(touchPoint.TouchDevice.Id) = nowtime
-                    Application.Current.Resources("speed") = v.ToString()
-                    If (Not Double.IsNaN(v) And Not Double.IsPositiveInfinity(v)) Then
-                        Application.Current.Resources("speedint") = v
-                    End If
+                    'Application.Current.Resources("speed") = v.ToString()
+                    'l.Add(v)
+                    'If (Not Double.IsNaN(v) And Not Double.IsPositiveInfinity(v)) Then
+                    '    Application.Current.Resources("speedint") = v
+                    'End If
                 End If
             End If
         End If
@@ -490,141 +504,154 @@ Class MainWindow1
     Private Shared Function IsNearbyPoint(ByVal stroke As Stroke, ByVal point As Point) As Boolean
         Return stroke.StylusPoints.Any(Function(p) (Math.Abs(p.X - point.X) <= ThreasholdNearbyDistance) AndAlso (Math.Abs(p.Y - point.Y) <= ThreasholdNearbyDistance))
     End Function
+
+    Private Function calc_pressure(v As Double) As Double
+        Dim a = -1.7
+        Dim b = 0.6
+        Dim c = 80
+        If v = Double.NaN Then Return 0.5
+        Dim f = -(2 * b * Math.Atan(v / c + a)) / Math.PI + b
+        Return f
+    End Function
 #End Region
 #Region "Animation"
-    'Private Sub animation_timer_tick()
-    '    animation_timer.Stop()
-    '    Me.Dispatcher.Invoke(AddressOf startanimation)
-    'End Sub
+    Private Sub animation_timer_tick()
+        animation_timer.Stop()
+        Me.Dispatcher.Invoke(AddressOf startanimation)
+    End Sub
 
-    'Private Sub startanimation()
-    '    logogrid.Visibility = Visibility.Visible
+    Private Sub startanimation()
+        logogrid.Visibility = Visibility.Visible
 
-    '    Dim doubleKeyFrame1 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame1.KeyTime = TimeSpan.FromSeconds(0.0)
-    '    doubleKeyFrame1.Value = 40
-    '    Dim splineDoubleKeyFrame As SplineDoubleKeyFrame = New SplineDoubleKeyFrame()
-    '    splineDoubleKeyFrame.KeyTime = TimeSpan.FromSeconds(1.2)
-    '    Dim controlPoint As Point = New Point(0, 0.25) 'cubic-bezier(0,.25,.36,1)
-    '    Dim controlPoint2 As Point = New Point(0.36, 1)
-    '    splineDoubleKeyFrame.KeySpline = New KeySpline() With {.ControlPoint1 = controlPoint, .ControlPoint2 = controlPoint2}
-    '    splineDoubleKeyFrame.Value = 0
-    '    Dim doubleKeyFramea As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFramea.KeyTime = TimeSpan.FromSeconds(1.7)
-    '    doubleKeyFramea.Value = 0
-    '    Dim doubleKeyFrame2 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame2.KeyTime = TimeSpan.FromSeconds(2.2)
-    '    doubleKeyFrame2.Value = 40
-    '    Dim logo2animation2 = New DoubleAnimationUsingKeyFrames
-    '    logo2animation2.KeyFrames.Add(doubleKeyFrame1)
-    '    logo2animation2.KeyFrames.Add(splineDoubleKeyFrame)
-    '    logo2animation2.KeyFrames.Add(doubleKeyFramea)
-    '    logo2animation2.KeyFrames.Add(doubleKeyFrame2)
-    '    Dim x As New TranslateTransform
-    '    logo2.RenderTransform = x
+        '开源免费 位移
+        Dim doubleKeyFrame1 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame1.KeyTime = TimeSpan.FromSeconds(0.0)
+        doubleKeyFrame1.Value = 40
+        Dim splineDoubleKeyFrame As SplineDoubleKeyFrame = New SplineDoubleKeyFrame()
+        splineDoubleKeyFrame.KeyTime = TimeSpan.FromSeconds(0.4)
+        Dim controlPoint As Point = New Point(0, 0.25) 'cubic-bezier(0,.25,.36,1)
+        Dim controlPoint2 As Point = New Point(0.36, 1)
+        splineDoubleKeyFrame.KeySpline = New KeySpline() With {.ControlPoint1 = controlPoint, .ControlPoint2 = controlPoint2}
+        splineDoubleKeyFrame.Value = 0
+        Dim doubleKeyFramea As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFramea.KeyTime = TimeSpan.FromSeconds(0.7)
+        doubleKeyFramea.Value = 0
+        Dim doubleKeyFrame2 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame2.KeyTime = TimeSpan.FromSeconds(1)
+        doubleKeyFrame2.Value = 40
+        Dim logo2animation2 = New DoubleAnimationUsingKeyFrames
+        logo2animation2.KeyFrames.Add(doubleKeyFrame1)
+        logo2animation2.KeyFrames.Add(splineDoubleKeyFrame)
+        logo2animation2.KeyFrames.Add(doubleKeyFramea)
+        logo2animation2.KeyFrames.Add(doubleKeyFrame2)
+        Dim x As New TranslateTransform
+        logo2.RenderTransform = x
 
+        '开源免费 透明度
+        Dim doubleKeyFrame3 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame3.KeyTime = TimeSpan.FromSeconds(0.0)
+        doubleKeyFrame3.Value = 0
+        Dim splineDoubleKeyFrame2 As SplineDoubleKeyFrame = New SplineDoubleKeyFrame()
+        splineDoubleKeyFrame2.KeyTime = TimeSpan.FromSeconds(0.4)
+        Dim controlPoint3 As Point = New Point(0, 0.25)
+        Dim controlPoint4 As Point = New Point(0.36, 1)
+        splineDoubleKeyFrame2.KeySpline = New KeySpline() With {.ControlPoint1 = controlPoint3, .ControlPoint2 = controlPoint4}
+        splineDoubleKeyFrame2.Value = 1
+        Dim doubleKeyFrameb As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrameb.KeyTime = TimeSpan.FromSeconds(0.7)
+        doubleKeyFrameb.Value = 1
+        Dim doubleKeyFrame4 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame4.KeyTime = TimeSpan.FromSeconds(1)
+        doubleKeyFrame4.Value = 0
+        Dim logo2animation As New DoubleAnimationUsingKeyFrames
+        logo2animation.KeyFrames.Add(doubleKeyFrame3)
+        logo2animation.KeyFrames.Add(splineDoubleKeyFrame2)
+        logo2animation.KeyFrames.Add(doubleKeyFrameb)
+        logo2animation.KeyFrames.Add(doubleKeyFrame4)
 
-    '    Dim doubleKeyFrame3 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame3.KeyTime = TimeSpan.FromSeconds(0.0)
-    '    doubleKeyFrame3.Value = 0
-    '    Dim splineDoubleKeyFrame2 As SplineDoubleKeyFrame = New SplineDoubleKeyFrame()
-    '    splineDoubleKeyFrame2.KeyTime = TimeSpan.FromSeconds(1.2)
-    '    Dim controlPoint3 As Point = New Point(0, 0.25)
-    '    Dim controlPoint4 As Point = New Point(0.36, 1)
-    '    splineDoubleKeyFrame2.KeySpline = New KeySpline() With {.ControlPoint1 = controlPoint3, .ControlPoint2 = controlPoint4}
-    '    splineDoubleKeyFrame2.Value = 1
-    '    Dim doubleKeyFrameb As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrameb.KeyTime = TimeSpan.FromSeconds(1.7)
-    '    doubleKeyFrameb.Value = 1
-    '    Dim doubleKeyFrame4 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame4.KeyTime = TimeSpan.FromSeconds(2.0)
-    '    doubleKeyFrame4.Value = 0
-    '    Dim logo2animation As New DoubleAnimationUsingKeyFrames
-    '    logo2animation.KeyFrames.Add(doubleKeyFrame3)
-    '    logo2animation.KeyFrames.Add(splineDoubleKeyFrame2)
-    '    logo2animation.KeyFrames.Add(doubleKeyFrameb)
-    '    logo2animation.KeyFrames.Add(doubleKeyFrame4)
+        'HandyDrawPPTHelper 透明度
+        Dim doubleKeyFrame5 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame5.KeyTime = TimeSpan.FromSeconds(0.0)
+        doubleKeyFrame5.Value = 0
+        Dim splineDoubleKeyFrame3 As SplineDoubleKeyFrame = New SplineDoubleKeyFrame()
+        splineDoubleKeyFrame3.KeyTime = TimeSpan.FromSeconds(0.4)
+        Dim controlPoint5 As Point = New Point(0, 0.48) 'cubic-bezier(0,.48,.8,.99)
+        Dim controlPoint6 As Point = New Point(0.8, 0.99)
+        splineDoubleKeyFrame3.KeySpline = New KeySpline() With {.ControlPoint1 = controlPoint5, .ControlPoint2 = controlPoint6}
+        splineDoubleKeyFrame3.Value = 1
+        Dim doubleKeyFramec As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFramec.KeyTime = TimeSpan.FromSeconds(0.7)
+        doubleKeyFramec.Value = 1
+        Dim doubleKeyFrame6 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame6.KeyTime = TimeSpan.FromSeconds(1)
+        doubleKeyFrame6.Value = 0
+        Dim logo1animation As New DoubleAnimationUsingKeyFrames
+        logo1animation.KeyFrames.Add(doubleKeyFrame5)
+        logo1animation.KeyFrames.Add(splineDoubleKeyFrame3)
+        logo1animation.KeyFrames.Add(doubleKeyFramec)
+        logo1animation.KeyFrames.Add(doubleKeyFrame6)
 
+        '背景颜色
+        Dim ColorKeyFrame7 As ColorKeyFrame = New LinearColorKeyFrame()
+        ColorKeyFrame7.KeyTime = TimeSpan.FromSeconds(0.0)
+        ColorKeyFrame7.Value = Color.FromArgb(0, 0, 0, 0)
+        Dim splineColorKeyFrame4 As SplineColorKeyFrame = New SplineColorKeyFrame()
+        splineColorKeyFrame4.KeyTime = TimeSpan.FromSeconds(0.5)
+        Dim controlPoint7 As Point = New Point(0, 0.48) 'cubic-bezier(0,.48,.8,.99)
+        Dim controlPoint8 As Point = New Point(0.8, 0.99)
+        splineColorKeyFrame4.KeySpline = New KeySpline() With {.ControlPoint1 = controlPoint7, .ControlPoint2 = controlPoint8}
+        splineColorKeyFrame4.Value = Color.FromArgb(150, 0, 0, 0)
+        Dim ColorKeyFramed As ColorKeyFrame = New LinearColorKeyFrame()
+        ColorKeyFramed.KeyTime = TimeSpan.FromSeconds(0.7)
+        ColorKeyFramed.Value = Color.FromArgb(150, 0, 0, 0)
+        Dim ColorKeyFrame8 As ColorKeyFrame = New LinearColorKeyFrame()
+        ColorKeyFrame8.KeyTime = TimeSpan.FromSeconds(1)
+        ColorKeyFrame8.Value = Color.FromArgb(0, 0, 0, 0)
+        Dim backanimation As New ColorAnimationUsingKeyFrames
+        backanimation.KeyFrames.Add(ColorKeyFrame7)
+        backanimation.KeyFrames.Add(splineColorKeyFrame4)
+        backanimation.KeyFrames.Add(ColorKeyFramed)
+        backanimation.KeyFrames.Add(ColorKeyFrame8)
 
-    '    Dim doubleKeyFrame5 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame5.KeyTime = TimeSpan.FromSeconds(0.0)
-    '    doubleKeyFrame5.Value = 0
-    '    Dim splineDoubleKeyFrame3 As SplineDoubleKeyFrame = New SplineDoubleKeyFrame()
-    '    splineDoubleKeyFrame3.KeyTime = TimeSpan.FromSeconds(1.2)
-    '    Dim controlPoint5 As Point = New Point(0, 0.48) 'cubic-bezier(0,.48,.8,.99)
-    '    Dim controlPoint6 As Point = New Point(0.8, 0.99)
-    '    splineDoubleKeyFrame3.KeySpline = New KeySpline() With {.ControlPoint1 = controlPoint5, .ControlPoint2 = controlPoint6}
-    '    splineDoubleKeyFrame3.Value = 1
-    '    Dim doubleKeyFramec As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFramec.KeyTime = TimeSpan.FromSeconds(1.7)
-    '    doubleKeyFramec.Value = 1
-    '    Dim doubleKeyFrame6 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame6.KeyTime = TimeSpan.FromSeconds(2.0)
-    '    doubleKeyFrame6.Value = 0
-    '    Dim logo1animation As New DoubleAnimationUsingKeyFrames
-    '    logo1animation.KeyFrames.Add(doubleKeyFrame5)
-    '    logo1animation.KeyFrames.Add(splineDoubleKeyFrame3)
-    '    logo1animation.KeyFrames.Add(doubleKeyFramec)
-    '    logo1animation.KeyFrames.Add(doubleKeyFrame6)
+        '进度条 透明度
+        Dim doubleKeyFrame7 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame7.KeyTime = TimeSpan.FromSeconds(0.6)
+        doubleKeyFrame7.Value = 1
+        Dim doubleKeyFramee As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFramee.KeyTime = TimeSpan.FromSeconds(0.7)
+        doubleKeyFramee.Value = 1
+        Dim doubleKeyFrame8 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame8.KeyTime = TimeSpan.FromSeconds(1)
+        doubleKeyFrame8.Value = 0
+        Dim progressanimation As New DoubleAnimationUsingKeyFrames
+        progressanimation.KeyFrames.Add(doubleKeyFrame7)
+        progressanimation.KeyFrames.Add(doubleKeyFramee)
+        progressanimation.KeyFrames.Add(doubleKeyFrame8)
 
-    '    Dim ColorKeyFrame7 As ColorKeyFrame = New LinearColorKeyFrame()
-    '    ColorKeyFrame7.KeyTime = TimeSpan.FromSeconds(0.0)
-    '    ColorKeyFrame7.Value = Color.FromArgb(0, 0, 0, 0)
-    '    Dim splineColorKeyFrame4 As SplineColorKeyFrame = New SplineColorKeyFrame()
-    '    splineColorKeyFrame4.KeyTime = TimeSpan.FromSeconds(1)
-    '    Dim controlPoint7 As Point = New Point(0, 0.48) 'cubic-bezier(0,.48,.8,.99)
-    '    Dim controlPoint8 As Point = New Point(0.8, 0.99)
-    '    splineColorKeyFrame4.KeySpline = New KeySpline() With {.ControlPoint1 = controlPoint7, .ControlPoint2 = controlPoint8}
-    '    splineColorKeyFrame4.Value = Color.FromArgb(150, 0, 0, 0)
-    '    Dim ColorKeyFramed As ColorKeyFrame = New LinearColorKeyFrame()
-    '    ColorKeyFramed.KeyTime = TimeSpan.FromSeconds(1.5)
-    '    ColorKeyFramed.Value = Color.FromArgb(150, 0, 0, 0)
-    '    Dim ColorKeyFrame8 As ColorKeyFrame = New LinearColorKeyFrame()
-    '    ColorKeyFrame8.KeyTime = TimeSpan.FromSeconds(2.0)
-    '    ColorKeyFrame8.Value = Color.FromArgb(0, 0, 0, 0)
-    '    Dim backanimation As New ColorAnimationUsingKeyFrames
-    '    backanimation.KeyFrames.Add(ColorKeyFrame7)
-    '    backanimation.KeyFrames.Add(splineColorKeyFrame4)
-    '    backanimation.KeyFrames.Add(ColorKeyFramed)
-    '    backanimation.KeyFrames.Add(ColorKeyFrame8)
+        '进度条 值
+        Dim doubleKeyFrame11 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame11.KeyTime = TimeSpan.FromSeconds(0)
+        doubleKeyFrame11.Value = 0
+        Dim doubleKeyFrame12 As DoubleKeyFrame = New LinearDoubleKeyFrame()
+        doubleKeyFrame12.KeyTime = TimeSpan.FromSeconds(1)
+        doubleKeyFrame12.Value = 100
+        Dim proganimation As New DoubleAnimationUsingKeyFrames
+        proganimation.KeyFrames.Add(doubleKeyFrame11)
+        proganimation.KeyFrames.Add(doubleKeyFrame12)
 
-    '    Dim doubleKeyFrame7 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame7.KeyTime = TimeSpan.FromSeconds(1.2)
-    '    doubleKeyFrame7.Value = 1
-    '    Dim doubleKeyFramee As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFramee.KeyTime = TimeSpan.FromSeconds(1.7)
-    '    doubleKeyFramee.Value = 1
-    '    Dim doubleKeyFrame8 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame8.KeyTime = TimeSpan.FromSeconds(2.0)
-    '    doubleKeyFrame8.Value = 0
-    '    Dim progressanimation As New DoubleAnimationUsingKeyFrames
-    '    progressanimation.KeyFrames.Add(doubleKeyFrame7)
-    '    progressanimation.KeyFrames.Add(doubleKeyFramee)
-    '    progressanimation.KeyFrames.Add(doubleKeyFrame8)
+        AddHandler progressanimation.Completed, AddressOf animationend
+        x.BeginAnimation(TranslateTransform.YProperty, logo2animation2)
+        logo2.BeginAnimation(UIElement.OpacityProperty, logo2animation)
+        logo1.BeginAnimation(UIElement.OpacityProperty, logo1animation)
+        logogrid.Background.BeginAnimation(SolidColorBrush.ColorProperty, backanimation)
+        loadprog.BeginAnimation(UIElement.OpacityProperty, progressanimation)
+        loadprog.BeginAnimation(ProgressBar.ValueProperty, proganimation)
+    End Sub
 
-    '    Dim doubleKeyFrame11 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame11.KeyTime = TimeSpan.FromSeconds(0)
-    '    doubleKeyFrame11.Value = 0
-    '    Dim doubleKeyFrame12 As DoubleKeyFrame = New LinearDoubleKeyFrame()
-    '    doubleKeyFrame12.KeyTime = TimeSpan.FromSeconds(2.0)
-    '    doubleKeyFrame12.Value = 100
-    '    Dim proganimation As New DoubleAnimationUsingKeyFrames
-    '    proganimation.KeyFrames.Add(doubleKeyFrame11)
-    '    proganimation.KeyFrames.Add(doubleKeyFrame12)
-
-    '    AddHandler progressanimation.Completed, AddressOf animationend
-    '    x.BeginAnimation(TranslateTransform.YProperty, logo2animation2)
-    '    logo2.BeginAnimation(UIElement.OpacityProperty, logo2animation)
-    '    logo1.BeginAnimation(UIElement.OpacityProperty, logo1animation)
-    '    logogrid.Background.BeginAnimation(SolidColorBrush.ColorProperty, backanimation)
-    '    loadprog.BeginAnimation(UIElement.OpacityProperty, progressanimation)
-    '    loadprog.BeginAnimation(ProgressBar.ValueProperty, proganimation)
-    'End Sub
-
-    'Private Sub animationend()
-    '    MainGrid.Children.Remove(logogrid)
-    '    GC.Collect()
-    'End Sub
+    Private Sub animationend()
+        MainGrid.Children.Remove(logogrid)
+        GC.Collect()
+    End Sub
 #End Region
 #Region "History"
     Private ReadOnly _history As New Stack(Of StrokesHistoryNode)
@@ -780,7 +807,7 @@ Class MainWindow1
             update_timer.Stop()
             ci = bv.InkCanvas1
             BoardGrid.Visibility = Visibility.Visible
-            Dim da = CubicBezierAnimation(TimeSpan.FromSeconds(0.3), 0, MainGrid.ActualHeight, "0,.96,.8,1")
+            Dim da = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), 0, MainGrid.ActualHeight, "0,.96,.8,1")
             BoardGrid.BeginAnimation(Grid.HeightProperty, da)
             TextPage.Text = bv.getlabel
             If bv.n = bv.inks.Count - 1 Then
@@ -798,7 +825,7 @@ Class MainWindow1
         ElseIf e = App_Mode_Enum.ppt Then
             App_Mode = e
             ci = InkCanvas1
-            Dim da = CubicBezierAnimation(TimeSpan.FromSeconds(0.3), MainGrid.ActualHeight, 0, "0,.96,.8,1")
+            Dim da = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), MainGrid.ActualHeight, 0, "0,.96,.8,1")
             BoardGrid.BeginAnimation(Grid.HeightProperty, da)
             'BoardGrid.Visibility = Visibility.Collapsed
             TextPage.Text = currentpage & "/" & GetTotalSlideCount()
@@ -847,12 +874,6 @@ Class MainWindow1
             Throw New NotImplementedException
         End Function
     End Class
-
-    Private Async Sub Info_Click(sender As Object, e As RoutedEventArgs)
-        Dim res As String
-        Dim s As AboutDialog = New AboutDialog
-        res = Await MaterialDesignThemes.Wpf.DialogHost.Show(s, "MainDialogHost1")
-    End Sub
 
 
     'Private Sub startnotianimation(c As Canvas, n As UserControl1)

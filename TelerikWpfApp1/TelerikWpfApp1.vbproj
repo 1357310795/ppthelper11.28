@@ -64,7 +64,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>项目2.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\项目2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
@@ -126,14 +126,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FlushMemory.vb" />
-    <Compile Include="ftp.vb" />
-    <Compile Include="logcat.vb" />
+    <Compile Include="Modules\FlushMemory.vb" />
+    <Compile Include="Modules\ftp.vb" />
+    <Compile Include="Modules\logcat.vb" />
     <Compile Include="MainWindow1.xaml.vb">
       <DependentUpon>MainWindow1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Module1.vb" />
-    <Compile Include="Module2.vb" />
+    <Compile Include="Modules\Module1.vb" />
+    <Compile Include="Modules\Module2.vb" />
     <Compile Include="notify\UserControl1.xaml.vb">
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
@@ -143,12 +143,16 @@
     <Compile Include="SaveNoti1.xaml.vb">
       <DependentUpon>SaveNoti1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StrokesHistoryNode.vb" />
+    <Compile Include="Modules\ScreenHelper.vb" />
+    <Compile Include="Modules\StrokesHistoryNode.vb" />
     <Compile Include="ToolsMenu\CursorSettingMenu.xaml.vb">
       <DependentUpon>CursorSettingMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ToolsMenu\SettingMenu.xaml.vb">
-      <DependentUpon>SettingMenu.xaml</DependentUpon>
+    <Compile Include="ToolsMenu\PenSettingWindow.xaml.vb">
+      <DependentUpon>PenSettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ToolsMenu\MoreMenu.xaml.vb">
+      <DependentUpon>MoreMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="ToolsMenu\EraserSettingMenu.xaml.vb">
       <DependentUpon>EraserSettingMenu.xaml</DependentUpon>
@@ -159,16 +163,16 @@
     <Compile Include="ToolsMenu\PenSettingMenu.xaml.vb">
       <DependentUpon>PenSettingMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ToolsMenu\SaveSettingMenu.xaml.vb">
-      <DependentUpon>SaveSettingMenu.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SplashScreenWindow.xaml.vb">
       <DependentUpon>SplashScreenWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="about.xaml.vb">
-      <DependentUpon>about.xaml</DependentUpon>
+    <Compile Include="ToolsMenu\AboutWindow.xaml.vb">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="updatehelper.vb" />
+    <Compile Include="ToolsMenu\SettingWindow.xaml.vb">
+      <DependentUpon>SettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\updatehelper.vb" />
     <Compile Include="View\BoardView.xaml.vb">
       <DependentUpon>BoardView.xaml</DependentUpon>
     </Compile>
@@ -198,7 +202,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ToolsMenu\SettingMenu.xaml">
+    <Page Include="ToolsMenu\PenSettingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ToolsMenu\MoreMenu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -214,17 +222,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ToolsMenu\SaveSettingMenu.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SplashScreenWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="about.xaml">
+    <Page Include="ToolsMenu\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ToolsMenu\SettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\BoardView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -284,25 +292,24 @@
     </None>
     <AppDesigner Include="My Project\" />
     <None Include="packages.config" />
-    <None Include="TelerikWpfApp1_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="项目1.ico" />
+    <Resource Include="Resources\项目1.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Group.png" />
+    <Resource Include="Resources\Group.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="图层 3%402x.png" />
+    <Resource Include="Resources\图层 3%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="图层 2%402x.png" />
+    <Resource Include="Resources\图层 2%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="produced by.png" />
+    <Resource Include="Resources\produced by.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -317,7 +324,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo.png" />
+    <Resource Include="Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
@@ -349,14 +356,14 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="HandyDrawPPTHelper.png" />
-    <Resource Include="开源免费.png" />
+    <Resource Include="Resources\HandyDrawPPTHelper.png" />
+    <Resource Include="Resources\开源免费.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="项目2.ico" />
+    <Resource Include="Resources\项目2.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="HandyDrawPPTHelper1.png" />
+    <Resource Include="Resources\HandyDrawPPTHelper1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="..\packages\MaterialDesignThemes.3.1.3\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.1.3\build\MaterialDesignThemes.targets')" />

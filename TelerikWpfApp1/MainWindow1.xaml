@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TelerikWpfApp1"
         Title="HandyDraw BlackBoard Ver. by Hikari✨" 
         Height="1080" Width="1920" 
-        Icon="项目2.ico" WindowStyle="None" 
+        Icon="Resources/项目2.ico" WindowStyle="None" 
         Background="Transparent" 
         AllowsTransparency="True" 
         ShowInTaskbar="False" Topmost="False" 
@@ -20,7 +20,7 @@
             <EventSetter Event="MouseUp" Handler="ListBoxItem_MouseUp"/>
         </Style>
     </Window.Resources>
-
+    <local:DpiDecorator>
     <materialDesign:DialogHost x:Name="MainDialogHost1" Identifier="MainDialogHost1" Background="Transparent">
         <materialDesign:DialogHost x:Name="MainDialogHost2" Identifier="MainDialogHost2" Background="Transparent">
             <Grid x:Name="MainGrid" Background="Transparent">
@@ -214,9 +214,9 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Bug" Width="24" Height="24" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="DEBUG" Margin="0,5,0,0" FontSize="14"/>
-                                    <materialDesign:PopupBox x:Name="SettingPopup" 
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Apps" Width="24" Height="24" />
+                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="更多" Margin="0,5,0,0" FontSize="14"/>
+                                    <materialDesign:PopupBox x:Name="MorePopup" 
                                                              StaysOpen="True" 
                                                              IsEnabled="True" 
                                                              Grid.RowSpan="2" 
@@ -227,22 +227,10 @@
                                         <materialDesign:PopupBox.ToggleContent>
                                             <x:Null/>
                                         </materialDesign:PopupBox.ToggleContent>
-                                        <local:SettingMenu x:Name="GlobalSetting"/>
+                                        <local:MoreMenu x:Name="More"/>
                                     </materialDesign:PopupBox>
                                 </Grid>
                             </RadioButton>
-                            <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Info_Click">
-                                <Grid Margin="1,5,1,4">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                             Kind="InfoCircleOutline" Width="24" Height="24" Foreground="Black" >
-                                    </materialDesign:PackIcon>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="关于" Margin="0,5,0,0"  FontSize="14" Foreground="Black"/>
-                                </Grid>
-                            </Button>
                             <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Exit_presentation">
                                 <Grid Margin="-5,5,-5,4">
                                     <Grid.RowDefinitions>
@@ -398,7 +386,7 @@
                         </StackPanel>
                     </materialDesign:Card>
                 </Grid>
-                <!--<Grid x:Name="logogrid" Background="#00000000" Visibility="Collapsed">
+                <Grid x:Name="logogrid" Background="#00000000" Visibility="Collapsed">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -411,8 +399,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="1.2*"/>
                     </Grid.RowDefinitions>
-                    <Image x:Name="logo1" Source="HandyDrawPPTHelper.png" Grid.Column="1" Grid.Row="1"/>
-                    <Image x:Name="logo2" Source="开源免费.png" Grid.Column="1" Grid.Row="2">
+                    <Image x:Name="logo1" Source="Resources/HandyDrawPPTHelper.png" Grid.Column="1" Grid.Row="1"/>
+                    <Image x:Name="logo2" Source="Resources/开源免费.png" Grid.Column="1" Grid.Row="2">
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -427,8 +415,9 @@
                                      BorderBrush="#FFFF6976" 
                                      Foreground="#FFFFD29A"
                                      Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Value="17"/>
-                </Grid>-->
+                </Grid>
             </Grid>
         </materialDesign:DialogHost>
     </materialDesign:DialogHost>
+    </local:DpiDecorator>
 </Window>

@@ -10,11 +10,11 @@ none
 false
 
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\Application.xaml
-141122997521
+15140361989
 
-26-541444515
+28-1255323126
 22-360747908
-MainWindow1.xaml;notify\UserControl1.xaml;SaveDialog.xaml;SaveNoti1.xaml;ToolsMenu\CursorSettingMenu.xaml;ToolsMenu\SettingMenu.xaml;ToolsMenu\EraserSettingMenu.xaml;ToolsMenu\MarkerSettingMenu.xaml;ToolsMenu\PenSettingMenu.xaml;ToolsMenu\SaveSettingMenu.xaml;SplashScreenWindow.xaml;about.xaml;View\BoardView.xaml;YesNoDialog.xaml;
+MainWindow1.xaml;notify\UserControl1.xaml;SaveDialog.xaml;SaveNoti1.xaml;ToolsMenu\CursorSettingMenu.xaml;ToolsMenu\PenSettingWindow.xaml;ToolsMenu\MoreMenu.xaml;ToolsMenu\EraserSettingMenu.xaml;ToolsMenu\MarkerSettingMenu.xaml;ToolsMenu\PenSettingMenu.xaml;SplashScreenWindow.xaml;ToolsMenu\AboutWindow.xaml;ToolsMenu\SettingWindow.xaml;View\BoardView.xaml;YesNoDialog.xaml;
 
 False
 

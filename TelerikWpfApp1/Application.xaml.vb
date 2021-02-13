@@ -19,10 +19,7 @@ Class Application
                                                                          ByVal nHeight As Integer,
                                                                          ByVal bRepaint As Boolean) As Integer
     Private Declare Function SetForegroundWindow Lib "user32" Alias "SetForegroundWindow" (ByVal hwnd As Int32) As Int32
-
-
-    ' Application-level events, such as Startup, Exit, and DispatcherUnhandledException
-    ' can be handled in this file.
+    Private Declare Function SetProcessDPIAware Lib "user32" Alias "SetProcessDPIAware" () As Boolean
     Public mw As MainWindow1
     Dim prepare_timer, close_timer As Timer
     Dim ppt_hwnd As Int32
@@ -33,6 +30,7 @@ Class Application
         'Me.MainWindow = splashScreen
         'splashScreen.Show()
         AddHandler DispatcherUnhandledException, AddressOf App_DispatcherUnhandledException
+        'SetProcessDPIAware()
 
         prepare_timer = New Timer
         prepare_timer.Interval = 1000
@@ -49,29 +47,22 @@ Class Application
         If ppt_hwnd <> 0 Then
             prepare_timer.Stop()
             Task.Factory.StartNew(Sub()
-                                      'System.Threading.Thread.Sleep(1000)
                                       Me.Dispatcher.Invoke(Sub()
                                                                mw = New MainWindow1()
                                                                mw.ppt_hwnd = ppt_hwnd
                                                                GetWindowRect(ppt_hwnd, mw.ppt_rect)
-                                                               'GetClientRect(ppt, r)
-                                                               'mw.Left = mw.ppt_rect.Left
-                                                               'mw.Width = mw.ppt_rect.Right - mw.ppt_rect.Left
-                                                               'mw.Top = mw.ppt_rect.Top
-                                                               'mw.Height = mw.ppt_rect.Bottom - mw.ppt_rect.Top
-                                                               'MoveWindow(New WindowInteropHelper(mw).Handle,
-                                                               '                            mw.ppt_rect.Left,
-                                                               '                            mw.ppt_rect.Top,
-                                                               '                            mw.ppt_rect.Right - mw.ppt_rect.Left,
-                                                               '                            mw.ppt_rect.Bottom - mw.ppt_rect.Top,
-                                                               '                            True)
                                                                mw.ppt_obj = New PowerPoint.Application
                                                                mw.ppt_view = mw.ppt_obj.ActivePresentation.SlideShowWindow.View
                                                                Me.MainWindow = mw
                                                                MainWindow.Show()
-                                                               'splashScreen.Close()
                                                            End Sub)
                                   End Sub)
+            Dim seewo = Process.GetProcessesByName("PPTService")
+            If seewo.Length <> 0 Then
+                For Each i In seewo
+                    i.Kill()
+                Next
+            End If
             close_timer.Start()
         End If
     End Sub
