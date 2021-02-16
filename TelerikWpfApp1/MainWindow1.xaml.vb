@@ -1,4 +1,5 @@
-﻿Imports System.Timers
+﻿Imports System.IO
+Imports System.Timers
 Imports System.Windows.Ink
 Imports System.Windows.Interop
 Imports System.Windows.Media.Animation
@@ -100,6 +101,8 @@ Class MainWindow1
         MarkerColorTip.SetBinding(Shape.FillProperty, MarkerColorBinding)
 
         SetForegroundWindow(New WindowInteropHelper(Me).Handle)
+
+        AddHandler optimer.Elapsed, AddressOf op_timer_Tick
 
         update_timer.Interval = 1000
         AddHandler update_timer.Elapsed, AddressOf update_timer_Tick
@@ -208,7 +211,7 @@ Class MainWindow1
                     'PenSetting.popup = PenSettingPopup
 
                     Dim w As New PenSettingWindow
-                     If App_Mode = App_Mode_Enum.PPT Then
+                    If App_Mode = App_Mode_Enum.PPT Then
                         w.initdrawer(pen)
                     ElseIf App_Mode = App_Mode_Enum.Board Then
                         w.initdrawer(pen1)
@@ -243,6 +246,8 @@ Class MainWindow1
     Private inks As StrokeCollection()
     Dim update_timer As New Timer
     Public erroccured As Boolean
+    Private optimer As New Timer With {.Interval = 10000}
+
     Private Sub ppt_next()
         ppt_view.Next()
         updatepage(1)
@@ -253,7 +258,15 @@ Class MainWindow1
         updatepage(-1)
         SetForegroundWindow(ppt_hwnd)
     End Sub
-    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+    Private Sub Button_Prev_Click(sender As Object, e As RoutedEventArgs)
+        GridLeft.BeginAnimation(UIElement.OpacityProperty, Nothing)
+        GridLeft.Opacity = 0.7
+        If optimer.Enabled Then
+            optimer.Stop()
+            optimer.Start()
+        Else
+            optimer.Start()
+        End If
         If App_Mode = App_Mode_Enum.PPT Then
             ppt_prev()
         ElseIf App_Mode = App_Mode_Enum.Board Then
@@ -268,7 +281,15 @@ Class MainWindow1
             End If
         End If
     End Sub
-    Private Sub Button_Click_1(sender As Object, e As RoutedEventArgs)
+    Private Sub Button_Next_Click(sender As Object, e As RoutedEventArgs)
+        GridLeft.BeginAnimation(UIElement.OpacityProperty, Nothing)
+        GridLeft.Opacity = 0.7
+        If optimer.Enabled Then
+            optimer.Stop()
+            optimer.Start()
+        Else
+            optimer.Start()
+        End If
         If App_Mode = App_Mode_Enum.PPT Then
             ppt_next()
         ElseIf App_Mode = App_Mode_Enum.Board Then
@@ -369,6 +390,14 @@ Class MainWindow1
         erroccured = True
         System.Threading.Thread.Sleep(2000)
         If update_timer IsNot Nothing Then update_timer.Start()
+    End Sub
+
+    Private Sub op_timer_Tick(sender As Object, e As EventArgs)
+        TryCast(sender, Timer).Stop()
+        Me.Dispatcher.Invoke(Sub()
+                                 Dim a = New DoubleAnimation(GridLeft.Opacity, 0.2, TimeSpan.FromSeconds(1))
+                                 GridLeft.BeginAnimation(UIElement.OpacityProperty, a)
+                             End Sub)
     End Sub
 #End Region
 #Region "MultiTouch"
@@ -824,7 +853,7 @@ Class MainWindow1
             ButtonBoardText.Text = "返回"
             ButtonCameraIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WebCamera
             ButtonCameraText.Text = "视频展台"
-        ElseIf e = App_Mode_Enum.ppt Then
+        ElseIf e = App_Mode_Enum.PPT Then
             App_Mode = e
             ci = InkCanvas1
             Dim da = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), MainGrid.ActualHeight, 0, "0,.96,.8,1")
@@ -854,6 +883,57 @@ Class MainWindow1
             Set_App_Mode(App_Mode_Enum.Camera)
         End If
     End Sub
+
+
+#Region "FreeScale"
+    Public BackBitmapImage As BitmapImage
+    Public IsScaleMode As Boolean
+    Private Sub FreeScale_Click(sender As Object, e As RoutedEventArgs)
+        'Dim ppt_prst As PowerPoint.Presentation = ppt_obj.ActivePresentation
+        'If IsScaleMode Then
+        '    MainContentControl.Content = Nothing
+        '    InkCanvas1.Visibility = Visibility.Visible
+        '    FreeScaleButton.Background = Application.Current.Resources("MaterialDesignBackground")
+        '    IsScaleMode = False
+        '    Return
+        'End If
+        'IsScaleMode = True
+        'Dim screenradio As Single = ScreenHelper.GetActualWidth / ScreenHelper.GetActualHeight
+        'Dim r As Single = ppt_prst.PageSetup.SlideWidth / ppt_prst.PageSetup.SlideHeight
+        'Dim fw, fh As Int32
+        'If screenradio >= r Then
+        '    fh = ScreenHelper.GetActualHeight
+        '    fw = Math.Round(fh * r)
+        'Else
+        '    fw = ScreenHelper.GetActualWidth
+        '    fh = Math.Round(fw / r)
+        'End If
+
+        'FreeScaleButton.Background = Application.Current.Resources("MaterialDesignFlatButtonClick")
+        'ppt_prst.Slides.Item(currentpage).Export("D:\1.png", "PNG", fw, fh)
+        'Dim imageurl = "D:\1.png"
+
+        'Dim t As New PicView
+        'MainContentControl.Content = t
+        'InkCanvas1.Visibility = Visibility.Hidden
+        'Using reader As BinaryReader = New BinaryReader(File.Open(imageurl, FileMode.Open))
+        '    Try
+        '        Dim fi As FileInfo = New FileInfo(imageurl)
+        '        Dim bytes As Byte() = reader.ReadBytes(CInt(fi.Length))
+        '        reader.Close()
+        '        BackBitmapImage = New BitmapImage
+        '        BackBitmapImage.CacheOption = BitmapCacheOption.OnLoad
+        '        BackBitmapImage.BeginInit()
+        '        BackBitmapImage.StreamSource = New MemoryStream(bytes)
+        '        BackBitmapImage.EndInit()
+        '        t.BackImage.Source = BackBitmapImage
+        '    Catch ex As Exception
+        '        MsgBox(ex.Message)
+        '    End Try
+        'End Using
+    End Sub
+
+#End Region
 
     Private Sub Button_Camera_Click(sender As Object, e As RoutedEventArgs)
         If App_Mode = App_Mode_Enum.PPT Then

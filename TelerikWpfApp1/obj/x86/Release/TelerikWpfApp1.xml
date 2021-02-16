@@ -104,6 +104,16 @@ CursorSettingMenu
 InitializeComponent
 </summary>
 </member>
+<member name="T:TelerikWpfApp1.PicView">
+<summary>
+PicView
+</summary>
+</member>
+<member name="M:TelerikWpfApp1.PicView.InitializeComponent">
+<summary>
+InitializeComponent
+</summary>
+</member>
 <member name="T:TelerikWpfApp1.PenSettingWindow">
 <summary>
 PenSettingWindow

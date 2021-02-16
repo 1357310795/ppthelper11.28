@@ -258,14 +258,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TelerikWpfApp1.exe" size="3157968">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TelerikWpfApp1.exe" size="3168208">
       <assemblyIdentity name="TelerikWpfApp1" version="1.0.1.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>j1uvHhupaZmLJoJ+tQ7yKw7AgC3Mhn+plETMq0WRtdg=</dsig:DigestValue>
+        <dsig:DigestValue>ibtZntLkKMknVY8rgyjJp09E9cyhBqG1WwDo+O60veI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

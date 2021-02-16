@@ -148,6 +148,9 @@
     <Compile Include="ToolsMenu\CursorSettingMenu.xaml.vb">
       <DependentUpon>CursorSettingMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\PicView.xaml.vb">
+      <DependentUpon>PicView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Window\PenSettingWindow.xaml.vb">
       <DependentUpon>PenSettingWindow.xaml</DependentUpon>
     </Compile>
@@ -196,6 +199,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ToolsMenu\CursorSettingMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\PicView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

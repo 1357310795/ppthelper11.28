@@ -630,3 +630,5 @@ C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\S
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\PenSettingWindow.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\AboutWindow.baml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\Window\SettingWindow.baml
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\View\PicView.g.vb
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\View\PicView.baml

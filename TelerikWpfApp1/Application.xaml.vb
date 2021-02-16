@@ -20,17 +20,20 @@ Class Application
                                                                          ByVal bRepaint As Boolean) As Integer
     Private Declare Function SetForegroundWindow Lib "user32" Alias "SetForegroundWindow" (ByVal hwnd As Int32) As Int32
     Private Declare Function SetProcessDPIAware Lib "user32" Alias "SetProcessDPIAware" () As Boolean
+    Private mutex As System.Threading.Mutex
     Public mw As MainWindow1
     Dim prepare_timer, close_timer As Timer
     Dim ppt_hwnd As Int32
 
     Protected Overrides Sub OnStartup(ByVal e As StartupEventArgs)
         MyBase.OnStartup(e)
-        'Dim splashScreen = New SplashScreenWindow()
-        'Me.MainWindow = splashScreen
-        'splashScreen.Show()
+        Dim ret As Boolean
+        mutex = New System.Threading.Mutex(True, "PPTHelper", ret)
+
+        If Not ret Then
+            Environment.[Exit](0)
+        End If
         AddHandler DispatcherUnhandledException, AddressOf App_DispatcherUnhandledException
-        'SetProcessDPIAware()
 
         prepare_timer = New Timer
         prepare_timer.Interval = 1000

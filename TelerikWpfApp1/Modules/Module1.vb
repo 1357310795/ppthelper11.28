@@ -10,6 +10,7 @@ Public Enum App_Mode_Enum As Integer
     PPT = 0
     Board = 1
     Camera = 2
+    Scale = 3
 End Enum
 Module Module1
     Public Structure RECT
@@ -37,8 +38,9 @@ Public Class DpiDecorator
 
     Public Sub New()
         AddHandler Me.Loaded, Sub(s, e)
+                                  Dim r = ScreenHelper.GetActualWidth / 1920
                                   Dim m As Matrix = PresentationSource.FromVisual(Me).CompositionTarget.TransformToDevice
-                                  Dim dpiTransform As ScaleTransform = New ScaleTransform(1 / m.M11, 1 / m.M22)
+                                  Dim dpiTransform As ScaleTransform = New ScaleTransform(r * 1 / m.M11, r * 1 / m.M22)
                                   If dpiTransform.CanFreeze Then dpiTransform.Freeze()
                                   Me.LayoutTransform = dpiTransform
                               End Sub

@@ -73,3 +73,5 @@ C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Release\Teleri
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Release\TelerikWpfApp1.exe
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Release\TelerikWpfApp1.xml
 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Release\TelerikWpfApp1.pdb
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Release\View\PicView.g.vb
+C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Release\View\PicView.baml

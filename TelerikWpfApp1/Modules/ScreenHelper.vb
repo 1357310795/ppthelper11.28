@@ -93,8 +93,12 @@ Public Class ScreenHelper
     End Function
 
     ' Token: 0x06000008 RID: 8 RVA: 0x000020F8 File Offset: 0x000002F8
-    Private Shared Function GetActualHeight() As Double
+    Public Shared Function GetActualHeight() As Double
         Return SystemParameters.PrimaryScreenHeight
+    End Function
+
+    Public Shared Function GetActualWidth() As Double
+        Return SystemParameters.PrimaryScreenWidth
     End Function
 
     ' Token: 0x06000009 RID: 9 RVA: 0x00002110 File Offset: 0x00000310
