@@ -12,3 +12,10 @@ C:\Users\13573\source\repos\ppthelper11.28\Project1\obj\Debug\Project1.vbprojAss
 C:\Users\13573\source\repos\ppthelper11.28\Project1\obj\Debug\Project1.vbproj.CoreCompileInputs.cache
 C:\Users\13573\source\repos\ppthelper11.28\Project1\obj\Debug\loader.exe
 C:\Users\13573\source\repos\ppthelper11.28\Project1\obj\Debug\loader.pdb
+C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\bin\Debug\loader.exe.config
+C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\bin\Debug\loader.exe
+C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\bin\Debug\loader.pdb
+C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\obj\Debug\Project1.vbprojAssemblyReference.cache
+C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\obj\Debug\Project1.vbproj.CoreCompileInputs.cache
+C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\obj\Debug\loader.exe
+C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\obj\Debug\loader.pdb

@@ -36,7 +36,7 @@ Namespace logcat.Log
         Public Sub WriteLog(ByVal logContent As String, ByVal Optional logType As LogType = LogType.Information, ByVal Optional fileName As String = Nothing)
             Try
                 Dim basePath As String = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                basePath = "C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\bin"
+                'basePath = "D:"
 
                 If Not Directory.Exists(basePath & "\Log") Then
                     Directory.CreateDirectory(basePath & "\Log")

@@ -24,8 +24,8 @@ Class MainWindow1
     Public Sub New()
         pen = New DrawingAttributes With {
             .Color = Color.FromRgb(245, 63, 54),
-            .Height = 4,
-            .Width = 4,
+            .Height = 3,
+            .Width = 3,
             .FitToCurve = True,
             .IsHighlighter = False,
             .StylusTip = StylusTip.Ellipse

@@ -116,4 +116,19 @@ Public Class ScreenHelper
         WindowsMonitorAPI.EnumDisplayMonitors(WindowsMonitorAPI.NullHandleRef, Nothing, proc, IntPtr.Zero)
         Return logicalHeight
     End Function
+
+    Public Shared Function GetLogicalWidth() As Double
+        Dim logicalWidth As Double = 0.0
+        Dim proc As WindowsMonitorAPI.MonitorEnumProc = Function(m As IntPtr, h As IntPtr, lm As IntPtr, lp As IntPtr)
+                                                            Dim info As WindowsMonitorAPI.MONITORINFOEX = New WindowsMonitorAPI.MONITORINFOEX()
+                                                            WindowsMonitorAPI.GetMonitorInfo(New HandleRef(Nothing, m), info)
+                                                            Dim flag As Boolean = (info.dwFlags And 1) <> 0
+                                                            If flag Then
+                                                                logicalWidth = CDbl((info.rcMonitor.right - info.rcMonitor.left))
+                                                            End If
+                                                            Return True
+                                                        End Function
+        WindowsMonitorAPI.EnumDisplayMonitors(WindowsMonitorAPI.NullHandleRef, Nothing, proc, IntPtr.Zero)
+        Return logicalWidth
+    End Function
 End Class

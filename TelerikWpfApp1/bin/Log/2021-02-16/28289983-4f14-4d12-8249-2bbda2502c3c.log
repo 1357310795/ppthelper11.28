@@ -19,3 +19,10 @@
                StackTrace:    在 TelerikWpfApp1.FtpWeb.Download(String ftpUri, String fileFullPath) 位置 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\Modules\ftp.vb:行号 107
    在 TelerikWpfApp1.updatehelper.updatemain() 位置 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\Modules\updatehelper.vb:行号 21
 
+08:41:29: Information: Update Start
+08:41:29: Error: Exception: IOException
+               Message: 文件“C:\Users\13573\AppData\Local\HandyDraw\tmp.ini”正由另一进程使用，因此该进程无法访问此文件。
+               Source: TelerikWpfApp1
+               StackTrace:    在 TelerikWpfApp1.FtpWeb.Download(String ftpUri, String fileFullPath) 位置 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\Modules\ftp.vb:行号 107
+   在 TelerikWpfApp1.updatehelper.updatemain() 位置 C:\Users\13573\Source\Repos\ppthelper11.28\TelerikWpfApp1\Modules\updatehelper.vb:行号 21
+

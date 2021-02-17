@@ -38,7 +38,7 @@ Public Class DpiDecorator
 
     Public Sub New()
         AddHandler Me.Loaded, Sub(s, e)
-                                  Dim r = ScreenHelper.GetActualWidth / 1920
+                                  Dim r = ScreenHelper.GetLogicalWidth / 1920
                                   Dim m As Matrix = PresentationSource.FromVisual(Me).CompositionTarget.TransformToDevice
                                   Dim dpiTransform As ScaleTransform = New ScaleTransform(r * 1 / m.M11, r * 1 / m.M22)
                                   If dpiTransform.CanFreeze Then dpiTransform.Freeze()

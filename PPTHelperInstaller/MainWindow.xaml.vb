@@ -26,7 +26,8 @@ Class MainWindow
             Dim s3 = """" & installpath & "loader.exe" & """"
             Registry.SetValue(s1, s2, s3, RegistryValueKind.String)
             Me.Dispatcher.Invoke(New Action(Of String)(AddressOf undate), "设置开机启动成功")
-            Process.Start(s3)
+            'Process.Start(s3)
+            Process.Start("runas.exe", $"/trustlevel:0x20000 """ & s3 & """")
             Me.Dispatcher.Invoke(New Action(Of String)(AddressOf undate), "程序启动成功")
             Threading.Thread.Sleep(1000)
             End

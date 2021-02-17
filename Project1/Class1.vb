@@ -19,7 +19,7 @@ Public Module m
             Try
                 Dim lastver = GetKeyValue("main", "lastver", "", inipath)
                 Process.Start(baseURL & "\" & lastver & "\TelerikWpfApp1.exe")
-
+                SetKeyValue("main", "ver", lastver, inipath)
             Catch ex1 As Exception
                 MsgBox(ex.Message)
             End Try

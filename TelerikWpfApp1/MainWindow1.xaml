@@ -412,7 +412,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="1.2*"/>
                         </Grid.RowDefinitions>
-                        <Image x:Name="logo1" Source="Resources/HandyDrawPPTHelper1.png" Grid.Column="1" Grid.Row="1"/>
+                        <Image x:Name="logo1" Source="Resources/HandyDrawPPTHelper.png" Grid.Column="1" Grid.Row="1"/>
                         <Image x:Name="logo2" Source="Resources/开源免费.png" Grid.Column="1" Grid.Row="2">
                             <Image.RenderTransform>
                                 <TransformGroup>
