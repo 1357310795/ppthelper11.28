@@ -24,8 +24,8 @@ Class MainWindow1
     Public Sub New()
         pen = New DrawingAttributes With {
             .Color = Color.FromRgb(245, 63, 54),
-            .Height = 3,
-            .Width = 3,
+            .Height = 4,
+            .Width = 4,
             .FitToCurve = True,
             .IsHighlighter = False,
             .StylusTip = StylusTip.Ellipse
@@ -417,7 +417,7 @@ Class MainWindow1
 #Disable Warning BC40005 ' 成员隐藏基类型中的可重写的方法
     Private Sub OnTouchDown(ByVal sender As Object, ByVal touchEventArgs As TouchEventArgs)
         Console.WriteLine("OnTouchDown")
-        Dim touchPoint = touchEventArgs.GetTouchPoint(Me)
+        Dim touchPoint = touchEventArgs.GetTouchPoint(InkCanvas1)
         Dim point = touchPoint.Position
 
         If InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint Then
@@ -437,8 +437,8 @@ Class MainWindow1
             If Not _currentCanvasStrokes.ContainsKey(touchPoint.TouchDevice.Id) Then
                 _currentCanvasStrokes.Add(touchPoint.TouchDevice.Id, _addingStroke)
                 InkCanvas1.Strokes.Add(_addingStroke)
-                _lasttimestamp.Add(touchPoint.TouchDevice.Id, DateTime.Now.Ticks / 1000000D)
-                _lastpoint.Add(touchPoint.TouchDevice.Id, _addingStroke.StylusPoints(0))
+                '_lasttimestamp.Add(touchPoint.TouchDevice.Id, DateTime.Now.Ticks / 1000000D)
+                '_lastpoint.Add(touchPoint.TouchDevice.Id, _addingStroke.StylusPoints(0))
             End If
         End If
     End Sub
@@ -452,27 +452,29 @@ Class MainWindow1
         End If
 
         If Edit_Mode = Edit_Mode_Enum.Pen Then
-            Dim touchPoint = touchEventArgs.GetTouchPoint(Me)
-            Dim spc As StylusPointCollection = _currentCanvasStrokes(touchPoint.TouchDevice.Id).StylusPoints
-            Console.WriteLine(spc.Count)
-            If (spc.Count > 5) Then
-                If (spc(spc.Count - 2).PressureFactor < 0.8) Then
-                    For i = 1 To 1 Step -1
-                        Dim t As StylusPoint = spc(spc.Count - i)
-                        t.PressureFactor = 0.1F + (spc(spc.Count - 2).PressureFactor - 0.1F) * (i - 1) / 2
-                        spc(spc.Count - i) = t
-                    Next
+            Dim touchPoint = touchEventArgs.GetTouchPoint(InkCanvas1)
+            If _currentCanvasStrokes.ContainsKey(touchPoint.TouchDevice.Id) Then
+                Dim spc As StylusPointCollection = _currentCanvasStrokes(touchPoint.TouchDevice.Id).StylusPoints
+                Console.WriteLine(spc.Count)
+                If (spc.Count > 5) Then
+                    If spc(spc.Count - 3).PressureFactor < 0.8 Then
+                        For i = 2 To 1 Step -1
+                            Dim t As StylusPoint = spc(spc.Count - i)
+                            t.PressureFactor = 0.1F + (spc(spc.Count - 3).PressureFactor - 0.1F) * (i - 1) / 2
+                            spc(spc.Count - i) = t
+                        Next
+                    End If
                 End If
+                _currentCanvasStrokes.Remove(touchPoint.TouchDevice.Id)
+                '_lasttimestamp.Remove(touchPoint.TouchDevice.Id)
+                '_lastpoint.Remove(touchPoint.TouchDevice.Id)
             End If
-            _currentCanvasStrokes.Remove(touchPoint.TouchDevice.Id)
-            _lasttimestamp.Remove(touchPoint.TouchDevice.Id)
-            _lastpoint.Remove(touchPoint.TouchDevice.Id)
         End If
     End Sub
 
     Private Sub OnTouchMove(ByVal sender As Object, ByVal touchEventArgs As TouchEventArgs)
         'Console.WriteLine("OnTouchMove")
-        Dim touchPoint = touchEventArgs.GetTouchPoint(Me)
+        Dim touchPoint = touchEventArgs.GetTouchPoint(InkCanvas1)
         Dim point = touchPoint.Position
 
         If InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint Then
@@ -485,27 +487,19 @@ Class MainWindow1
         If Edit_Mode = Edit_Mode_Enum.Pen Then
             If _currentCanvasStrokes.ContainsKey(touchPoint.TouchDevice.Id) Then
                 Dim stroke = _currentCanvasStrokes(touchPoint.TouchDevice.Id)
-                Dim nearbyPoint = IsNearbyPoint(stroke, point)
+                'Dim nearbyPoint = IsNearbyPoint(stroke, point)
 
-                If Not nearbyPoint Then
-                    Dim sp As StylusPoint = New StylusPoint(point.X, point.Y)
-                    Dim nowtime As Double = DateTime.Now.Ticks / 1000000D
-                    Dim v = (point - _lastpoint(touchPoint.TouchDevice.Id).ToPoint).Length / (nowtime - _lasttimestamp(touchPoint.TouchDevice.Id))
-                    'If (Double.IsNaN(v) Or v > maxv) Then
-                    '    sp.PressureFactor = 0.2F
-                    'Else
-                    '    sp.PressureFactor = CType((0.8F - (0.6F / maxv) * v), Single)
-                    'End If
-                    sp.PressureFactor = CType(calc_pressure(v), Single)
-                    stroke.StylusPoints.Add(sp)
-                    _lastpoint(touchPoint.TouchDevice.Id) = sp
-                    _lasttimestamp(touchPoint.TouchDevice.Id) = nowtime
-                    'Application.Current.Resources("speed") = v.ToString()
-                    'l.Add(v)
-                    'If (Not Double.IsNaN(v) And Not Double.IsPositiveInfinity(v)) Then
-                    '    Application.Current.Resources("speedint") = v
-                    'End If
-                End If
+                'If Not nearbyPoint Then
+                '    Dim sp As StylusPoint = New StylusPoint(point.X, point.Y)
+                '    Dim nowtime As Double = DateTime.Now.Ticks / 1000000D
+                '    Dim v = (point - _lastpoint(touchPoint.TouchDevice.Id).ToPoint).Length / (nowtime - _lasttimestamp(touchPoint.TouchDevice.Id))
+
+                '    sp.PressureFactor = CType(calc_pressure(v), Single)
+                '    stroke.StylusPoints.Add(sp)
+                '    _lastpoint(touchPoint.TouchDevice.Id) = sp
+                '    _lasttimestamp(touchPoint.TouchDevice.Id) = nowtime
+                'End If
+                stroke.StylusPoints.Add(New StylusPoint(point.X, point.Y))
             End If
         End If
     End Sub

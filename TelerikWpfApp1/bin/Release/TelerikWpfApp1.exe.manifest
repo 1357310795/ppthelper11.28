@@ -265,7 +265,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>LVa+WZ+U6OlqjKWomiFV0pF42HAfVTQGaQLO0HXDo/0=</dsig:DigestValue>
+        <dsig:DigestValue>tkeP4/iShsvOIH9HXWvcWRy14VPmgukTW4lqckgMovY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -278,13 +278,13 @@
       <dsig:DigestValue>Y4wTs+rps1pQaVrgq5a8beUD/rLppQSUS5zX1JXfk1M=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="TelerikWpfApp1.exe.config" size="1800">
+  <file name="TelerikWpfApp1.exe.config" size="1833">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>cRzxMGArrs9R4LVTIqbwCNcxiwwTSMW0vbFm6XRV4VM=</dsig:DigestValue>
+      <dsig:DigestValue>knXtvtOSJhUeAGeZ7X8Nf2Z16fK0wiCzauqKiWgQeoc=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

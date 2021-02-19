@@ -4,17 +4,17 @@
 winexe
 VB
 .vb
-C:\Users\13573\source\repos\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\
+C:\Users\11637\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\obj\x86\Debug\
 TelerikWpfApp1
 none
 false
 
-C:\Users\13573\source\repos\ppthelper11.28\TelerikWpfApp1\Application.xaml
+C:\Users\11637\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\Application.xaml
 15552721422
 
-29-1336015108
-22-1340026241
+28435154502
+191600329295
 MainWindow1.xaml;notify\UserControl1.xaml;SaveDialog.xaml;SaveNoti1.xaml;ToolsMenu\CursorSettingMenu.xaml;View\PicView.xaml;Window\PenSettingWindow.xaml;ToolsMenu\MoreMenu.xaml;ToolsMenu\EraserSettingMenu.xaml;ToolsMenu\MarkerSettingMenu.xaml;ToolsMenu\PenSettingMenu.xaml;Window\AboutWindow.xaml;Window\SettingWindow.xaml;View\BoardView.xaml;YesNoDialog.xaml;
 
-True
+False
 

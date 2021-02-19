@@ -27,8 +27,12 @@ Class MainWindow
             Registry.SetValue(s1, s2, s3, RegistryValueKind.String)
             Me.Dispatcher.Invoke(New Action(Of String)(AddressOf undate), "设置开机启动成功")
             'Process.Start(s3)
-            Process.Start("runas.exe", $"/trustlevel:0x20000 """ & s3 & """")
+            'Process.Start("runas.exe", $"/trustlevel:0x20000 """ & s3 & """")
+            Process.Start("explorer.exe", s3)
             Me.Dispatcher.Invoke(New Action(Of String)(AddressOf undate), "程序启动成功")
+            'Process.Start("runas.exe", $"/trustlevel:0x20000 """ & rootpath & "\演示文稿1.pptx" & """")
+            Process.Start("explorer.exe", rootpath & "\演示文稿1.pptx")
+            Me.Dispatcher.Invoke(New Action(Of String)(AddressOf undate), "打开示例")
             Threading.Thread.Sleep(1000)
             End
         Catch ex As Exception
