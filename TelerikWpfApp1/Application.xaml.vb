@@ -22,10 +22,22 @@ Class Application
     Private Declare Function SetProcessDPIAware Lib "user32" Alias "SetProcessDPIAware" () As Boolean
     Private mutex As System.Threading.Mutex
     Public mw As MainWindow1
-    Dim prepare_timer, close_timer As Timer
+    Dim prepare_timer As System.Windows.Threading.DispatcherTimer
+    Dim close_timer As Timer
     Dim ppt_hwnd As Int32
 
+    Protected Overrides Sub OnExit(e As ExitEventArgs)
+        logcat.Log.Logger.Instance.WriteLog(e.ApplicationExitCode.ToString)
+        MyBase.OnExit(e)
+    End Sub
+
+    Protected Overrides Sub OnSessionEnding(e As SessionEndingCancelEventArgs)
+        logcat.Log.Logger.Instance.WriteLog(e.ReasonSessionEnding.ToString)
+        MyBase.OnSessionEnding(e)
+    End Sub
+
     Protected Overrides Sub OnStartup(ByVal e As StartupEventArgs)
+        logcat.Log.Logger.Instance.WriteLog("程序启动")
         MyBase.OnStartup(e)
         Dim ret As Boolean
         mutex = New System.Threading.Mutex(True, "PPTHelper", ret)
@@ -35,11 +47,11 @@ Class Application
         End If
         AddHandler DispatcherUnhandledException, AddressOf App_DispatcherUnhandledException
 
-        prepare_timer = New Timer
-        prepare_timer.Interval = 1000
+        prepare_timer = New System.Windows.Threading.DispatcherTimer
+        prepare_timer.Interval = TimeSpan.FromSeconds(1)
         close_timer = New Timer
         close_timer.Interval = 200
-        AddHandler prepare_timer.Elapsed, AddressOf prepare
+        AddHandler prepare_timer.Tick, AddressOf prepare
         AddHandler close_timer.Elapsed, AddressOf close
         prepare_timer.Start()
     End Sub
@@ -49,17 +61,17 @@ Class Application
         ppt_hwnd = FindWindow("screenClass", vbNullString)
         If ppt_hwnd <> 0 Then
             prepare_timer.Stop()
-            Task.Factory.StartNew(Sub()
-                                      Me.Dispatcher.Invoke(Sub()
-                                                               mw = New MainWindow1()
-                                                               mw.ppt_hwnd = ppt_hwnd
-                                                               GetWindowRect(ppt_hwnd, mw.ppt_rect)
-                                                               mw.ppt_obj = New PowerPoint.Application
-                                                               mw.ppt_view = mw.ppt_obj.ActivePresentation.SlideShowWindow.View
-                                                               Me.MainWindow = mw
-                                                               MainWindow.Show()
-                                                           End Sub)
-                                  End Sub)
+            Try
+                mw = New MainWindow1()
+                mw.ppt_hwnd = ppt_hwnd
+                GetWindowRect(ppt_hwnd, mw.ppt_rect)
+                mw.ppt_obj = New PowerPoint.Application
+                mw.ppt_view = mw.ppt_obj.ActivePresentation.SlideShowWindow.View
+                Me.MainWindow = mw
+                MainWindow.Show()
+            Catch ex As Exception
+                logcat.Log.Logger.Instance.WriteException(ex)
+            End Try
             Dim seewo = Process.GetProcessesByName("PPTService")
             If seewo.Length <> 0 Then
                 For Each i In seewo

@@ -60,7 +60,8 @@ Namespace logcat.Log
                     File.AppendAllLines(basePath & "\Log\" & dataString & "\" & fileName, logText)
                 End SyncLock
 
-            Catch __unusedException1__ As Exception
+            Catch ex As Exception
+                Console.WriteLine(ex)
             End Try
         End Sub
 
