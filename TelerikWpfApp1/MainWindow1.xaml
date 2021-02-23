@@ -47,7 +47,7 @@
                     <Grid x:Name="GridTools"
                           HorizontalAlignment="Center" VerticalAlignment="Bottom"
                           Margin="172,0,173,15" RenderTransformOrigin="0.5,1" 
-                          Height="45" Opacity="0.6">
+                          Height="60" Opacity="0.6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
@@ -65,55 +65,70 @@
                                     </TransformGroup>
                                 </StackPanel.RenderTransform>
                                 <RadioButton x:Name="CursorRadioButton"
+                                             Padding="8"
                                              Style="{StaticResource ListBoxItemStyle}"
                                              IsChecked="True" Tag="Cursor"
                                              GroupName="Tools" Checked="Cursor_Selected">
-                                    <Grid Margin="5,2">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
                                                                  Kind="CursorDefault" Width="24" Height="24" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="指针" Margin="0,5,0,0" FontSize="14"/>
+                                        <TextBlock Grid.Row="1" Text="指针" Margin="7,4,7,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton x:Name="SelectRadioButton"
+                                             Padding="8"
                                              Style="{StaticResource ListBoxItemStyle}"
                                              IsChecked="False" Tag="select"
                                              GroupName="Tools" Checked="Select_Selected">
-                                    <Grid Margin="5,2">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
                                                                  Kind="Select" Width="24" Height="24" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="选择" Margin="0,5,0,0" FontSize="14"/>
+                                        <TextBlock Grid.Row="1" Text="选择" Margin="7,4,7,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                     </Grid>
                                 </RadioButton>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" x:Name="FreeScaleButton"  Height="60" Click="FreeScale_Click">
-                                    <Grid Margin="2">
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
+                                        x:Name="FreeScaleButton" 
+                                        Height="60" Click="FreeScale_Click"
+                                         Padding="8">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
                                                                  Kind="ArrowTopRightBottomLeft" Width="24" Height="24" Foreground="#FF7C7C7C" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="缩放" Margin="0,5,0,0" FontSize="14" Foreground="#FF787878"/>
+                                        <TextBlock Grid.Row="1" Text="缩放" Margin="7,4,7,0"
+                                                    Foreground="#FF787878"
+                                                   FontSize="14"
+                                                   Visibility="Visible"/>
                                     </Grid>
                                 </Button>
                                 <RadioButton x:Name="PenRadioButton"
+                                             Padding="8"
                                              Style="{StaticResource ListBoxItemStyle}"
                                              IsChecked="False" Tag="Pen"
                                              GroupName="Tools" Checked="Pen_Selected">
-                                    <Grid Margin="5,2">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="LeadPencil" Width="24" Height="24" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="画笔" Margin="0,5,0,0" FontSize="14"/>
+                                        <TextBlock Grid.Row="1" Text="标注" Margin="7,4,7,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                         <materialDesign:PopupBox x:Name="PenSettingPopup" 
                                                                  StaysOpen="True" 
                                                                  IsEnabled="True" 
@@ -135,16 +150,19 @@
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton x:Name="MarkerRadioButton"
+                                             Padding="8"
                                              Style="{StaticResource ListBoxItemStyle}"
                                              IsChecked="False" Tag="Marker"
                                              GroupName="Tools" Checked="Marker_Selected">
-                                    <Grid Margin="5,2">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Marker" VerticalAlignment="Center" Width="24" Height="24" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="荧光笔" Margin="0,5,0,0" FontSize="14"/>
+                                        <TextBlock Grid.Row="1" Text="荧光笔" Margin="7,4,7,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                         <materialDesign:PopupBox x:Name="MarkerSettingPopup" 
                                                                  StaysOpen="True" 
                                                                  IsEnabled="True" 
@@ -166,16 +184,19 @@
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton x:Name="EraserRadioButton"
+                                             Padding="8"
                                              Style="{StaticResource ListBoxItemStyle}"
                                              IsChecked="False" Tag="Eraser"
                                              GroupName="Tools" Checked="Eraser_Selected">
-                                    <Grid Margin="5,2">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Eraser" Width="24" Height="24" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="擦除" Margin="0,5,0,0" FontSize="14"/>
+                                        <TextBlock Grid.Row="1" Text="擦除" Margin="7,4,7,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                         <materialDesign:PopupBox x:Name="EraserSettingPopup" 
                                                                  StaysOpen="True" 
                                                                  IsEnabled="True" 
@@ -192,42 +213,51 @@
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton Style="{StaticResource ListBoxItemStyle}"
+                                             Padding="8"
                                              IsChecked="False" Tag="Undo"
                                              GroupName="Tools1" Checked="Undo_Selected">
-                                    <Grid Margin="5,2">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
                                                                  Kind="Undo" Width="24" Height="24" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="撤销" Margin="0,5,0,0" FontSize="14"/>
+                                        <TextBlock Grid.Row="1" Text="撤销" Margin="7,4,7,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton Style="{StaticResource ListBoxItemStyle}"
+                                             Padding="8"
                                              IsChecked="False" Tag="Redo"
                                              GroupName="Tools1" Checked="Redo_Selected">
-                                    <Grid Margin="5,2">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
                                                                  Kind="Redo" Width="24" Height="24" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="重做" Margin="0,5,0,0" FontSize="14"/>
+                                        <TextBlock Grid.Row="1" Text="重做" Margin="7,4,7,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton Style="{StaticResource ListBoxItemStyle}"
+                                             Padding="8"
                                              IsChecked="False" Tag="Setting"
                                              GroupName="Setting"
                                              Checked="Setting_Selected">
-                                    <Grid Margin="0,2">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Apps" Width="24" Height="24" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="更多" Margin="0,5,0,0" FontSize="14"/>
+                                        <TextBlock Grid.Row="1" Text="更多" Margin="7,4,7,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                         <materialDesign:PopupBox x:Name="MorePopup" 
                                                                  StaysOpen="True" 
                                                                  IsEnabled="True" 
@@ -243,17 +273,21 @@
                                         </materialDesign:PopupBox>
                                     </Grid>
                                 </RadioButton>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Exit_presentation">
-                                    <Grid Margin="-5,5,-5,4">
+                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        Padding="8"
+                                        Height="60" Click="Exit_presentation">
+                                    <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
                                                                  Kind="Presentation" Width="24" Height="24" Foreground="Black" >
                                         </materialDesign:PackIcon>
                                         <materialDesign:PackIcon  Grid.Row="0"  Kind="WindowClose" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" Width="11" Height="11" Margin="0,0,0,2.3" BorderBrush="Black" BorderThickness="0" FontSize="9" FontWeight="Normal" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="结束放映" Margin="0,5,0,0"  FontSize="14" Foreground="Black"/>
+                                        <TextBlock Grid.Row="1" Text="结束放映" Margin="3,4,3,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                     </Grid>
                                 </Button>
                             </StackPanel>
@@ -262,10 +296,10 @@
                             <StackPanel HorizontalAlignment="Center"
                                         Orientation="Horizontal" Margin="0">
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Height="45" Width="45"
-                                        Padding="5"
+                                        Height="Auto" Width="Auto"
+                                        Padding="8"
                                         Click="Button_Board_Click">
-                                    <Grid Margin="0">
+                                    <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
@@ -274,10 +308,10 @@
                                             HorizontalAlignment="Center" Grid.Row="0" 
                                             Kind="WebAsset" Width="24" Height="24" Foreground="Black" >
                                         </materialDesign:PackIcon>
-                                        <TextBlock x:Name="ButtonBoardText" HorizontalAlignment="Center" 
-                                                   Grid.Row="1" Text="白板" Margin="0,5,0,0"  
+                                        <TextBlock x:Name="ButtonBoardText"  
+                                                   Grid.Row="1" Text="白板" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Collapsed"/>
+                                                   Visibility="Visible"/>
                                     </Grid>
                                 </Button>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" 
@@ -291,7 +325,10 @@
                                         <materialDesign:PackIcon x:Name="ButtonCameraIcon" HorizontalAlignment="Center" Grid.Row="0" 
                                                                      Kind="WebCamera" Width="24" Height="24" Foreground="Black" >
                                         </materialDesign:PackIcon>
-                                        <TextBlock x:Name="ButtonCameraText" HorizontalAlignment="Center" Grid.Row="1" Text="视频展台" Margin="0,5,0,0"  FontSize="14" Foreground="Black"/>
+                                        <TextBlock x:Name="ButtonCameraText"  
+                                                   Grid.Row="1" Text="视频展台" Margin="2,4,2,0"  
+                                                   FontSize="14" Foreground="Black"
+                                                   Visibility="Visible"/>
                                     </Grid>
                                 </Button>
                             </StackPanel>
