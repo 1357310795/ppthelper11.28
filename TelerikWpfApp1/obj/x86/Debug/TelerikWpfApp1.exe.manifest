@@ -222,14 +222,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TelerikWpfApp1.exe" size="3182032">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TelerikWpfApp1.exe" size="3183056">
       <assemblyIdentity name="TelerikWpfApp1" version="1.0.1.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>cFLFgPrNICt8Fxf8E/irvEU4m8QR66MFCKTq3+UzjDY=</dsig:DigestValue>
+        <dsig:DigestValue>O70LqrIRJOZTAPu6cYl8sikBTLtyVTHKDSkZZNIGwSk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -242,13 +242,13 @@
       <dsig:DigestValue>Y4wTs+rps1pQaVrgq5a8beUD/rLppQSUS5zX1JXfk1M=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="TelerikWpfApp1.exe.config" size="1833">
+  <file name="TelerikWpfApp1.exe.config" size="1887">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>knXtvtOSJhUeAGeZ7X8Nf2Z16fK0wiCzauqKiWgQeoc=</dsig:DigestValue>
+      <dsig:DigestValue>bLm0LcjFJhb/yNJ2u36be4jyX20PAO5MDgpDKEeolKM=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

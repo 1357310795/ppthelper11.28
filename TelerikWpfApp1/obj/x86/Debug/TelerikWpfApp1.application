@@ -4,7 +4,7 @@
   <description asmv2:publisher="TelerikWpfApp1" asmv2:product="TelerikWpfApp1" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <deployment install="true" mapFileExtensions="true" />
   <compatibleFrameworks xmlns="urn:schemas-microsoft-com:clickonce.v2">
-    <framework targetVersion="4.7.2" profile="Full" supportedRuntime="4.0.30319" />
+    <framework targetVersion="4.5" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
     <dependentAssembly dependencyType="install" codebase="TelerikWpfApp1.exe.manifest" size="15141">
@@ -14,7 +14,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>eVHTQ/KUSeL+5/xda5uCgwN/1kW+0vDuM3VtY+bZJec=</dsig:DigestValue>
+        <dsig:DigestValue>GhnBqSsvbGrKKE+P5bmIRlGda9Z1KqjvZAMg9O4r+KQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
