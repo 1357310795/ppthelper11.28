@@ -59,9 +59,22 @@ Class MainWindow1
         AddHandler InkCanvas1.TouchMove, AddressOf OnTouchMove
         AddHandler InkCanvas1.PreviewMouseDown, AddressOf OnMouseDown
         AddHandler InkCanvas1.MouseUp, AddressOf OnMouseUp
-        'AddHandler InkCanvas1.MouseLeave, AddressOf OnMouseUp
 
+        Dim PenColorBinding As Binding = New Binding
+        PenColorBinding.Source = pen
+        PenColorBinding.Path = New PropertyPath("Color")
+        PenColorBinding.Converter = New ColorValueConverter
+        PenColorTip.SetBinding(Shape.FillProperty, PenColorBinding)
 
+        Dim MarkerColorBinding As Binding = New Binding
+        MarkerColorBinding.Source = marker
+        MarkerColorBinding.Path = New PropertyPath("Color")
+        MarkerColorBinding.Converter = New ColorValueConverter
+        MarkerColorTip.SetBinding(Shape.FillProperty, MarkerColorBinding)
+
+        AddHandler optimer.Elapsed, AddressOf op_timer_Tick
+        AddHandler optimer1.Elapsed, AddressOf op_timer1_Tick
+        AddHandler update_timer.Elapsed, AddressOf update_timer_Tick
         ' 在 InitializeComponent() 调用之后添加任何初始化。
     End Sub
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -79,6 +92,7 @@ Class MainWindow1
                                     ppt_rect.Right - ppt_rect.Left,
                                     ppt_rect.Bottom - ppt_rect.Top,
                                     True)
+        SetForegroundWindow(New WindowInteropHelper(Me).Handle)
 
         ReDim inks(GetTotalSlideCount() + 2)
         For i = 0 To GetTotalSlideCount() + 2
@@ -86,26 +100,8 @@ Class MainWindow1
         Next
         updatepage(1)
         InkCanvas1.Strokes = inks(currentpage)
-        'AddHandler InkCanvas1.Strokes.StrokesChanged, AddressOf StrokesChanged
 
-        Dim PenColorBinding As Binding = New Binding
-        PenColorBinding.Source = pen
-        PenColorBinding.Path = New PropertyPath("Color")
-        PenColorBinding.Converter = New ColorValueConverter
-        PenColorTip.SetBinding(Shape.FillProperty, PenColorBinding)
-
-        Dim MarkerColorBinding As Binding = New Binding
-        MarkerColorBinding.Source = marker
-        MarkerColorBinding.Path = New PropertyPath("Color")
-        MarkerColorBinding.Converter = New ColorValueConverter
-        MarkerColorTip.SetBinding(Shape.FillProperty, MarkerColorBinding)
-
-        SetForegroundWindow(New WindowInteropHelper(Me).Handle)
-
-        AddHandler optimer.Elapsed, AddressOf op_timer_Tick
-
-        update_timer.Interval = 1000
-        AddHandler update_timer.Elapsed, AddressOf update_timer_Tick
+        optimer1.Start()
         update_timer.Start()
 
         Dim u As New Threading.Thread(AddressOf updatehelper.updatemain)
@@ -244,9 +240,10 @@ Class MainWindow1
     Public ppt_hwnd As Int32
     Public currentpage As Int32
     Private inks As StrokeCollection()
-    Dim update_timer As New Timer
+    Dim update_timer As New Timer With {.Interval = 1000}
     Public erroccured As Boolean
     Private optimer As New Timer With {.Interval = 10000}
+    Private optimer1 As New Timer With {.Interval = 6000}
 
     Private Sub ppt_next()
         ppt_view.Next()
@@ -397,6 +394,25 @@ Class MainWindow1
         Me.Dispatcher.Invoke(Sub()
                                  Dim a = New DoubleAnimation(GridLeft.Opacity, 0.2, TimeSpan.FromSeconds(1))
                                  GridLeft.BeginAnimation(UIElement.OpacityProperty, a)
+                             End Sub)
+    End Sub
+
+    Private Sub GridTools_PreviewMouseDown(sender As Object, e As MouseButtonEventArgs) Handles GridTools.PreviewMouseDown
+        GridTools.BeginAnimation(UIElement.OpacityProperty, Nothing)
+        GridTools.Opacity = 0.6
+        If optimer1.Enabled Then
+            optimer1.Stop()
+            optimer1.Start()
+        Else
+            optimer1.Start()
+        End If
+    End Sub
+
+    Private Sub op_timer1_Tick(sender As Object, e As EventArgs)
+        TryCast(sender, Timer).Stop()
+        Me.Dispatcher.Invoke(Sub()
+                                 Dim a = New DoubleAnimation(GridTools.Opacity, 0.2, TimeSpan.FromSeconds(1))
+                                 GridTools.BeginAnimation(UIElement.OpacityProperty, a)
                              End Sub)
     End Sub
 #End Region

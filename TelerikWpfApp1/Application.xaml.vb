@@ -71,14 +71,15 @@ Class Application
                 MainWindow.Show()
             Catch ex As Exception
                 logcat.Log.Logger.Instance.WriteException(ex)
+            Finally
+                close_timer.Start()
+                Dim seewo = Process.GetProcessesByName("PPTService")
+                If seewo.Length <> 0 Then
+                    For Each i In seewo
+                        i.Kill()
+                    Next
+                End If
             End Try
-            Dim seewo = Process.GetProcessesByName("PPTService")
-            If seewo.Length <> 0 Then
-                For Each i In seewo
-                    i.Kill()
-                Next
-            End If
-            close_timer.Start()
         End If
     End Sub
 
