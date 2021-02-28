@@ -1,0 +1,10 @@
+03:25:08: Information: 程序启动
+03:25:12: Information: Update Start
+03:25:13: Information: Local:C:\Users\11637\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\bin\version.ini
+03:25:13: Information: Server:C:\Users\11637\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\bin\tmp.ini
+03:25:13: Error: Exception: WebException
+               Message: 远程服务器返回错误: (550) 文件不可用(例如，未找到文件，无法访问文件)。
+               Source: TelerikWpfApp1
+               StackTrace:    在 TelerikWpfApp1.FtpWeb.Download(String ftpUri, String fileFullPath) 位置 C:\Users\11637\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\Modules\ftp.vb:行号 107
+   在 TelerikWpfApp1.updatehelper.updatemain() 位置 C:\Users\11637\Documents\GitHub\ppthelper11.28\TelerikWpfApp1\Modules\updatehelper.vb:行号 33
+

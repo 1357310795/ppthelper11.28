@@ -29,7 +29,7 @@ Public Class EraserSettingMenu
         res = Await MaterialDesignThemes.Wpf.DialogHost.Show(New YesNoDialog(300, "确定要擦除全部墨迹？"), "MainDialogHost1")
         Console.WriteLine(res)
         If res = "OK" Then
-            mw.Clear()
+            mw.ci.Clear()
             mw.Set_Edit_Mode(Edit_Mode_Enum.Pen)
         End If
     End Sub

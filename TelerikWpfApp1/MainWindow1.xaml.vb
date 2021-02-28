@@ -18,8 +18,8 @@ Class MainWindow1
 
     Public Edit_Mode As Edit_Mode_Enum
     Public App_Mode As App_Mode_Enum
-    Private ci As InkCanvas
-    Private animation_timer As Timer
+    Public ci As MyInkCanvas
+
     Public simplemode As Boolean
 
     Public Sub New()
@@ -49,21 +49,12 @@ Class MainWindow1
         }
 
         InitializeComponent()
-        InkCanvas1.EraserShape = New Ink.RectangleStylusShape(40, 60)
+
         ci = InkCanvas1
         App_Mode = App_Mode_Enum.PPT
-        _currentCanvasStrokes = New Dictionary(Of Integer, Stroke)()
-        _lasttimestamp = New Dictionary(Of Integer, Double)
-        _lastpoint = New Dictionary(Of Integer, StylusPoint)
 
         simplemode = CType(GetKeyValue("main", "simplemode", "true", inipath), Boolean)
         SetSimpleMode()
-
-        AddHandler InkCanvas1.TouchDown, AddressOf OnTouchDown
-        AddHandler InkCanvas1.TouchUp, AddressOf OnTouchUp
-        AddHandler InkCanvas1.TouchMove, AddressOf OnTouchMove
-        AddHandler InkCanvas1.PreviewMouseDown, AddressOf OnMouseDown
-        AddHandler InkCanvas1.MouseUp, AddressOf OnMouseUp
 
         Dim PenColorBinding As Binding = New Binding
         PenColorBinding.Source = pen
@@ -84,13 +75,7 @@ Class MainWindow1
     End Sub
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         '启动动画
-        If GetKeyValue("main", "StartAnimation", "true", inipath) = "true" Then
-            animation_timer = New Timer
-            animation_timer.Interval = 100
-            AddHandler animation_timer.Elapsed, AddressOf animation_timer_tick
-            animation_timer.Start()
-        End If
-
+        CheckStartAnimation()
 
         MoveWindow(New WindowInteropHelper(Me).Handle,
                                    ppt_rect.Left,
@@ -113,8 +98,10 @@ Class MainWindow1
         Dim u As New Threading.Thread(AddressOf updatehelper.updatemain)
         u.Start()
     End Sub
-
-
+    Private Sub Window_Closing(sender As Object, e As ComponentModel.CancelEventArgs)
+        update_timer.Stop()
+        update_timer = Nothing
+    End Sub
 #Region "listboxTools"
     Public Sub Set_Edit_Mode(e As Edit_Mode_Enum)
         If App_Mode = App_Mode_Enum.PPT Then
@@ -145,7 +132,7 @@ Class MainWindow1
                     EraserRadioButton.IsChecked = True
                     InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
             End Select
-            Edit_Mode = e
+            InkCanvas1.Edit_Mode = e
         ElseIf App_Mode = App_Mode_Enum.Board Then
             Select Case e
                 Case Edit_Mode_Enum.Cursor
@@ -169,8 +156,7 @@ Class MainWindow1
                     End If
                     EraserRadioButton.IsChecked = True
             End Select
-            Edit_Mode = e
-            bv.Edit_Mode = e
+            bv.InkCanvas1.Edit_Mode = e
         End If
     End Sub
     Private Sub Cursor_Selected(sender As Object, e As RoutedEventArgs)
@@ -238,6 +224,24 @@ Class MainWindow1
         End If
     End Sub
 
+    Private Sub Redo_Selected(sender As Object, e As RoutedEventArgs)
+        TryCast(sender, RadioButton).IsChecked = False
+        If App_Mode = App_Mode_Enum.PPT Then
+            InkCanvas1.Redo()
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            bv.InkCanvas1.Redo()
+        End If
+
+    End Sub
+
+    Private Sub Undo_Selected(sender As Object, e As RoutedEventArgs)
+        TryCast(sender, RadioButton).IsChecked = False
+        If App_Mode = App_Mode_Enum.PPT Then
+            InkCanvas1.Undo()
+        ElseIf App_Mode = App_Mode_Enum.Board Then
+            bv.InkCanvas1.Undo()
+        End If
+    End Sub
 #End Region
 #Region "PPTControl"
     Public ppt_obj As PowerPoint.Application
@@ -350,7 +354,7 @@ Class MainWindow1
                 Me.Dispatcher.Invoke(Sub()
                                          TextPage.Text = currentpage & "/" & GetTotalSlideCount()
                                          InkCanvas1.Strokes = inks(currentpage)
-                                         ClearHistory()
+                                         InkCanvas1.ClearHistory()
                                      End Sub)
             End If
         Catch ex As Exception
@@ -422,146 +426,18 @@ Class MainWindow1
                              End Sub)
     End Sub
 #End Region
-#Region "MultiTouch"
-    Private Const ThreasholdNearbyDistance As Double = 0.01
-    Private ReadOnly _currentCanvasStrokes As Dictionary(Of Integer, Stroke)
-    Private ReadOnly _lasttimestamp As Dictionary(Of Integer, Double)
-    Private ReadOnly _lastpoint As Dictionary(Of Integer, StylusPoint)
-    Private _strokeHitTester As IncrementalStrokeHitTester
-    Private _addingStroke As Stroke
-    Private maxv As Double = 200
-    Private Sub StrokeHit(sender As Object, argsHitTester As StrokeHitEventArgs)
-        Dim eraseResults = argsHitTester.GetPointEraseResults()
-        InkCanvas1.Strokes.Remove(argsHitTester.HitStroke)
-        InkCanvas1.Strokes.Add(eraseResults)
-    End Sub
-
-#Disable Warning BC40005 ' 成员隐藏基类型中的可重写的方法
-    Private Sub OnTouchDown(ByVal sender As Object, ByVal touchEventArgs As TouchEventArgs)
-        Console.WriteLine("OnTouchDown")
-        Dim touchPoint = touchEventArgs.GetTouchPoint(InkCanvas1)
-        Dim point = touchPoint.Position
-
-        If InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint Then
-            If _strokeHitTester Is Nothing Then
-                _strokeHitTester = InkCanvas1.Strokes.GetIncrementalStrokeHitTester(InkCanvas1.EraserShape)
-                AddHandler _strokeHitTester.StrokeHit, AddressOf StrokeHit
-            End If
-            _strokeHitTester.AddPoint(point)
-            Return
-        End If
-
-        If Edit_Mode = Edit_Mode_Enum.Pen Then
-            _addingStroke = New Stroke(New StylusPointCollection(New List(Of StylusPoint) From {
-                New StylusPoint(point.X, point.Y, 0.5)
-            }), InkCanvas1.DefaultDrawingAttributes.Clone)
-
-            If Not _currentCanvasStrokes.ContainsKey(touchPoint.TouchDevice.Id) Then
-                _currentCanvasStrokes.Add(touchPoint.TouchDevice.Id, _addingStroke)
-                InkCanvas1.Strokes.Add(_addingStroke)
-                '_lasttimestamp.Add(touchPoint.TouchDevice.Id, DateTime.Now.Ticks / 1000000D)
-                '_lastpoint.Add(touchPoint.TouchDevice.Id, _addingStroke.StylusPoints(0))
-            End If
-        End If
-    End Sub
-
-    Private Sub OnTouchUp(ByVal sender As Object, ByVal touchEventArgs As TouchEventArgs)
-        Console.WriteLine("OnTouchUp")
-
-        If InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint Then
-            _strokeHitTester = Nothing
-            Return
-        End If
-
-        If Edit_Mode = Edit_Mode_Enum.Pen Then
-            Dim touchPoint = touchEventArgs.GetTouchPoint(InkCanvas1)
-            If _currentCanvasStrokes.ContainsKey(touchPoint.TouchDevice.Id) Then
-                Dim spc As StylusPointCollection = _currentCanvasStrokes(touchPoint.TouchDevice.Id).StylusPoints
-                Console.WriteLine(spc.Count)
-                If (spc.Count > 5) Then
-                    If spc(spc.Count - 3).PressureFactor < 0.8 Then
-                        For i = 2 To 1 Step -1
-                            Dim t As StylusPoint = spc(spc.Count - i)
-                            t.PressureFactor = 0.1F + (spc(spc.Count - 3).PressureFactor - 0.1F) * (i - 1) / 2
-                            spc(spc.Count - i) = t
-                        Next
-                    End If
-                End If
-                _currentCanvasStrokes.Remove(touchPoint.TouchDevice.Id)
-                '_lasttimestamp.Remove(touchPoint.TouchDevice.Id)
-                '_lastpoint.Remove(touchPoint.TouchDevice.Id)
-            End If
-        End If
-    End Sub
-
-    Private Sub OnTouchMove(ByVal sender As Object, ByVal touchEventArgs As TouchEventArgs)
-        'Console.WriteLine("OnTouchMove")
-        Dim touchPoint = touchEventArgs.GetTouchPoint(InkCanvas1)
-        Dim point = touchPoint.Position
-
-        If InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint Then
-            If _strokeHitTester IsNot Nothing Then
-                _strokeHitTester.AddPoint(point)
-            End If
-            Return
-        End If
-
-        If Edit_Mode = Edit_Mode_Enum.Pen Then
-            If _currentCanvasStrokes.ContainsKey(touchPoint.TouchDevice.Id) Then
-                Dim stroke = _currentCanvasStrokes(touchPoint.TouchDevice.Id)
-                'Dim nearbyPoint = IsNearbyPoint(stroke, point)
-
-                'If Not nearbyPoint Then
-                '    Dim sp As StylusPoint = New StylusPoint(point.X, point.Y)
-                '    Dim nowtime As Double = DateTime.Now.Ticks / 1000000D
-                '    Dim v = (point - _lastpoint(touchPoint.TouchDevice.Id).ToPoint).Length / (nowtime - _lasttimestamp(touchPoint.TouchDevice.Id))
-
-                '    sp.PressureFactor = CType(calc_pressure(v), Single)
-                '    stroke.StylusPoints.Add(sp)
-                '    _lastpoint(touchPoint.TouchDevice.Id) = sp
-                '    _lasttimestamp(touchPoint.TouchDevice.Id) = nowtime
-                'End If
-                stroke.StylusPoints.Add(New StylusPoint(point.X, point.Y))
-            End If
-        End If
-    End Sub
-
-    Private Sub OnMouseDown(ByVal sender As Object, ByVal e As MouseEventArgs)
-        Console.WriteLine("OnMouseDown")
-        If e.StylusDevice IsNot Nothing Then Return
-        Dim point = e.GetPosition(InkCanvas1)
-        If Edit_Mode = Edit_Mode_Enum.Pen Then
-            InkCanvas1.EditingMode = InkCanvasEditingMode.Ink
-            InkCanvas1.CaptureMouse()
-        End If
-    End Sub
-
-    Private Sub OnMouseUp(ByVal sender As Object, ByVal e As MouseEventArgs)
-        Console.WriteLine("OnMouseUp")
-        CompareStrokes()
-        PushToHistory()
-        If e.StylusDevice IsNot Nothing Then Return
-        If Edit_Mode = Edit_Mode_Enum.Pen Then
-            InkCanvas1.EditingMode = InkCanvasEditingMode.None
-            InkCanvas1.ReleaseMouseCapture()
-        End If
-    End Sub
-
-
-    Private Shared Function IsNearbyPoint(ByVal stroke As Stroke, ByVal point As Point) As Boolean
-        Return stroke.StylusPoints.Any(Function(p) (Math.Abs(p.X - point.X) <= ThreasholdNearbyDistance) AndAlso (Math.Abs(p.Y - point.Y) <= ThreasholdNearbyDistance))
-    End Function
-
-    Private Function calc_pressure(v As Double) As Double
-        Dim a = -1.7
-        Dim b = 0.6
-        Dim c = 80
-        If v = Double.NaN Then Return 0.5
-        Dim f = -(2 * b * Math.Atan(v / c + a)) / Math.PI + b
-        Return f
-    End Function
-#End Region
 #Region "Animation"
+    Private animation_timer As Timer
+
+    Private Sub CheckStartAnimation()
+        If GetKeyValue("main", "StartAnimation", "true", inipath) = "true" Then
+            animation_timer = New Timer
+            animation_timer.Interval = 100
+            AddHandler animation_timer.Elapsed, AddressOf animation_timer_tick
+            animation_timer.Start()
+        End If
+    End Sub
+
     Private Sub animation_timer_tick()
         animation_timer.Stop()
         Me.Dispatcher.Invoke(AddressOf startanimation)
@@ -700,154 +576,7 @@ Class MainWindow1
         GC.Collect()
     End Sub
 #End Region
-#Region "History"
-    Private ReadOnly _history As New Stack(Of StrokesHistoryNode)
-    Private ReadOnly _redoHistory As New Stack(Of StrokesHistoryNode)
-    Private _ignoreStrokesChange As Boolean
-    Private strokeadded, strokeremoved As New StrokeCollection
-    Private PreStrokes As New StrokeCollection
-
-    Private Sub Undo()
-        CompareStrokes()
-        If strokeadded.Count <> 0 Or strokeremoved.Count <> 0 Then
-            PushToHistory()
-        End If
-        If Not CanUndo() Then Return
-
-        Dim last = Pop(_history)
-        _ignoreStrokesChange = True
-
-        InkCanvas1.Strokes.Add(last.StrokesRemoved)
-        InkCanvas1.Strokes.Remove(last.StrokesAdded)
-        PreStrokes.Add(last.StrokesRemoved)
-        PreStrokes.Remove(last.StrokesAdded)
-
-        _ignoreStrokesChange = False
-        Push(_redoHistory, last)
-    End Sub
-
-    Private Sub Redo()
-        CompareStrokes()
-        If strokeadded.Count <> 0 Or strokeremoved.Count <> 0 Then
-            PushToHistory()
-            Return
-        End If
-        If Not CanRedo() Then Return
-        Dim last = Pop(_redoHistory)
-        _ignoreStrokesChange = True
-
-        InkCanvas1.Strokes.Remove(last.StrokesRemoved)
-        InkCanvas1.Strokes.Add(last.StrokesAdded)
-        PreStrokes.Add(last.StrokesAdded)
-        PreStrokes.Remove(last.StrokesRemoved)
-
-        _ignoreStrokesChange = False
-        Push(_history, last)
-    End Sub
-
-    Private Shared Sub Push(ByVal collection As Stack(Of StrokesHistoryNode), ByVal node As StrokesHistoryNode)
-        collection.Push(node)
-    End Sub
-
-    Private Shared Function Pop(ByVal collection As Stack(Of StrokesHistoryNode)) As StrokesHistoryNode
-        Return If(collection.Count = 0, Nothing, collection.Pop())
-    End Function
-
-    Private Function CanUndo() As Boolean
-        Return _history.Count <> 0
-    End Function
-
-    Private Function CanRedo() As Boolean
-        Return _redoHistory.Count <> 0
-    End Function
-
-    'Private Sub StrokesChanged(ByVal sender As Object, ByVal e As StrokeCollectionChangedEventArgs)
-    '    If _ignoreStrokesChange Then Exit Sub
-    '    For Each i In e.Added
-    '        strokeadded.Add(i)
-    '    Next
-    '    For Each i In e.Removed
-    '        strokeremoved.Add(i)
-    '    Next
-    '    'strokeadded = TryCast(strokeadded.Concat(e.Added), StrokeCollection)
-    '    'strokeremoved = TryCast(strokeremoved.Concat(e.Removed), StrokeCollection)
-    'End Sub
-    Public Sub CompareStrokes()
-        Dim t As New StrokeCollection
-        For Each s In PreStrokes
-            If Not InkCanvas1.Strokes.Contains(s) Then
-                strokeremoved.Add(s)
-                t.Add(s)
-            End If
-        Next
-        For Each s In t
-            PreStrokes.Remove(s)
-        Next
-        For Each s In InkCanvas1.Strokes
-            If Not PreStrokes.Contains(s) Then
-                strokeadded.Add(s)
-                PreStrokes.Add(s)
-            End If
-        Next
-    End Sub
-
-    Private Sub PushToHistory()
-        If strokeadded.Count = 0 And strokeremoved.Count = 0 Then Return
-        Dim t As New StrokesHistoryNode()
-        t.StrokesAdded = strokeadded
-        t.StrokesRemoved = strokeremoved
-        Push(_history, t)
-
-        strokeadded = New StrokeCollection()
-        strokeremoved = New StrokeCollection()
-        ClearHistory(_redoHistory)
-    End Sub
-
-    Private Sub ClearHistory()
-        ClearHistory(_history)
-        ClearHistory(_redoHistory)
-    End Sub
-
-    Private Shared Sub ClearHistory(ByVal collection As Stack(Of StrokesHistoryNode))
-        collection?.Clear()
-    End Sub
-
-    Public Sub Clear()
-        InkCanvas1.Strokes.Clear()
-        ClearHistory()
-        FlushMemory.Flush()
-    End Sub
-
-    Private Sub AnimatedClear()
-        Dim ani = New DoubleAnimation(0, New Duration(New TimeSpan(0, 0, 0, 0, 3)))
-        AddHandler ani.Completed, AddressOf ClearAniComplete
-        InkCanvas1.BeginAnimation(OpacityProperty, ani)
-    End Sub
-
-    Private Sub ClearAniComplete(ByVal sender As Object, ByVal e As EventArgs)
-        Clear()
-        InkCanvas1.BeginAnimation(OpacityProperty, New DoubleAnimation(1, New Duration(New TimeSpan(0, 0, 0, 0, 3))))
-    End Sub
-
-    Private Sub Redo_Selected(sender As Object, e As RoutedEventArgs)
-        TryCast(sender, RadioButton).IsChecked = False
-        If App_Mode = App_Mode_Enum.PPT Then
-            Redo()
-        ElseIf App_Mode = App_Mode_Enum.Board Then
-            bv.Redo()
-        End If
-
-    End Sub
-
-    Private Sub Undo_Selected(sender As Object, e As RoutedEventArgs)
-        TryCast(sender, RadioButton).IsChecked = False
-        If App_Mode = App_Mode_Enum.PPT Then
-            Undo()
-        ElseIf App_Mode = App_Mode_Enum.Board Then
-            bv.Undo()
-        End If
-    End Sub
-#End Region
+#Region "AppMode"
     Private Sub Set_App_Mode(e As App_Mode_Enum)
         If e = App_Mode_Enum.Board Then
             App_Mode = e
@@ -900,57 +629,6 @@ Class MainWindow1
         End If
     End Sub
 
-
-#Region "FreeScale"
-    Public BackBitmapImage As BitmapImage
-    Public IsScaleMode As Boolean
-    Private Sub FreeScale_Click(sender As Object, e As RoutedEventArgs)
-        'Dim ppt_prst As PowerPoint.Presentation = ppt_obj.ActivePresentation
-        'If IsScaleMode Then
-        '    MainContentControl.Content = Nothing
-        '    InkCanvas1.Visibility = Visibility.Visible
-        '    FreeScaleButton.Background = Application.Current.Resources("MaterialDesignBackground")
-        '    IsScaleMode = False
-        '    Return
-        'End If
-        'IsScaleMode = True
-        'Dim screenradio As Single = ScreenHelper.GetActualWidth / ScreenHelper.GetActualHeight
-        'Dim r As Single = ppt_prst.PageSetup.SlideWidth / ppt_prst.PageSetup.SlideHeight
-        'Dim fw, fh As Int32
-        'If screenradio >= r Then
-        '    fh = ScreenHelper.GetActualHeight
-        '    fw = Math.Round(fh * r)
-        'Else
-        '    fw = ScreenHelper.GetActualWidth
-        '    fh = Math.Round(fw / r)
-        'End If
-
-        'FreeScaleButton.Background = Application.Current.Resources("MaterialDesignFlatButtonClick")
-        'ppt_prst.Slides.Item(currentpage).Export("D:\1.png", "PNG", fw, fh)
-        'Dim imageurl = "D:\1.png"
-
-        'Dim t As New PicView
-        'MainContentControl.Content = t
-        'InkCanvas1.Visibility = Visibility.Hidden
-        'Using reader As BinaryReader = New BinaryReader(File.Open(imageurl, FileMode.Open))
-        '    Try
-        '        Dim fi As FileInfo = New FileInfo(imageurl)
-        '        Dim bytes As Byte() = reader.ReadBytes(CInt(fi.Length))
-        '        reader.Close()
-        '        BackBitmapImage = New BitmapImage
-        '        BackBitmapImage.CacheOption = BitmapCacheOption.OnLoad
-        '        BackBitmapImage.BeginInit()
-        '        BackBitmapImage.StreamSource = New MemoryStream(bytes)
-        '        BackBitmapImage.EndInit()
-        '        t.BackImage.Source = BackBitmapImage
-        '    Catch ex As Exception
-        '        MsgBox(ex.Message)
-        '    End Try
-        'End Using
-    End Sub
-
-#End Region
-
     Private Sub Button_Camera_Click(sender As Object, e As RoutedEventArgs)
         If App_Mode = App_Mode_Enum.PPT Then
             Set_App_Mode(App_Mode_Enum.Camera)
@@ -972,19 +650,56 @@ Class MainWindow1
             GridTools.Height = 60
         End If
     End Sub
+#End Region
+#Region "FreeScale"
+    Public BackBitmapImage As BitmapImage
+    Public IsScaleMode As Boolean
+    Private Sub FreeScale_Click(sender As Object, e As RoutedEventArgs)
+        Dim ppt_prst As PowerPoint.Presentation = ppt_obj.ActivePresentation
+        If IsScaleMode Then
+            MainContentControl.Content = Nothing
+            InkCanvas1.Visibility = Visibility.Visible
+            FreeScaleButton.Background = Application.Current.Resources("MaterialDesignBackground")
+            IsScaleMode = False
+            Return
+        End If
+        IsScaleMode = True
+        Dim screenradio As Single = ScreenHelper.GetActualWidth / ScreenHelper.GetActualHeight
+        Dim r As Single = ppt_prst.PageSetup.SlideWidth / ppt_prst.PageSetup.SlideHeight
+        Dim fw, fh As Int32
+        If screenradio >= r Then
+            fh = ScreenHelper.GetActualHeight
+            fw = Math.Round(fh * r)
+        Else
+            fw = ScreenHelper.GetActualWidth
+            fh = Math.Round(fw / r)
+        End If
 
-    Private Class ColorValueConverter
-        Implements IValueConverter
-        Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As Globalization.CultureInfo) As Object Implements IValueConverter.Convert
-            Dim c As Color = CType(value, Color)
-            Dim b As SolidColorBrush = New SolidColorBrush(c)
-            Return b
-        End Function
-        Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As Globalization.CultureInfo) As Object Implements IValueConverter.ConvertBack
-            Throw New NotImplementedException
-        End Function
-    End Class
+        FreeScaleButton.Background = Application.Current.Resources("MaterialDesignFlatButtonClick")
+        ppt_prst.Slides.Item(currentpage).Export("D:\1.png", "PNG", fw, fh)
+        Dim imageurl = "D:\1.png"
 
+        Dim t As New PicView
+        MainContentControl.Content = t
+        InkCanvas1.Visibility = Visibility.Hidden
+        Using reader As BinaryReader = New BinaryReader(File.Open(imageurl, FileMode.Open))
+            Try
+                Dim fi As FileInfo = New FileInfo(imageurl)
+                Dim bytes As Byte() = reader.ReadBytes(CInt(fi.Length))
+                reader.Close()
+                BackBitmapImage = New BitmapImage
+                BackBitmapImage.CacheOption = BitmapCacheOption.OnLoad
+                BackBitmapImage.BeginInit()
+                BackBitmapImage.StreamSource = New MemoryStream(bytes)
+                BackBitmapImage.EndInit()
+                t.BackImage.Source = BackBitmapImage
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
+        End Using
+    End Sub
+
+#End Region
 
     'Private Sub startnotianimation(c As Canvas, n As UserControl1)
     '    Dim doubleKeyFrame1 As DoubleKeyFrame = New LinearDoubleKeyFrame()
@@ -1018,9 +733,6 @@ Class MainWindow1
     '    a = Nothing
     '    NotiStackPanel.Children.Clear()
     'End Sub
-    Private Sub Window_Closing(sender As Object, e As ComponentModel.CancelEventArgs)
-        update_timer.Stop()
-        update_timer = Nothing
-    End Sub
+
 End Class
 

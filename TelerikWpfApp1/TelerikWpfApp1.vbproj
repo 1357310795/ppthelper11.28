@@ -135,6 +135,7 @@
     </Compile>
     <Compile Include="Modules\Module1.vb" />
     <Compile Include="Modules\Module2.vb" />
+    <Compile Include="Modules\MyInkCanvas.vb" />
     <Compile Include="notify\UserControl1.xaml.vb">
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>

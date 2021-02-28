@@ -16,13 +16,13 @@
                 </TransformGroup>
             </Grid.LayoutTransform>
             <Grid x:Name="MyBackControl" Height="{Binding ElementName=Canvas1,Path=ActualHeight}" Width="{Binding ElementName=Canvas1,Path=ActualWidth}" Background="White"/>
-            <InkCanvas x:Name="InkCanvas1" 
+            <local:MyInkCanvas x:Name="InkCanvas1" 
                        Visibility="Visible" 
                        Background="#008B8B8B" 
                        Height="{Binding ElementName=MyBackControl,Path=ActualHeight,Mode=OneWay}"
                        Width="{Binding ElementName=MyBackControl,Path=ActualWidth,Mode=OneWay}" 
                        IsHitTestVisible="true" RenderTransformOrigin="0.5,0.5" IsManipulationEnabled="False">
-            </InkCanvas>
+            </local:MyInkCanvas>
 
         </Grid>
     </Canvas>

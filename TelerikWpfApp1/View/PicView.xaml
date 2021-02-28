@@ -24,13 +24,13 @@
                 </TransformGroup>
             </Grid.LayoutTransform>
             <Image x:Name="BackImage"/>
-            <InkCanvas x:Name="InkCanvas1" 
+            <local:MyInkCanvas x:Name="InkCanvas1" 
                        Visibility="Visible" 
                        Background="#008B8B8B" 
                        Height="{Binding ElementName=BackImage,Path=ActualHeight,Mode=OneWay}"
                        Width="{Binding ElementName=BackImage,Path=ActualWidth,Mode=OneWay}" 
                        IsHitTestVisible="true" RenderTransformOrigin="0.5,0.5" IsManipulationEnabled="False">
-            </InkCanvas>
+            </local:MyInkCanvas>
         </Grid>
     </Canvas>
 </UserControl>

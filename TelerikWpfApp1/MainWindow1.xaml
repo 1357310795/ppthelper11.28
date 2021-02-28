@@ -27,7 +27,7 @@
                     <ContentControl x:Name="MainContentControl" Background="Transparent">
                         
                     </ContentControl>
-                    <InkCanvas x:Name="InkCanvas1" 
+                    <local:MyInkCanvas x:Name="InkCanvas1" 
                                Visibility="Visible" 
                                Background="{StaticResource FakeTransparent}" 
                                IsHitTestVisible="true" RenderTransformOrigin="0.5,0.5">
@@ -38,7 +38,7 @@
                                 <MenuItem Header="结束放映" Click="Exit_presentation"/>
                             </ContextMenu>
                         </InkCanvas.ContextMenu>
-                    </InkCanvas>
+                    </local:MyInkCanvas>
                     <Grid x:Name="BoardGrid" Width="{Binding ElementName=MainGrid,Path=ActualWidth}" Height="999"
                           HorizontalAlignment="Left" VerticalAlignment="Top"
                           Visibility="Collapsed">
@@ -103,7 +103,7 @@
                                 </RadioButton>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" 
                                         x:Name="FreeScaleButton" 
-                                        Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
+                                        Visibility="Visible"
                                         Height="Auto" Click="FreeScale_Click"
                                          Padding="{Binding ElementName=VisibilityControl,Path=Padding}">
                                     <Grid>
