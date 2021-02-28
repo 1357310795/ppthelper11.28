@@ -24,7 +24,10 @@
                 <TextBlock Text="启动动画" FontSize="14" Margin="10"/>
                 <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" x:Name="ToggleButton1"/>
             </StackPanel>
-
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="简易模式" FontSize="14" Margin="10"/>
+                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" x:Name="ToggleButton2"/>
+            </StackPanel>
         </StackPanel>
     </DockPanel>
 </Window>

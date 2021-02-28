@@ -46,12 +46,14 @@
                     </Grid>
                     <Grid x:Name="GridTools"
                           HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                          Margin="172,0,173,15" RenderTransformOrigin="0.5,1" 
-                          Height="60" Opacity="0.6">
+                          Margin="172,0,173,10" RenderTransformOrigin="0.5,1" 
+                          Height="50" Opacity="0.6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
+                        <Label x:Name="VisibilityControl" Visibility="Collapsed" 
+                               Width="0" Height="0" Padding="12"/>
                         <materialDesign:Card UniformCornerRadius="3" Padding="0" Grid.Column="1" >
                             <StackPanel x:Name="listboxTools"  
                                         HorizontalAlignment="Left"
@@ -65,7 +67,7 @@
                                     </TransformGroup>
                                 </StackPanel.RenderTransform>
                                 <RadioButton x:Name="CursorRadioButton"
-                                             Padding="8"
+                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              Style="{StaticResource ListBoxItemStyle}"
                                              IsChecked="True" Tag="Cursor"
                                              GroupName="Tools" Checked="Cursor_Selected">
@@ -78,12 +80,13 @@
                                                                  Kind="CursorDefault" Width="24" Height="24" />
                                         <TextBlock Grid.Row="1" Text="指针" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton x:Name="SelectRadioButton"
-                                             Padding="8"
+                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              Style="{StaticResource ListBoxItemStyle}"
+                                             Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
                                              IsChecked="False" Tag="select"
                                              GroupName="Tools" Checked="Select_Selected">
                                     <Grid>
@@ -95,13 +98,14 @@
                                                                  Kind="Select" Width="24" Height="24" />
                                         <TextBlock Grid.Row="1" Text="选择" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                     </Grid>
                                 </RadioButton>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" 
                                         x:Name="FreeScaleButton" 
-                                        Height="60" Click="FreeScale_Click"
-                                         Padding="8">
+                                        Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
+                                        Height="Auto" Click="FreeScale_Click"
+                                         Padding="{Binding ElementName=VisibilityControl,Path=Padding}">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -112,11 +116,11 @@
                                         <TextBlock Grid.Row="1" Text="缩放" Margin="7,4,7,0"
                                                     Foreground="#FF787878"
                                                    FontSize="14"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                     </Grid>
                                 </Button>
                                 <RadioButton x:Name="PenRadioButton"
-                                             Padding="8"
+                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              Style="{StaticResource ListBoxItemStyle}"
                                              IsChecked="False" Tag="Pen"
                                              GroupName="Tools" Checked="Pen_Selected">
@@ -128,7 +132,7 @@
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="LeadPencil" Width="24" Height="24" />
                                         <TextBlock Grid.Row="1" Text="标注" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                         <materialDesign:PopupBox x:Name="PenSettingPopup" 
                                                                  StaysOpen="True" 
                                                                  IsEnabled="True" 
@@ -150,8 +154,9 @@
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton x:Name="MarkerRadioButton"
-                                             Padding="8"
+                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              Style="{StaticResource ListBoxItemStyle}"
+                                             Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
                                              IsChecked="False" Tag="Marker"
                                              GroupName="Tools" Checked="Marker_Selected">
                                     <Grid>
@@ -162,7 +167,7 @@
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Marker" VerticalAlignment="Center" Width="24" Height="24" />
                                         <TextBlock Grid.Row="1" Text="荧光笔" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                         <materialDesign:PopupBox x:Name="MarkerSettingPopup" 
                                                                  StaysOpen="True" 
                                                                  IsEnabled="True" 
@@ -184,7 +189,7 @@
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton x:Name="EraserRadioButton"
-                                             Padding="8"
+                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              Style="{StaticResource ListBoxItemStyle}"
                                              IsChecked="False" Tag="Eraser"
                                              GroupName="Tools" Checked="Eraser_Selected">
@@ -196,7 +201,7 @@
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Eraser" Width="24" Height="24" />
                                         <TextBlock Grid.Row="1" Text="擦除" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                         <materialDesign:PopupBox x:Name="EraserSettingPopup" 
                                                                  StaysOpen="True" 
                                                                  IsEnabled="True" 
@@ -213,7 +218,7 @@
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton Style="{StaticResource ListBoxItemStyle}"
-                                             Padding="8"
+                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              IsChecked="False" Tag="Undo"
                                              GroupName="Tools1" Checked="Undo_Selected">
                                     <Grid>
@@ -225,12 +230,13 @@
                                                                  Kind="Undo" Width="24" Height="24" />
                                         <TextBlock Grid.Row="1" Text="撤销" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton Style="{StaticResource ListBoxItemStyle}"
-                                             Padding="8"
+                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              IsChecked="False" Tag="Redo"
+                                             Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
                                              GroupName="Tools1" Checked="Redo_Selected">
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -241,11 +247,11 @@
                                                                  Kind="Redo" Width="24" Height="24" />
                                         <TextBlock Grid.Row="1" Text="重做" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                     </Grid>
                                 </RadioButton>
                                 <RadioButton Style="{StaticResource ListBoxItemStyle}"
-                                             Padding="8"
+                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              IsChecked="False" Tag="Setting"
                                              GroupName="Setting"
                                              Checked="Setting_Selected">
@@ -257,7 +263,7 @@
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Apps" Width="24" Height="24" />
                                         <TextBlock Grid.Row="1" Text="更多" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                         <materialDesign:PopupBox x:Name="MorePopup" 
                                                                  StaysOpen="True" 
                                                                  IsEnabled="True" 
@@ -274,8 +280,8 @@
                                     </Grid>
                                 </RadioButton>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                        Padding="8"
-                                        Height="60" Click="Exit_presentation">
+                                        Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
+                                        Height="Auto" Click="Exit_presentation">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -284,10 +290,14 @@
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
                                                                  Kind="Presentation" Width="24" Height="24" Foreground="Black" >
                                         </materialDesign:PackIcon>
-                                        <materialDesign:PackIcon  Grid.Row="0"  Kind="WindowClose" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" Width="11" Height="11" Margin="0,0,0,2.3" BorderBrush="Black" BorderThickness="0" FontSize="9" FontWeight="Normal" />
-                                        <TextBlock Grid.Row="1" Text="结束放映" Margin="3,4,3,0"  
+                                        <materialDesign:PackIcon  Grid.Row="0"  Kind="WindowClose" 
+                                                                  HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                                  Foreground="Black"
+                                                                  Width="11" Height="11" 
+                                                                  Margin="0,0,0,5" />
+                                        <TextBlock Grid.Row="1" Text="结束放映" Margin="2,4,2,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                     </Grid>
                                 </Button>
                             </StackPanel>
@@ -297,7 +307,7 @@
                                         Orientation="Horizontal" Margin="0">
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" 
                                         Height="Auto" Width="Auto"
-                                        Padding="8"
+                                        Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                         Click="Button_Board_Click">
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -311,13 +321,15 @@
                                         <TextBlock x:Name="ButtonBoardText"  
                                                    Grid.Row="1" Text="白板" Margin="7,4,7,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                     </Grid>
                                 </Button>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Height="60" 
+                                        Height="Auto" Width="Auto"
+                                        Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
+                                        Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
                                         Click="Button_Camera_Click">
-                                    <Grid Margin="-7,5,-7,4">
+                                    <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
@@ -328,7 +340,7 @@
                                         <TextBlock x:Name="ButtonCameraText"  
                                                    Grid.Row="1" Text="视频展台" Margin="2,4,2,0"  
                                                    FontSize="14" Foreground="Black"
-                                                   Visibility="Visible"/>
+                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
                                     </Grid>
                                 </Button>
                             </StackPanel>
@@ -343,7 +355,7 @@
                     </StackPanel>
                     <Grid x:Name="GridLeft"
                           HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                          Margin="15,0,15,15" RenderTransformOrigin="0.5,0.5" Height="60" Opacity="0.3">
+                          Margin="15,0,15,10" RenderTransformOrigin="0.5,0.5" Height="60" Opacity="0.3">
                         <materialDesign:Card UniformCornerRadius="3" Padding="0">
                             <StackPanel x:Name="listboxLeft"  
                                         HorizontalAlignment="Center"
@@ -393,7 +405,7 @@
                     </Grid>
                     <Grid x:Name="GridRight"
                           HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                          Margin="15,0,15,15" RenderTransformOrigin="0.5,0.5" 
+                          Margin="15,0,15,10" RenderTransformOrigin="0.5,0.5" 
                           Height="60" Opacity="{Binding ElementName=GridLeft,Path=Opacity}">
                         <materialDesign:Card UniformCornerRadius="3" Padding="0">
                             <StackPanel x:Name="listboxRight"  
@@ -457,7 +469,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="1.2*"/>
                         </Grid.RowDefinitions>
-                        <Image x:Name="logo1" Source="Resources/HandyDrawPPTHelper.png" Grid.Column="1" Grid.Row="1"/>
+                        <Image x:Name="logo1" Source="Resources/HandyDrawPPTHelper1.png" Grid.Column="1" Grid.Row="1"/>
                         <Image x:Name="logo2" Source="Resources/开源免费.png" Grid.Column="1" Grid.Row="2">
                             <Image.RenderTransform>
                                 <TransformGroup>

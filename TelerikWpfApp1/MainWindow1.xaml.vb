@@ -20,6 +20,7 @@ Class MainWindow1
     Public App_Mode As App_Mode_Enum
     Private ci As InkCanvas
     Private animation_timer As Timer
+    Public simplemode As Boolean
 
     Public Sub New()
         pen = New DrawingAttributes With {
@@ -54,6 +55,10 @@ Class MainWindow1
         _currentCanvasStrokes = New Dictionary(Of Integer, Stroke)()
         _lasttimestamp = New Dictionary(Of Integer, Double)
         _lastpoint = New Dictionary(Of Integer, StylusPoint)
+
+        simplemode = CType(GetKeyValue("main", "simplemode", "true", inipath), Boolean)
+        SetSimpleMode()
+
         AddHandler InkCanvas1.TouchDown, AddressOf OnTouchDown
         AddHandler InkCanvas1.TouchUp, AddressOf OnTouchUp
         AddHandler InkCanvas1.TouchMove, AddressOf OnTouchMove
@@ -85,6 +90,7 @@ Class MainWindow1
             AddHandler animation_timer.Elapsed, AddressOf animation_timer_tick
             animation_timer.Start()
         End If
+
 
         MoveWindow(New WindowInteropHelper(Me).Handle,
                                    ppt_rect.Left,
@@ -952,6 +958,18 @@ Class MainWindow1
             Set_App_Mode(App_Mode_Enum.Camera)
         ElseIf App_Mode = App_Mode_Enum.Camera Then
             Set_App_Mode(App_Mode_Enum.PPT)
+        End If
+    End Sub
+
+    Public Sub SetSimpleMode()
+        If simplemode Then
+            VisibilityControl.Visibility = Visibility.Collapsed
+            VisibilityControl.Padding = New Thickness(12)
+            GridTools.Height = 50
+        Else
+            VisibilityControl.Visibility = Visibility.Visible
+            VisibilityControl.Padding = New Thickness(8)
+            GridTools.Height = 60
         End If
     End Sub
 

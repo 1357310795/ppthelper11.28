@@ -18,6 +18,7 @@
     </Application.Resources>-->
     <Application.Resources>
         <ResourceDictionary>
+
             <Color x:Key="FakeTransparentColor" >#01000000</Color>
             <Color x:Key="TrueTransparentColor" >Transparent</Color>
             <SolidColorBrush x:Key="FakeTransparent" Color="{StaticResource FakeTransparentColor}"/>
