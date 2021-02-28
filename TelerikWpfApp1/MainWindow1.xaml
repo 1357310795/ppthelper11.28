@@ -9,7 +9,7 @@
         Icon="Resources/项目2.ico" WindowStyle="None" 
         Background="Transparent" 
         AllowsTransparency="True" 
-        ShowInTaskbar="False" Topmost="True" 
+        ShowInTaskbar="False" Topmost="False" 
         PreviewMouseWheel="Window_PreviewMouseWheel" 
         PreviewKeyDown="Window_PreviewKeyDown" 
         Closing="Window_Closing">
@@ -69,7 +69,7 @@
                                 <RadioButton x:Name="CursorRadioButton"
                                              Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
                                              Style="{StaticResource ListBoxItemStyle}"
-                                             IsChecked="True" Tag="Cursor"
+                                             IsChecked="False" Tag="Cursor"
                                              GroupName="Tools" Checked="Cursor_Selected">
                                     <Grid>
                                         <Grid.RowDefinitions>

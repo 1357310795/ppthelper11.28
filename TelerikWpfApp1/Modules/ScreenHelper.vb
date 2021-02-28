@@ -102,7 +102,7 @@ Public Class ScreenHelper
     End Function
 
     ' Token: 0x06000009 RID: 9 RVA: 0x00002110 File Offset: 0x00000310
-    Private Shared Function GetLogicalHeight() As Double
+    Public Shared Function GetLogicalHeight() As Double
         Dim logicalHeight As Double = 0.0
         Dim proc As WindowsMonitorAPI.MonitorEnumProc = Function(m As IntPtr, h As IntPtr, lm As IntPtr, lp As IntPtr)
                                                             Dim info As WindowsMonitorAPI.MONITORINFOEX = New WindowsMonitorAPI.MONITORINFOEX()

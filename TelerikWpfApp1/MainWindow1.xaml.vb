@@ -49,9 +49,9 @@ Class MainWindow1
         }
 
         InitializeComponent()
-
         ci = InkCanvas1
         App_Mode = App_Mode_Enum.PPT
+        Set_Edit_Mode(Edit_Mode_Enum.Cursor)
 
         simplemode = CType(GetKeyValue("main", "simplemode", "true", inipath), Boolean)
         SetSimpleMode()
@@ -104,59 +104,51 @@ Class MainWindow1
     End Sub
 #Region "listboxTools"
     Public Sub Set_Edit_Mode(e As Edit_Mode_Enum)
+        Select Case e
+            Case Edit_Mode_Enum.Cursor
+                ci.EditingMode = InkCanvasEditingMode.None
+                CursorRadioButton.IsChecked = True
+            Case Edit_Mode_Enum.Pen
+                ci.EditingMode = InkCanvasEditingMode.None
+                ci.DefaultDrawingAttributes = pen1
+                PenRadioButton.IsChecked = True
+            Case Edit_Mode_Enum.Selectt
+                ci.EditingMode = InkCanvasEditingMode.Select
+                SelectRadioButton.IsChecked = True
+            Case Edit_Mode_Enum.Marker
+                ci.EditingMode = InkCanvasEditingMode.Ink
+                ci.DefaultDrawingAttributes = marker
+                MarkerRadioButton.IsChecked = True
+            Case Edit_Mode_Enum.Eraser
+                If ci.EditingMode <> InkCanvasEditingMode.EraseByStroke And
+                        ci.EditingMode <> InkCanvasEditingMode.EraseByPoint Then
+                    ci.EditingMode = InkCanvasEditingMode.EraseByPoint
+                End If
+                EraserRadioButton.IsChecked = True
+        End Select
+        ci.Edit_Mode = e
+
         If App_Mode = App_Mode_Enum.PPT Then
             Select Case e
                 Case Edit_Mode_Enum.Cursor
-                    InkCanvas1.EditingMode = InkCanvasEditingMode.None
-                    CursorRadioButton.IsChecked = True
                     InkCanvas1.Background = TryCast(Application.Current.Resources("TrueTransparent"), Brush)
                 Case Edit_Mode_Enum.Pen
-                    InkCanvas1.EditingMode = InkCanvasEditingMode.None
                     InkCanvas1.DefaultDrawingAttributes = pen
-                    PenRadioButton.IsChecked = True
                     InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
                 Case Edit_Mode_Enum.Selectt
-                    InkCanvas1.EditingMode = InkCanvasEditingMode.Select
                     InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
-                    SelectRadioButton.IsChecked = True
                 Case Edit_Mode_Enum.Marker
-                    InkCanvas1.EditingMode = InkCanvasEditingMode.Ink
-                    InkCanvas1.DefaultDrawingAttributes = marker
-                    MarkerRadioButton.IsChecked = True
                     InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
                 Case Edit_Mode_Enum.Eraser
-                    If InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByStroke And
-                    InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByPoint Then
-                        InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint
-                    End If
-                    EraserRadioButton.IsChecked = True
                     InkCanvas1.Background = TryCast(Application.Current.Resources("FakeTransparent"), Brush)
             End Select
-            InkCanvas1.Edit_Mode = e
-        ElseIf App_Mode = App_Mode_Enum.Board Then
+        End If
+
+        If App_Mode = App_Mode_Enum.Scale Then
             Select Case e
-                Case Edit_Mode_Enum.Cursor
-                    bv.InkCanvas1.EditingMode = InkCanvasEditingMode.None
-                    CursorRadioButton.IsChecked = True
                 Case Edit_Mode_Enum.Pen
-                    bv.InkCanvas1.EditingMode = InkCanvasEditingMode.None
-                    bv.InkCanvas1.DefaultDrawingAttributes = pen1
-                    PenRadioButton.IsChecked = True
-                Case Edit_Mode_Enum.Selectt
-                    bv.InkCanvas1.EditingMode = InkCanvasEditingMode.Select
-                    SelectRadioButton.IsChecked = True
-                Case Edit_Mode_Enum.Marker
-                    bv.InkCanvas1.EditingMode = InkCanvasEditingMode.Ink
-                    bv.InkCanvas1.DefaultDrawingAttributes = marker
-                    MarkerRadioButton.IsChecked = True
-                Case Edit_Mode_Enum.Eraser
-                    If bv.InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByStroke And
-                        bv.InkCanvas1.EditingMode <> InkCanvasEditingMode.EraseByPoint Then
-                        bv.InkCanvas1.EditingMode = InkCanvasEditingMode.EraseByPoint
-                    End If
-                    EraserRadioButton.IsChecked = True
+                    ci.DefaultDrawingAttributes = pen
             End Select
-            bv.InkCanvas1.Edit_Mode = e
         End If
     End Sub
     Private Sub Cursor_Selected(sender As Object, e As RoutedEventArgs)
@@ -199,7 +191,7 @@ Class MainWindow1
                     'PenSetting.popup = PenSettingPopup
 
                     Dim w As New PenSettingWindow
-                    If App_Mode = App_Mode_Enum.PPT Then
+                    If App_Mode = App_Mode_Enum.PPT Or App_Mode = App_Mode_Enum.Scale Then
                         w.initdrawer(pen)
                     ElseIf App_Mode = App_Mode_Enum.Board Then
                         w.initdrawer(pen1)
@@ -226,21 +218,13 @@ Class MainWindow1
 
     Private Sub Redo_Selected(sender As Object, e As RoutedEventArgs)
         TryCast(sender, RadioButton).IsChecked = False
-        If App_Mode = App_Mode_Enum.PPT Then
-            InkCanvas1.Redo()
-        ElseIf App_Mode = App_Mode_Enum.Board Then
-            bv.InkCanvas1.Redo()
-        End If
+        ci.Redo()
 
     End Sub
 
     Private Sub Undo_Selected(sender As Object, e As RoutedEventArgs)
         TryCast(sender, RadioButton).IsChecked = False
-        If App_Mode = App_Mode_Enum.PPT Then
-            InkCanvas1.Undo()
-        ElseIf App_Mode = App_Mode_Enum.Board Then
-            bv.InkCanvas1.Undo()
-        End If
+        ci.Undo()
     End Sub
 #End Region
 #Region "PPTControl"
@@ -659,19 +643,22 @@ Class MainWindow1
         If IsScaleMode Then
             MainContentControl.Content = Nothing
             InkCanvas1.Visibility = Visibility.Visible
+            update_timer.Start()
+            App_Mode = App_Mode_Enum.PPT
+            ci = InkCanvas1
             FreeScaleButton.Background = Application.Current.Resources("MaterialDesignBackground")
             IsScaleMode = False
             Return
         End If
         IsScaleMode = True
-        Dim screenradio As Single = ScreenHelper.GetActualWidth / ScreenHelper.GetActualHeight
+        Dim screenradio As Single = ScreenHelper.GetLogicalWidth / ScreenHelper.GetLogicalHeight
         Dim r As Single = ppt_prst.PageSetup.SlideWidth / ppt_prst.PageSetup.SlideHeight
         Dim fw, fh As Int32
         If screenradio >= r Then
-            fh = ScreenHelper.GetActualHeight
+            fh = ScreenHelper.GetLogicalHeight
             fw = Math.Round(fh * r)
         Else
-            fw = ScreenHelper.GetActualWidth
+            fw = ScreenHelper.GetLogicalWidth
             fh = Math.Round(fw / r)
         End If
 
@@ -682,6 +669,10 @@ Class MainWindow1
         Dim t As New PicView
         MainContentControl.Content = t
         InkCanvas1.Visibility = Visibility.Hidden
+        App_Mode = App_Mode_Enum.Scale
+        update_timer.Stop()
+        ci = t.InkCanvas1
+        Set_Edit_Mode(Edit_Mode_Enum.Pen)
         Using reader As BinaryReader = New BinaryReader(File.Open(imageurl, FileMode.Open))
             Try
                 Dim fi As FileInfo = New FileInfo(imageurl)

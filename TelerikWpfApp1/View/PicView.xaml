@@ -11,7 +11,7 @@
             ManipulationStarting="Canvas1_ManipulationStarting"
             ManipulationStarted="Canvas1_ManipulationStarted"
             ManipulationDelta="Canvas1_ManipulationDelta"
-            ManipulationCompleted="Canvas1_ManipulationCompleted" >
+            ManipulationCompleted="Canvas1_ManipulationCompleted" Background="#FFE29191" >
         <Grid x:Name="Grid1" Canvas.Left="0" Canvas.Top="0"
               Height="{Binding ElementName=BackImage,Path=ActualHeight,Mode=OneWay}"
               Width="{Binding ElementName=BackImage,Path=ActualWidth,Mode=OneWay}" >
@@ -23,7 +23,7 @@
                     <TranslateTransform x:Name="TranslateTransform" />
                 </TransformGroup>
             </Grid.LayoutTransform>
-            <Image x:Name="BackImage"/>
+            <Image x:Name="BackImage" Width="1920" Height="1080"/>
             <local:MyInkCanvas x:Name="InkCanvas1" 
                        Visibility="Visible" 
                        Background="#008B8B8B" 
