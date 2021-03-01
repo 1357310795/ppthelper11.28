@@ -19,3 +19,10 @@ C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\obj\Debug\Project1.vbprojA
 C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\obj\Debug\Project1.vbproj.CoreCompileInputs.cache
 C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\obj\Debug\loader.exe
 C:\Users\Fifteen\Desktop\ppthelper11.28-main\Project1\obj\Debug\loader.pdb
+C:\Users\11637\Documents\GitHub\ppthelper11.28\Project1\bin\Debug\loader.exe.config
+C:\Users\11637\Documents\GitHub\ppthelper11.28\Project1\bin\Debug\loader.exe
+C:\Users\11637\Documents\GitHub\ppthelper11.28\Project1\bin\Debug\loader.pdb
+C:\Users\11637\Documents\GitHub\ppthelper11.28\Project1\obj\Debug\Project1.vbprojAssemblyReference.cache
+C:\Users\11637\Documents\GitHub\ppthelper11.28\Project1\obj\Debug\Project1.vbproj.CoreCompileInputs.cache
+C:\Users\11637\Documents\GitHub\ppthelper11.28\Project1\obj\Debug\loader.exe
+C:\Users\11637\Documents\GitHub\ppthelper11.28\Project1\obj\Debug\loader.pdb
