@@ -688,6 +688,7 @@ Class MainWindow1
                 BackBitmapImage.StreamSource = New MemoryStream(bytes)
                 BackBitmapImage.EndInit()
                 t.BackImage.Source = BackBitmapImage
+                Canvas.SetLeft(t.Grid1, (ScreenHelper.GetLogicalWidth - fw) / 2)
             Catch ex As Exception
                 MsgBox(ex.Message)
             End Try

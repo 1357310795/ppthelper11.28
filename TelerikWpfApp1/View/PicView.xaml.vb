@@ -56,8 +56,8 @@ Public Class PicView
         Dim h As Double = Grid1.ActualHeight
         Dim w As Double = Grid1.ActualWidth
         Dim t As Double = TotalRotation / 180 * PI
-        Dim w1 As Double = Abs(h * Sin(t)) + Abs(w * Cos(t)) * TotalScale
-        Dim h1 As Double = Abs(h * Cos(t)) + Abs(w * Sin(t)) * TotalScale
+        Dim w1 As Double = Abs(h * Sin(t)) * TotalScale + Abs(w * Cos(t)) * TotalScale
+        Dim h1 As Double = Abs(h * Cos(t)) * TotalScale + Abs(w * Sin(t)) * TotalScale
 
         ScaleTransform.ScaleX *= scale.X
         ScaleTransform.ScaleY *= scale.Y
