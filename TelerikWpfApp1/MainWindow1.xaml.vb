@@ -96,7 +96,7 @@ Class MainWindow1
         update_timer.Start()
 
         Dim u As New Threading.Thread(AddressOf updatehelper.updatemain)
-        u.Start()
+        'u.Start()
     End Sub
     Private Sub Window_Closing(sender As Object, e As ComponentModel.CancelEventArgs)
         update_timer.Stop()
@@ -145,9 +145,13 @@ Class MainWindow1
         End If
 
         If App_Mode = App_Mode_Enum.Scale Then
+            Dim t As PicView = TryCast(MainContentControl.Content, PicView)
             Select Case e
                 Case Edit_Mode_Enum.Pen
+                    t.Canvas1.IsManipulationEnabled = False
                     ci.DefaultDrawingAttributes = pen
+                Case Edit_Mode_Enum.Cursor
+                    t.Canvas1.IsManipulationEnabled = True
             End Select
         End If
     End Sub

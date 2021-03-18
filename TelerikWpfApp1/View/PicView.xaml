@@ -26,7 +26,7 @@
             <Image x:Name="BackImage" Width="1920" Height="1080"/>
             <local:MyInkCanvas x:Name="InkCanvas1" 
                        Visibility="Visible" 
-                       Background="#008B8B8B" 
+                       Background="{StaticResource FakeTransparent}" 
                        Height="{Binding ElementName=BackImage,Path=ActualHeight,Mode=OneWay}"
                        Width="{Binding ElementName=BackImage,Path=ActualWidth,Mode=OneWay}" 
                        IsHitTestVisible="true" RenderTransformOrigin="0.5,0.5" IsManipulationEnabled="False">
