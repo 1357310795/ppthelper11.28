@@ -313,6 +313,7 @@ Class MainWindow1
         ppt_view.Exit()
     End Sub
     Private Sub Window_PreviewMouseWheel(sender As Object, e As MouseWheelEventArgs)
+        If App_Mode = App_Mode_Enum.Scale Then Return
         If e.Delta < 0 Then
             ppt_next()
         Else
@@ -688,6 +689,8 @@ Class MainWindow1
                 BackBitmapImage.StreamSource = New MemoryStream(bytes)
                 BackBitmapImage.EndInit()
                 t.BackImage.Source = BackBitmapImage
+                t.TranslateTransform.X = ScreenHelper.GetLogicalWidth / 2
+                t.TranslateTransform.Y = ScreenHelper.GetLogicalHeight / 2
                 Canvas.SetLeft(t.Grid1, (ScreenHelper.GetLogicalWidth - fw) / 2)
             Catch ex As Exception
                 MsgBox(ex.Message)

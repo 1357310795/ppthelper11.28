@@ -7,18 +7,17 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" Height="Auto" Width="Auto" d:DesignWidth="800" d:DesignHeight="800">
     <Canvas x:Name="Canvas1"
-            IsManipulationEnabled="True"
+            IsManipulationEnabled="True" Background="#FFE29191"
             ManipulationStarting="Canvas1_ManipulationStarting"
             ManipulationStarted="Canvas1_ManipulationStarted"
             ManipulationDelta="Canvas1_ManipulationDelta"
-            ManipulationCompleted="Canvas1_ManipulationCompleted" Background="#FFE29191" >
+            ManipulationCompleted="Canvas1_ManipulationCompleted" >
         <Grid x:Name="Grid1" Canvas.Left="0" Canvas.Top="0"
               Height="{Binding ElementName=BackImage,Path=ActualHeight,Mode=OneWay}"
               Width="{Binding ElementName=BackImage,Path=ActualWidth,Mode=OneWay}" >
             <Grid.LayoutTransform>
                 <TransformGroup>
                     <ScaleTransform x:Name="ScaleTransform" />
-                    <SkewTransform />
                     <RotateTransform Angle="0" x:Name="RotateTransform" />
                     <TranslateTransform x:Name="TranslateTransform" />
                 </TransformGroup>

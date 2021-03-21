@@ -191,6 +191,23 @@ Module Module2
         End If
         Return Nothing
     End Function
+    Public Function FindTranslateTransform(ByVal hayStack As Transform) As TranslateTransform
+        If TypeOf hayStack Is TranslateTransform Then
+            Return CType(hayStack, TranslateTransform)
+        End If
+
+        If TypeOf hayStack Is TransformGroup Then
+            Dim group As TransformGroup = TryCast(hayStack, TransformGroup)
+
+            For Each child In group.Children
+
+                If TypeOf child Is TranslateTransform Then
+                    Return CType(child, TranslateTransform)
+                End If
+            Next
+        End If
+        Return Nothing
+    End Function
     Public Function CubicBezierDoubleAnimation(d As TimeSpan, s As Double, t As Double, Bezier As String) As DoubleAnimationUsingKeyFrames
         Dim dkf As DoubleKeyFrame = New LinearDoubleKeyFrame
         dkf.KeyTime = TimeSpan.FromSeconds(0.0)
