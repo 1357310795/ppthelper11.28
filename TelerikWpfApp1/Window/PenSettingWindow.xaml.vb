@@ -91,9 +91,9 @@ Public Class PenSettingWindow
     End Sub
 
     Private Sub Window_Loaded(sender As Object, e As EventArgs)
-        Dim da1 = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), 0, 1, "0,.71,.47,1")
-        Dim da2 = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.2), TimeSpan.FromSeconds(0.5), 0, 1, "0,.71,.47,1")
-        Dim da3 = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.4), TimeSpan.FromSeconds(0.7), 0, 1, "0,.71,.47,1")
+        Dim da1 = AnimationHelper.CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), 0, 1, "0,.71,.47,1")
+        Dim da2 = AnimationHelper.CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.2), TimeSpan.FromSeconds(0.5), 0, 1, "0,.71,.47,1")
+        Dim da3 = AnimationHelper.CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.4), TimeSpan.FromSeconds(0.7), 0, 1, "0,.71,.47,1")
         MyScaleTransform1.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
         MyScaleTransform2.BeginAnimation(ScaleTransform.ScaleXProperty, da2)
         MyScaleTransform3.BeginAnimation(ScaleTransform.ScaleXProperty, da1)

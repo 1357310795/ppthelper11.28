@@ -36,7 +36,7 @@
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
         Me.Activate()
         Me.Focus()
-        Dim a = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), 0, 1, "0,1.25,.91,1.11")
+        Dim a = AnimationHelper.CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), 0, 1, "0,1.25,.91,1.11")
         MyScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, a)
     End Sub
 End Class

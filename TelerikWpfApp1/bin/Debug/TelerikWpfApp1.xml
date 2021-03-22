@@ -74,16 +74,6 @@ UserControl1
 InitializeComponent
 </summary>
 </member>
-<member name="T:TelerikWpfApp1.SaveDialog">
-<summary>
-SaveDialog
-</summary>
-</member>
-<member name="M:TelerikWpfApp1.SaveDialog.InitializeComponent">
-<summary>
-InitializeComponent
-</summary>
-</member>
 <member name="T:TelerikWpfApp1.SaveNoti1">
 <summary>
 SaveNoti1

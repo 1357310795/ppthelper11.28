@@ -1,493 +1,697 @@
 ﻿<Window x:Class="MainWindow1"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:telerikwpfapp1="clr-namespace:TelerikWpfApp1" 
+        xmlns:telerikwpfapp1="clr-namespace:TelerikWpfApp1"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:TelerikWpfApp1"
-        Title="HandyDraw BlackBoard Ver. by Hikari✨" 
-        Height="1080" Width="1920" 
-        Icon="Resources/项目2.ico" WindowStyle="None" 
-        Background="Transparent" 
-        AllowsTransparency="True" 
-        ShowInTaskbar="False" Topmost="True" 
-        PreviewMouseWheel="Window_PreviewMouseWheel" 
-        PreviewKeyDown="Window_PreviewKeyDown" 
+        Title="HandyDraw BlackBoard Ver. by Hikari✨"
+        Width="1920" Height="1080"
+        Background="{x:Null}"
+        Icon="Resources/项目2.ico" WindowStyle="None"
+        ResizeMode="NoResize" ShowInTaskbar="False"
+        Topmost="True" PreviewMouseWheel="Window_PreviewMouseWheel"
+        PreviewKeyDown="Window_PreviewKeyDown"
         Closing="Window_Closing">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="-1" />
+    </WindowChrome.WindowChrome>
     <Window.Resources>
-        <Style x:Key="ListBoxItemStyle" TargetType="{x:Type RadioButton}" 
-         BasedOn="{StaticResource MaterialDesignToolRadioButton}">
-            <EventSetter Event="PreviewMouseUp" Handler="ListBoxItem_PreviewMouseUp"/>
-            <EventSetter Event="MouseUp" Handler="ListBoxItem_MouseUp"/>
+        <Style x:Key="ListBoxItemStyle"
+               TargetType="{x:Type RadioButton}"
+               BasedOn="{StaticResource MaterialDesignToolRadioButton}">
+            <EventSetter Event="PreviewMouseUp" Handler="ListBoxItem_PreviewMouseUp" />
+            <EventSetter Event="MouseUp" Handler="ListBoxItem_MouseUp" />
         </Style>
     </Window.Resources>
     <local:DpiDecorator>
-        <materialDesign:DialogHost x:Name="MainDialogHost1" Identifier="MainDialogHost1" Background="Transparent">
-            <materialDesign:DialogHost x:Name="MainDialogHost2" Identifier="MainDialogHost2" Background="Transparent">
-                <Grid x:Name="MainGrid" Background="Transparent">
-                    <ContentControl x:Name="MainContentControl" Background="Transparent">
-                        
-                    </ContentControl>
-                    <local:MyInkCanvas x:Name="InkCanvas1" 
-                               Visibility="Visible" 
-                               Background="{StaticResource FakeTransparent}" 
-                               IsHitTestVisible="true" RenderTransformOrigin="0.5,0.5">
-                        <InkCanvas.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="上一页" Click="Button_Prev_Click" />
-                                <MenuItem Header="下一页" Click="Button_Next_Click"/>
-                                <MenuItem Header="结束放映" Click="Exit_presentation"/>
-                            </ContextMenu>
-                        </InkCanvas.ContextMenu>
-                    </local:MyInkCanvas>
-                    <Grid x:Name="BoardGrid" Width="{Binding ElementName=MainGrid,Path=ActualWidth}" Height="999"
-                          HorizontalAlignment="Left" VerticalAlignment="Top"
-                          Visibility="Collapsed">
-                        <local:BoardView x:Name="bv" />
-                    </Grid>
-                    <Grid x:Name="GridTools"
-                          HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                          Margin="172,0,173,10" RenderTransformOrigin="0.5,1" 
-                          Height="50" Opacity="0.6">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Label x:Name="VisibilityControl" Visibility="Collapsed" 
-                               Width="0" Height="0" Padding="12"/>
-                        <materialDesign:Card UniformCornerRadius="3" Padding="0" Grid.Column="1" >
-                            <StackPanel x:Name="listboxTools"  
-                                        HorizontalAlignment="Left"
-                                        Orientation="Horizontal" Margin="0" RenderTransformOrigin="0.5,0.5">
-                                <StackPanel.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform Y="0"/>
-                                    </TransformGroup>
-                                </StackPanel.RenderTransform>
-                                <RadioButton x:Name="CursorRadioButton"
-                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                             Style="{StaticResource ListBoxItemStyle}"
-                                             IsChecked="False" Tag="Cursor"
-                                             GroupName="Tools" Checked="Cursor_Selected">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="CursorDefault" Width="24" Height="24" />
-                                        <TextBlock Grid.Row="1" Text="指针" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                    </Grid>
-                                </RadioButton>
-                                <RadioButton x:Name="SelectRadioButton"
-                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                             Style="{StaticResource ListBoxItemStyle}"
-                                             Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
-                                             IsChecked="False" Tag="select"
-                                             GroupName="Tools" Checked="Select_Selected">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="Select" Width="24" Height="24" />
-                                        <TextBlock Grid.Row="1" Text="选择" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                    </Grid>
-                                </RadioButton>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
-                                        x:Name="FreeScaleButton" 
-                                        Visibility="Visible"
-                                        Height="Auto" Click="FreeScale_Click"
-                                         Padding="{Binding ElementName=VisibilityControl,Path=Padding}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="ArrowTopRightBottomLeft" Width="24" Height="24" Foreground="#FF7C7C7C" />
-                                        <TextBlock Grid.Row="1" Text="缩放" Margin="7,4,7,0"
-                                                    Foreground="#FF787878"
-                                                   FontSize="14"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                    </Grid>
-                                </Button>
-                                <RadioButton x:Name="PenRadioButton"
-                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                             Style="{StaticResource ListBoxItemStyle}"
-                                             IsChecked="False" Tag="Pen"
-                                             GroupName="Tools" Checked="Pen_Selected">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="LeadPencil" Width="24" Height="24" />
-                                        <TextBlock Grid.Row="1" Text="标注" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                        <materialDesign:PopupBox x:Name="PenSettingPopup" 
-                                                                 StaysOpen="True" 
-                                                                 IsEnabled="True" 
-                                                                 Grid.RowSpan="2" 
-                                                                 PlacementMode="TopAndAlignLeftEdges" 
-                                                                 PopupHorizontalOffset="-5" 
-                                                                 PopupVerticalOffset="40" 
-                                                                 Foreground="{x:Null}">
-                                            <materialDesign:PopupBox.ToggleContent>
-                                                <x:Null/>
-                                            </materialDesign:PopupBox.ToggleContent>
-                                            <local:PenSettingMenu x:Name="PenSetting"/>
-                                        </materialDesign:PopupBox>
-                                        <Ellipse x:Name="PenColorTip"
-                                            Fill="Black" 
-                                            Width="7"  Height="7" VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                                            Grid.Row="0" Margin="0,0,1,0"
-                                            />
-                                    </Grid>
-                                </RadioButton>
-                                <RadioButton x:Name="MarkerRadioButton"
-                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                             Style="{StaticResource ListBoxItemStyle}"
-                                             Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
-                                             IsChecked="False" Tag="Marker"
-                                             GroupName="Tools" Checked="Marker_Selected">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Marker" VerticalAlignment="Center" Width="24" Height="24" />
-                                        <TextBlock Grid.Row="1" Text="荧光笔" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                        <materialDesign:PopupBox x:Name="MarkerSettingPopup" 
-                                                                 StaysOpen="True" 
-                                                                 IsEnabled="True" 
-                                                                 Grid.RowSpan="2" 
-                                                                 PlacementMode="TopAndAlignLeftEdges" 
-                                                                 PopupHorizontalOffset="-5" 
-                                                                 PopupVerticalOffset="40" 
-                                                                 Foreground="{x:Null}">
-                                            <materialDesign:PopupBox.ToggleContent>
-                                                <x:Null/>
-                                            </materialDesign:PopupBox.ToggleContent>
-                                            <local:MarkerSettingMenu x:Name="MarkerSetting"/>
-                                        </materialDesign:PopupBox>
-                                        <Rectangle x:Name="MarkerColorTip"
-                                            Fill="Black" 
-                                            Width="7"  Height="7" VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                                            Grid.Row="0" Margin="0,0,1,0"
-                                            />
-                                    </Grid>
-                                </RadioButton>
-                                <RadioButton x:Name="EraserRadioButton"
-                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                             Style="{StaticResource ListBoxItemStyle}"
-                                             IsChecked="False" Tag="Eraser"
-                                             GroupName="Tools" Checked="Eraser_Selected">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Eraser" Width="24" Height="24" />
-                                        <TextBlock Grid.Row="1" Text="擦除" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                        <materialDesign:PopupBox x:Name="EraserSettingPopup" 
-                                                                 StaysOpen="True" 
-                                                                 IsEnabled="True" 
-                                                                 Grid.RowSpan="2" 
-                                                                 PlacementMode="TopAndAlignLeftEdges" 
-                                                                 PopupHorizontalOffset="-5" 
-                                                                 PopupVerticalOffset="40" 
-                                                                 Foreground="{x:Null}">
-                                            <materialDesign:PopupBox.ToggleContent>
-                                                <x:Null/>
-                                            </materialDesign:PopupBox.ToggleContent>
-                                            <local:EraserSettingMenu x:Name="EraserSetting"/>
-                                        </materialDesign:PopupBox>
-                                    </Grid>
-                                </RadioButton>
-                                <RadioButton Style="{StaticResource ListBoxItemStyle}"
-                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                             IsChecked="False" Tag="Undo"
-                                             GroupName="Tools1" Checked="Undo_Selected">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="Undo" Width="24" Height="24" />
-                                        <TextBlock Grid.Row="1" Text="撤销" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                    </Grid>
-                                </RadioButton>
-                                <RadioButton Style="{StaticResource ListBoxItemStyle}"
-                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                             IsChecked="False" Tag="Redo"
-                                             Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
-                                             GroupName="Tools1" Checked="Redo_Selected">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="Redo" Width="24" Height="24" />
-                                        <TextBlock Grid.Row="1" Text="重做" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                    </Grid>
-                                </RadioButton>
-                                <RadioButton Style="{StaticResource ListBoxItemStyle}"
-                                             Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                             IsChecked="False" Tag="Setting"
-                                             GroupName="Setting"
-                                             Checked="Setting_Selected">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Apps" Width="24" Height="24" />
-                                        <TextBlock Grid.Row="1" Text="更多" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                        <materialDesign:PopupBox x:Name="MorePopup" 
-                                                                 StaysOpen="True" 
-                                                                 IsEnabled="True" 
-                                                                 Grid.RowSpan="2" 
-                                                                 PlacementMode="TopAndAlignLeftEdges" 
-                                                                 PopupHorizontalOffset="-5" 
-                                                                 PopupVerticalOffset="40" 
-                                                                 Foreground="{x:Null}">
-                                            <materialDesign:PopupBox.ToggleContent>
-                                                <x:Null/>
-                                            </materialDesign:PopupBox.ToggleContent>
-                                            <local:MoreMenu x:Name="More"/>
-                                        </materialDesign:PopupBox>
-                                    </Grid>
-                                </RadioButton>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                        Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                        Height="Auto" Click="Exit_presentation">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="Presentation" Width="24" Height="24" Foreground="Black" >
-                                        </materialDesign:PackIcon>
-                                        <materialDesign:PackIcon  Grid.Row="0"  Kind="WindowClose" 
-                                                                  HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                                                  Foreground="Black"
-                                                                  Width="11" Height="11" 
-                                                                  Margin="0,0,0,5" />
-                                        <TextBlock Grid.Row="1" Text="结束放映" Margin="2,4,2,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                    </Grid>
-                                </Button>
-                            </StackPanel>
-                        </materialDesign:Card>
-                        <materialDesign:Card UniformCornerRadius="3" Padding="0" Margin="0,0,12,0">
-                            <StackPanel HorizontalAlignment="Center"
-                                        Orientation="Horizontal" Margin="0">
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Height="Auto" Width="Auto"
-                                        Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                        Click="Button_Board_Click">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon x:Name="ButtonBoardIcon"
-                                            HorizontalAlignment="Center" Grid.Row="0" 
-                                            Kind="WebAsset" Width="24" Height="24" Foreground="Black" >
-                                        </materialDesign:PackIcon>
-                                        <TextBlock x:Name="ButtonBoardText"  
-                                                   Grid.Row="1" Text="白板" Margin="7,4,7,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                    </Grid>
-                                </Button>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Height="Auto" Width="Auto"
-                                        Padding="{Binding ElementName=VisibilityControl,Path=Padding}"
-                                        Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"
-                                        Click="Button_Camera_Click">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon x:Name="ButtonCameraIcon" HorizontalAlignment="Center" Grid.Row="0" 
-                                                                     Kind="WebCamera" Width="24" Height="24" Foreground="Black" >
-                                        </materialDesign:PackIcon>
-                                        <TextBlock x:Name="ButtonCameraText"  
-                                                   Grid.Row="1" Text="视频展台" Margin="2,4,2,0"  
-                                                   FontSize="14" Foreground="Black"
-                                                   Visibility="{Binding ElementName=VisibilityControl,Path=Visibility}"/>
-                                    </Grid>
-                                </Button>
-                            </StackPanel>
-                        </materialDesign:Card>
-                    </Grid>
-                    <StackPanel x:Name="NotiStackPanel" Width="Auto" Height="Auto" 
-                                VerticalAlignment="Top" HorizontalAlignment="Right"
-                                Margin="0,15,15,0" Visibility="Collapsed">
-                        <!--<Canvas Width="174">
+        <materialDesign:DialogHost x:Name="MainDialogHost1"
+                                   Background="Transparent"
+                                   Identifier="MainDialogHost1">
+            <Grid x:Name="MainGrid" Background="Transparent">
+                <ContentControl x:Name="MainContentControl" Background="Transparent" />
+                <local:MyInkCanvas x:Name="InkCanvas1"
+                                   Background="{StaticResource FakeTransparent}"
+                                   Visibility="Visible" IsHitTestVisible="true"
+                                   RenderTransformOrigin="0.5,0.5">
+                    <InkCanvas.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="上一页" Click="Button_Prev_Click" />
+                            <MenuItem Header="下一页" Click="Button_Next_Click" />
+                            <MenuItem Header="结束放映" Click="Exit_presentation" />
+                        </ContextMenu>
+                    </InkCanvas.ContextMenu>
+                </local:MyInkCanvas>
+                <Grid x:Name="BoardGrid"
+                      Width="{Binding ElementName=MainGrid, Path=ActualWidth}"
+                      Height="999"
+                      HorizontalAlignment="Left" VerticalAlignment="Top"
+                      Visibility="Collapsed">
+                    <local:BoardView x:Name="bv" />
+                </Grid>
+                <Grid x:Name="GridTools"
+                      Height="50"
+                      HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                      Margin="172,0,173,10"
+                      RenderTransformOrigin="0.5,1" Opacity="0.6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="VisibilityControl"
+                           Width="0" Height="0"
+                           Padding="12"
+                           Visibility="Collapsed" />
+                    <materialDesign:Card Padding="0"
+                                         Grid.Column="1"
+                                         UniformCornerRadius="3">
+                        <StackPanel x:Name="listboxTools"
+                                    HorizontalAlignment="Left"
+                                    Margin="0"
+                                    Orientation="Horizontal" RenderTransformOrigin="0.5,0.5">
+                            <StackPanel.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform Y="0" />
+                                </TransformGroup>
+                            </StackPanel.RenderTransform>
+                            <RadioButton x:Name="CursorRadioButton"
+                                         Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                         IsChecked="False"
+                                         Style="{StaticResource ListBoxItemStyle}"
+                                         Tag="Cursor" GroupName="Tools"
+                                         Checked="Cursor_Selected">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Kind="CursorDefault" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="指针"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                </Grid>
+                            </RadioButton>
+                            <RadioButton x:Name="SelectRadioButton"
+                                         Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                         IsChecked="False"
+                                         Style="{StaticResource ListBoxItemStyle}"
+                                         Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                         Tag="select" GroupName="Tools"
+                                         Checked="Select_Selected">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Kind="Select" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="选择"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                </Grid>
+                            </RadioButton>
+                            <Button x:Name="FreeScaleButton"
+                                    Height="Auto"
+                                    Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Visibility="Visible" Click="FreeScale_Click">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Foreground="#FF7C7C7C"
+                                                             Kind="ArrowTopRightBottomLeft" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="#FF787878"
+                                               Text="缩放"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                </Grid>
+                            </Button>
+                            <RadioButton x:Name="PenRadioButton"
+                                         Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                         IsChecked="False"
+                                         Style="{StaticResource ListBoxItemStyle}"
+                                         Tag="Pen" GroupName="Tools"
+                                         Checked="Pen_Selected">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Kind="LeadPencil" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="标注"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                    <materialDesign:PopupBox x:Name="PenSettingPopup"
+                                                             Grid.RowSpan="2"
+                                                             Foreground="{x:Null}"
+                                                             StaysOpen="True" IsEnabled="True"
+                                                             PlacementMode="TopAndAlignLeftEdges"
+                                                             PopupHorizontalOffset="-5" PopupVerticalOffset="40">
+                                        <materialDesign:PopupBox.ToggleContent>
+                                            <x:Null />
+                                        </materialDesign:PopupBox.ToggleContent>
+                                        <local:PenSettingMenu x:Name="PenSetting" />
+                                    </materialDesign:PopupBox>
+                                    <Ellipse x:Name="PenColorTip"
+                                             Width="7" Height="7"
+                                             HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                             Margin="0,0,1,0"
+                                             Grid.Row="0"
+                                             Fill="Black" />
+                                </Grid>
+                            </RadioButton>
+                            <RadioButton x:Name="MarkerRadioButton"
+                                         Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                         IsChecked="False"
+                                         Style="{StaticResource ListBoxItemStyle}"
+                                         Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                         Tag="Marker" GroupName="Tools"
+                                         Checked="Marker_Selected">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                             Kind="Marker" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="荧光笔"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                    <materialDesign:PopupBox x:Name="MarkerSettingPopup"
+                                                             Grid.RowSpan="2"
+                                                             Foreground="{x:Null}"
+                                                             StaysOpen="True" IsEnabled="True"
+                                                             PlacementMode="TopAndAlignLeftEdges"
+                                                             PopupHorizontalOffset="-5" PopupVerticalOffset="40">
+                                        <materialDesign:PopupBox.ToggleContent>
+                                            <x:Null />
+                                        </materialDesign:PopupBox.ToggleContent>
+                                        <local:MarkerSettingMenu x:Name="MarkerSetting" />
+                                    </materialDesign:PopupBox>
+                                    <Rectangle x:Name="MarkerColorTip"
+                                               Width="7" Height="7"
+                                               HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                               Margin="0,0,1,0"
+                                               Grid.Row="0"
+                                               Fill="Black" />
+                                </Grid>
+                            </RadioButton>
+                            <RadioButton x:Name="EraserRadioButton"
+                                         Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                         IsChecked="False"
+                                         Style="{StaticResource ListBoxItemStyle}"
+                                         Tag="Eraser" GroupName="Tools"
+                                         Checked="Eraser_Selected">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Kind="Eraser" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="擦除"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                    <materialDesign:PopupBox x:Name="EraserSettingPopup"
+                                                             Grid.RowSpan="2"
+                                                             Foreground="{x:Null}"
+                                                             StaysOpen="True" IsEnabled="True"
+                                                             PlacementMode="TopAndAlignLeftEdges"
+                                                             PopupHorizontalOffset="-5" PopupVerticalOffset="40">
+                                        <materialDesign:PopupBox.ToggleContent>
+                                            <x:Null />
+                                        </materialDesign:PopupBox.ToggleContent>
+                                        <local:EraserSettingMenu x:Name="EraserSetting" />
+                                    </materialDesign:PopupBox>
+                                </Grid>
+                            </RadioButton>
+                            <RadioButton Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                         IsChecked="False"
+                                         Style="{StaticResource ListBoxItemStyle}"
+                                         Tag="Undo" GroupName="Tools1"
+                                         Checked="Undo_Selected">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Kind="Undo" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="撤销"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                </Grid>
+                            </RadioButton>
+                            <RadioButton Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                         IsChecked="False"
+                                         Style="{StaticResource ListBoxItemStyle}"
+                                         Tag="Redo"
+                                         Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                         GroupName="Tools1" Checked="Redo_Selected">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Kind="Redo" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="重做"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                </Grid>
+                            </RadioButton>
+                            <RadioButton Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                         IsChecked="False"
+                                         Style="{StaticResource ListBoxItemStyle}"
+                                         Tag="Setting" GroupName="Setting"
+                                         Checked="Setting_Selected">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Kind="Apps" />
+                                    <TextBlock Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="更多"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                    <materialDesign:PopupBox x:Name="MorePopup"
+                                                             Grid.RowSpan="2"
+                                                             Foreground="{x:Null}"
+                                                             StaysOpen="True" IsEnabled="True"
+                                                             PlacementMode="TopAndAlignLeftEdges"
+                                                             PopupHorizontalOffset="-5" PopupVerticalOffset="40">
+                                        <materialDesign:PopupBox.ToggleContent>
+                                            <x:Null />
+                                        </materialDesign:PopupBox.ToggleContent>
+                                        <local:MoreMenu x:Name="More" />
+                                    </materialDesign:PopupBox>
+                                </Grid>
+                            </RadioButton>
+                            <Button Height="Auto"
+                                    Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Click="Exit_presentation">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Foreground="Black"
+                                                             Kind="Presentation" />
+                                    <materialDesign:PackIcon Width="11" Height="11"
+                                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                             Margin="0,0,0,5"
+                                                             Grid.Row="0"
+                                                             Foreground="Black"
+                                                             Kind="WindowClose" />
+                                    <TextBlock Margin="2,4,2,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="结束放映"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </materialDesign:Card>
+                    <materialDesign:Card Margin="0,0,12,0" Padding="0"
+                                         UniformCornerRadius="3">
+                        <StackPanel HorizontalAlignment="Center"
+                                    Margin="0"
+                                    Orientation="Horizontal">
+                            <Button Width="Auto" Height="Auto"
+                                    Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Click="Button_Board_Click">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon x:Name="ButtonBoardIcon"
+                                                             Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Foreground="Black"
+                                                             Kind="WebAsset" />
+                                    <TextBlock x:Name="ButtonBoardText"
+                                               Margin="7,4,7,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="白板"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                </Grid>
+                            </Button>
+                            <Button Width="Auto" Height="Auto"
+                                    Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                    Click="Button_Camera_Click">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon x:Name="ButtonCameraIcon"
+                                                             Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Foreground="Black"
+                                                             Kind="WebCamera" />
+                                    <TextBlock x:Name="ButtonCameraText"
+                                               Margin="2,4,2,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="视频展台"
+                                               Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                               FontSize="14" />
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </Grid>
+                <StackPanel x:Name="NotiStackPanel"
+                            Width="Auto" Height="Auto"
+                            HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Margin="0,15,15,0"
+                            Visibility="Collapsed">
+                    <!--<Canvas Width="174">
                             <local:UserControl1/>
                         </Canvas>-->
-                    </StackPanel>
-                    <Grid x:Name="GridLeft"
-                          HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                          Margin="15,0,15,10" RenderTransformOrigin="0.5,0.5" Height="60" Opacity="0.3">
-                        <materialDesign:Card UniformCornerRadius="3" Padding="0">
-                            <StackPanel x:Name="listboxLeft"  
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal" Margin="0" RenderTransformOrigin="0.5,0.5">
-                                <StackPanel.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform Y="0"/>
-                                    </TransformGroup>
-                                </StackPanel.RenderTransform>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Button_Prev_Click">
-                                    <Grid Margin="0,2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="KeyboardArrowLeft" Width="24" Height="24" Foreground="Black" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="上一页" Margin="0,5,0,0" Foreground="Black" FontSize="14"/>
-                                    </Grid>
-                                </Button>
-                                <Grid Margin="5,0,5,-1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock x:Name="TextPageLeft"
-                                               HorizontalAlignment="Center" Grid.Row="0" 
-                                               Text="{Binding ElementName=TextPage,Path=Text}" Margin="0,10,0,0" Foreground="Black" FontSize="16"/>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="页码" Margin="0,5,0,0" Foreground="Black" FontSize="14"/>
-                                </Grid>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Button_Next_Click">
-                                    <Grid Margin="0,2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="{Binding ElementName=PageControlNextIcon,Path=Kind}" Width="24" Height="24" Foreground="Black" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="{Binding ElementName=PageControlNextText,Path=Text}" Margin="0,5,0,0" Foreground="Black"/>
-                                    </Grid>
-                                </Button>
-                            </StackPanel>
-                        </materialDesign:Card>
-                    </Grid>
-                    <Grid x:Name="GridRight"
-                          HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                          Margin="15,0,15,10" RenderTransformOrigin="0.5,0.5" 
-                          Height="60" Opacity="{Binding ElementName=GridLeft,Path=Opacity}">
-                        <materialDesign:Card UniformCornerRadius="3" Padding="0">
-                            <StackPanel x:Name="listboxRight"  
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal" Margin="0" RenderTransformOrigin="0.5,0.5">
-                                <StackPanel.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform Y="0"/>
-                                    </TransformGroup>
-                                </StackPanel.RenderTransform>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Button_Prev_Click">
-                                    <Grid Margin="0,2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon HorizontalAlignment="Center" Grid.Row="0" 
-                                                                 Kind="KeyboardArrowLeft" Width="24" Height="24" Foreground="Black" />
-                                        <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="上一页" Margin="0,5,0,0" Foreground="Black" FontSize="14"/>
-                                    </Grid>
-                                </Button>
-                                <Grid Margin="5,0,5,-1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock x:Name="TextPage"
-                                               HorizontalAlignment="Center" Grid.Row="0" 
-                                               Text="1/1" Margin="0,10,0,0" Foreground="Black" FontSize="16"/>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="页码" Margin="0,5,0,0" Foreground="Black" FontSize="14"/>
-                                </Grid>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" Height="60" Click="Button_Next_Click">
-                                    <Grid Margin="0,2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <materialDesign:PackIcon x:Name="PageControlNextIcon"
-                                            HorizontalAlignment="Center" Grid.Row="0" 
-                                            Kind="KeyboardArrowRight" Width="24" Height="24" Foreground="Black" />
-                                        <TextBlock  x:Name="PageControlNextText"
-                                            HorizontalAlignment="Center" Grid.Row="1" Text="下一页" Margin="0,5,0,0" Foreground="Black"/>
-                                    </Grid>
-                                </Button>
-                            </StackPanel>
-                        </materialDesign:Card>
-                    </Grid>
-                    <Grid x:Name="logogrid" Background="#00000000" Visibility="Collapsed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="1.2*"/>
-                        </Grid.RowDefinitions>
-                        <Image x:Name="logo1" Source="Resources/HandyDrawPPTHelper1.png" Grid.Column="1" Grid.Row="1"/>
-                        <Image x:Name="logo2" Source="Resources/开源免费.png" Grid.Column="1" Grid.Row="2">
-                            <Image.RenderTransform>
+                </StackPanel>
+                <Grid x:Name="GridLeft"
+                      Height="60"
+                      HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                      Margin="15,0,15,10"
+                      RenderTransformOrigin="0.5,0.5" Opacity="0.3">
+                    <materialDesign:Card Padding="0" UniformCornerRadius="3">
+                        <StackPanel x:Name="listboxLeft"
+                                    HorizontalAlignment="Center"
+                                    Margin="0"
+                                    Orientation="Horizontal" RenderTransformOrigin="0.5,0.5">
+                            <StackPanel.RenderTransform>
                                 <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform/>
-                                    <TranslateTransform Y="40"/>
+                                    <ScaleTransform />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform Y="0" />
                                 </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                        <ProgressBar x:Name="loadprog" Height="6" Width="1920" Margin="0,1,0,0"
-                                         Background="#FFFF6875" 
-                                         BorderBrush="#FFFF6976" 
-                                         Foreground="#FFFFD29A"
-                                         Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Value="17"/>
-                    </Grid>
+                            </StackPanel.RenderTransform>
+                            <Button Height="60"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Click="Button_Prev_Click">
+                                <Grid Margin="0,2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Foreground="Black"
+                                                             Kind="KeyboardArrowLeft" />
+                                    <TextBlock HorizontalAlignment="Center"
+                                               Margin="0,5,0,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="上一页"
+                                               FontSize="14" />
+                                </Grid>
+                            </Button>
+                            <Grid Margin="5,0,5,-1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Name="TextPageLeft"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,10,0,0"
+                                           Grid.Row="0"
+                                           Foreground="Black"
+                                           Text="{Binding ElementName=TextPage, Path=Text}"
+                                           FontSize="16" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Margin="0,5,0,0"
+                                           Grid.Row="1"
+                                           Foreground="Black"
+                                           Text="页码"
+                                           FontSize="14" />
+                            </Grid>
+                            <Button Height="60"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Click="Button_Next_Click">
+                                <Grid Margin="0,2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Foreground="Black"
+                                                             Kind="{Binding ElementName=PageControlNextIcon, Path=Kind}" />
+                                    <TextBlock HorizontalAlignment="Center"
+                                               Margin="0,5,0,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="{Binding ElementName=PageControlNextText, Path=Text}" />
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </materialDesign:Card>
                 </Grid>
-            </materialDesign:DialogHost>
+                <Grid x:Name="GridRight"
+                      Height="60"
+                      HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                      Margin="15,0,15,10"
+                      RenderTransformOrigin="0.5,0.5"
+                      Opacity="{Binding ElementName=GridLeft, Path=Opacity}">
+                    <materialDesign:Card Padding="0" UniformCornerRadius="3">
+                        <StackPanel x:Name="listboxRight"
+                                    HorizontalAlignment="Center"
+                                    Margin="0"
+                                    Orientation="Horizontal" RenderTransformOrigin="0.5,0.5">
+                            <StackPanel.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform Y="0" />
+                                </TransformGroup>
+                            </StackPanel.RenderTransform>
+                            <Button Height="60"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Click="Button_Prev_Click">
+                                <Grid Margin="0,2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Foreground="Black"
+                                                             Kind="KeyboardArrowLeft" />
+                                    <TextBlock HorizontalAlignment="Center"
+                                               Margin="0,5,0,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="上一页"
+                                               FontSize="14" />
+                                </Grid>
+                            </Button>
+                            <Grid Margin="5,0,5,-1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Name="TextPage"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,10,0,0"
+                                           Grid.Row="0"
+                                           Foreground="Black"
+                                           Text="1/1"
+                                           FontSize="16" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Margin="0,5,0,0"
+                                           Grid.Row="1"
+                                           Foreground="Black"
+                                           Text="页码"
+                                           FontSize="14" />
+                            </Grid>
+                            <Button Height="60"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Click="Button_Next_Click">
+                                <Grid Margin="0,2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon x:Name="PageControlNextIcon"
+                                                             Width="24" Height="24"
+                                                             HorizontalAlignment="Center"
+                                                             Grid.Row="0"
+                                                             Foreground="Black"
+                                                             Kind="KeyboardArrowRight" />
+                                    <TextBlock x:Name="PageControlNextText"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,5,0,0"
+                                               Grid.Row="1"
+                                               Foreground="Black"
+                                               Text="下一页" />
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </Grid>
+                <materialDesign:Card Margin="0,0,12,0" Padding="0"
+                                     UniformCornerRadius="3">
+                    <StackPanel HorizontalAlignment="Center"
+                                Margin="0"
+                                Orientation="Horizontal">
+                        <Button Width="Auto" Height="Auto"
+                                Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="Button_Board_Click">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <materialDesign:PackIcon x:Name="ButtonBoardIcon"
+                                                         Width="24" Height="24"
+                                                         HorizontalAlignment="Center"
+                                                         Grid.Row="0"
+                                                         Foreground="Black"
+                                                         Kind="WebAsset" />
+                                <TextBlock x:Name="ButtonBoardText"
+                                           Margin="7,4,7,0"
+                                           Grid.Row="1"
+                                           Foreground="Black"
+                                           Text="白板"
+                                           Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                           FontSize="14" />
+                            </Grid>
+                        </Button>
+                        <Button Width="Auto" Height="Auto"
+                                Padding="{Binding ElementName=VisibilityControl, Path=Padding}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                Click="Button_Camera_Click">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <materialDesign:PackIcon x:Name="ButtonCameraIcon"
+                                                         Width="24" Height="24"
+                                                         HorizontalAlignment="Center"
+                                                         Grid.Row="0"
+                                                         Foreground="Black"
+                                                         Kind="WebCamera" />
+                                <TextBlock x:Name="ButtonCameraText"
+                                           Margin="2,4,2,0"
+                                           Grid.Row="1"
+                                           Foreground="Black"
+                                           Text="视频展台"
+                                           Visibility="{Binding ElementName=VisibilityControl, Path=Visibility}"
+                                           FontSize="14" />
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </materialDesign:Card>
+                <Grid x:Name="logogrid"
+                      Background="#00000000"
+                      Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="1.2*" />
+                    </Grid.RowDefinitions>
+                    <Image x:Name="logo1"
+                           Grid.Row="1" Grid.Column="1"
+                           Source="Resources/HandyDrawPPTHelper1.png" />
+                    <Image x:Name="logo2"
+                           Grid.Row="2" Grid.Column="1"
+                           Source="Resources/开源免费.png">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform />
+                                <TranslateTransform Y="40" />
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                    <ProgressBar x:Name="loadprog"
+                                 Width="1920" Height="6"
+                                 Margin="0,1,0,0"
+                                 Grid.Row="3" Grid.Column="0"
+                                 Grid.ColumnSpan="3"
+                                 Background="#FFFF6875" Foreground="#FFFFD29A"
+                                 BorderBrush="#FFFF6976"
+                                 Value="17" />
+                </Grid>
+            </Grid>
         </materialDesign:DialogHost>
     </local:DpiDecorator>
 </Window>

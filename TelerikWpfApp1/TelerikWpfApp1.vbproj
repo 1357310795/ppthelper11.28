@@ -95,19 +95,7 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=3.1.3.1513, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.3.1.3\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="MediaFoundation, Version=3.1.0.32450, Culture=neutral, PublicKeyToken=36fa660e1d6ebf8d, processorArchitecture=MSIL">
-      <HintPath>..\lib\RCWPF\2020.1.115.45\MediaFoundation\MediaFoundation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="SharpDX, Version=2.5.0.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
-      <HintPath>..\lib\RCWPF\2020.1.115.45\SharpDX\SharpDX.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D9, Version=2.5.0.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
-      <HintPath>..\lib\RCWPF\2020.1.115.45\SharpDX\SharpDX.Direct3D9.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -129,19 +117,21 @@
     </ApplicationDefinition>
     <Compile Include="Modules\FlushMemory.vb" />
     <Compile Include="Modules\ftp.vb" />
+    <Compile Include="Modules\inihelper.vb" />
     <Compile Include="Modules\logcat.vb" />
     <Compile Include="MainWindow1.xaml.vb">
       <DependentUpon>MainWindow1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\Module1.vb" />
-    <Compile Include="Modules\Module2.vb" />
+    <Compile Include="Modules\AnimationHelper.vb" />
     <Compile Include="Modules\MyInkCanvas.vb" />
+    <Compile Include="Modules\TransformHelper.vb" />
     <Compile Include="notify\UserControl1.xaml.vb">
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SaveDialog.xaml.vb">
+    <None Include="SaveDialog.xaml.vb">
       <DependentUpon>SaveDialog.xaml</DependentUpon>
-    </Compile>
+    </None>
     <Compile Include="SaveNoti1.xaml.vb">
       <DependentUpon>SaveNoti1.xaml</DependentUpon>
     </Compile>
@@ -192,10 +182,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SaveDialog.xaml">
+    <None Include="SaveDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
+    </None>
     <Page Include="SaveNoti1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

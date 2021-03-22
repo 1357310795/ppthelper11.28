@@ -53,7 +53,7 @@ Class MainWindow1
         App_Mode = App_Mode_Enum.PPT
         Set_Edit_Mode(Edit_Mode_Enum.Cursor)
 
-        simplemode = CType(GetKeyValue("main", "simplemode", "true", inipath), Boolean)
+        simplemode = CType(iniHelper.GetKeyValue("main", "simplemode", "true", iniHelper.inipath), Boolean)
         SetSimpleMode()
 
         Dim PenColorBinding As Binding = New Binding
@@ -419,7 +419,7 @@ Class MainWindow1
     Private animation_timer As Timer
 
     Private Sub CheckStartAnimation()
-        If GetKeyValue("main", "StartAnimation", "true", inipath) = "true" Then
+        If iniHelper.GetKeyValue("main", "StartAnimation", "true", iniHelper.inipath) = "true" Then
             animation_timer = New Timer
             animation_timer.Interval = 100
             AddHandler animation_timer.Elapsed, AddressOf animation_timer_tick
@@ -572,7 +572,7 @@ Class MainWindow1
             update_timer.Stop()
             ci = bv.InkCanvas1
             BoardGrid.Visibility = Visibility.Visible
-            Dim da = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), 0, MainGrid.ActualHeight, "0,.96,.8,1")
+            Dim da = AnimationHelper.CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), 0, MainGrid.ActualHeight, "0,.96,.8,1")
             BoardGrid.BeginAnimation(Grid.HeightProperty, da)
             TextPage.Text = bv.getlabel
             If bv.n = bv.inks.Count - 1 Then
@@ -590,7 +590,7 @@ Class MainWindow1
         ElseIf e = App_Mode_Enum.PPT Then
             App_Mode = e
             ci = InkCanvas1
-            Dim da = CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), MainGrid.ActualHeight, 0, "0,.96,.8,1")
+            Dim da = AnimationHelper.CubicBezierDoubleAnimation(TimeSpan.FromSeconds(0.3), MainGrid.ActualHeight, 0, "0,.96,.8,1")
             BoardGrid.BeginAnimation(Grid.HeightProperty, da)
             'BoardGrid.Visibility = Visibility.Collapsed
             TextPage.Text = currentpage & "/" & GetTotalSlideCount()
