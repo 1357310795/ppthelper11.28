@@ -23,7 +23,7 @@ Class Application
     Private mutex As System.Threading.Mutex
     Public mw As MainWindow1
     Dim prepare_timer As System.Windows.Threading.DispatcherTimer
-    Dim close_timer As Timer
+    Dim close_timer, wordtimer As Timer
     Dim ppt_hwnd As Int32
 
     Protected Overrides Sub OnExit(e As ExitEventArgs)
@@ -51,9 +51,25 @@ Class Application
         prepare_timer.Interval = TimeSpan.FromSeconds(1)
         close_timer = New Timer
         close_timer.Interval = 200
+        wordtimer = New Timer
+        wordtimer.Interval = 1000 * 10
+        AddHandler wordtimer.Elapsed, AddressOf wordprepare
         AddHandler prepare_timer.Tick, AddressOf prepare
         AddHandler close_timer.Elapsed, AddressOf close
-        prepare_timer.Start()
+        'prepare_timer.Start()
+        'wordtimer.Start()
+        'wordprepare()
+    End Sub
+
+    Private Sub wordprepare()
+        'Dim w As New Word.Application
+        'Try
+        '    Dim t = w.ActiveDocument.Path
+        '    AddHandler w.
+        'Catch ex As Exception
+        '    Logger.Instance.WriteException(ex)
+        'End Try
+
     End Sub
 
     Private Sub prepare()
